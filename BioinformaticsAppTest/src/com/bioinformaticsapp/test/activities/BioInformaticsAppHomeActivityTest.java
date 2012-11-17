@@ -12,7 +12,7 @@ import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.data.DatabaseHelper;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.jayway.android.robotium.solo.Solo;
-
+//Test case for the home screen
 public class BioInformaticsAppHomeActivityTest extends ActivityInstrumentationTestCase2<BioinformaticsAppHomeActivity> {
 
 	private final static String TAG = "BioInformaticsAppHomeActivityTest";
