@@ -43,6 +43,8 @@ public class FinishedQueriesActivityTest extends
 		
 		emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
 		emblQuery.setStatus(BLASTQuery.Status.FINISHED);
+		emblQuery.setJobIdentifier("EXAM123PLE_JOB_1D");		
+		emblQuery.setSearchParameter("email", "example@email.com");
 		saveQuery(emblQuery);
 		solo = new Solo(getInstrumentation(), getActivity());
 		
@@ -71,7 +73,7 @@ public class FinishedQueriesActivityTest extends
 		
 	}
 
-	public void testThatTappingOptionToSeeParametersShowsParametersDialog(){
+	public void testThatTappingOptionToSeeParametersShowsParametersOfSelectedQuery(){
 		
 		
 		solo.waitForView(TextView.class);
@@ -82,9 +84,50 @@ public class FinishedQueriesActivityTest extends
 		
 		solo.clickOnText(viewParametersOption);
 		
-		boolean dialogShown = solo.searchText("Program");
+		boolean checkJobIdIsShownAsTitle = solo.searchText(emblQuery.getJobIdentifier());
 		
-		assertTrue("BLAST query parameters dialog", dialogShown);
+		assertTrue("Title is the job identifier", checkJobIdIsShownAsTitle);
+		
+		boolean programLabelShown = solo.searchText("Program");
+		
+		assertTrue("Should see the program label", programLabelShown);
+		
+		boolean valueOfProgramShown = solo.searchText(emblQuery.getBLASTProgram());
+		
+		assertTrue("Should see the value of the program parameter", valueOfProgramShown);
+		
+		boolean databaseLabelShown = solo.searchText("Program");
+		
+		assertTrue("Should see the database label", databaseLabelShown);
+		
+		boolean valueOfDatabaseShown = solo.searchText(emblQuery.getSearchParameter("database").getValue());
+		
+		assertTrue("Should see the value of the database parameter", valueOfDatabaseShown);
+		
+		boolean expThresholdLabelShown = solo.searchText("Exp. Threshold");
+		
+		assertTrue("Should see the database label", expThresholdLabelShown);
+		
+		boolean valueOfExpThresholdShown = solo.searchText(emblQuery.getSearchParameter("exp_threshold").getValue());
+		
+		assertTrue("Should see the value of the exp. threshold parameter", valueOfExpThresholdShown);
+		
+		boolean scoreLabelShown = solo.searchText("Score");
+		
+		assertTrue("Should see the score label", scoreLabelShown);
+		
+		boolean valueOfScoreShown = solo.searchText(emblQuery.getSearchParameter("score").getValue());
+		
+		assertTrue("Should see the value of the score parameter", valueOfScoreShown);
+		
+		boolean emailLabelShown = solo.searchText("E-mail");
+		
+		assertTrue("Should see the email label", emailLabelShown);
+		
+		boolean valueOfEmailShown = solo.searchText(emblQuery.getSearchParameter("email").getValue());
+		
+		assertTrue("Should see the value of the e-mail parameter", valueOfEmailShown);
+		
 		
 	}
 	
