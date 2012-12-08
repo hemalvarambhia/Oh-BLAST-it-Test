@@ -114,7 +114,7 @@ public class FinishedQueriesActivityTest extends
 		
 		boolean expThresholdLabelShown = solo.searchText("Exp. Threshold");
 		
-		assertTrue("Should see the database label", expThresholdLabelShown);
+		assertTrue("Should see the exp threshold label", expThresholdLabelShown);
 		
 		boolean valueOfExpThresholdShown = solo.searchText(emblQuery.getSearchParameter("exp_threshold").getValue());
 		
@@ -169,6 +169,29 @@ public class FinishedQueriesActivityTest extends
 		
 		assertTrue("Should see the value of the database parameter", valueOfDatabaseShown);
 		
+		boolean expThresholdLabelShown = solo.searchText("Exp. Threshold");
+		
+		assertTrue("Should see the exp threshold label", expThresholdLabelShown);
+		
+		boolean valueOfExpThresholdShown = solo.searchText(ncbiQuery.getSearchParameter("exp_threshold").getValue());
+		
+		assertTrue("Should see the value of the exp. threshold parameter", valueOfExpThresholdShown);
+		
+		boolean wordSizeLabelShown = solo.searchText("Word Size");
+		
+		assertTrue("Should see the word size label", wordSizeLabelShown);
+		
+		boolean valueOfWordSizeShown = solo.searchText(ncbiQuery.getSearchParameter("word_size").getValue());
+		
+		assertTrue("Should see the value of the word size parameter", valueOfWordSizeShown);
+		
+		boolean matchMismatchScoreLabelShown = solo.searchText("Match/Mis-Match Score");
+		
+		assertTrue("Should see the word size label", matchMismatchScoreLabelShown);
+		
+		boolean valueOfMatchMisMatchScoreShown = solo.searchText(ncbiQuery.getSearchParameter("match_mismatch_score").getValue());
+		
+		assertTrue("Should see the value of the match mis-match score parameter", valueOfMatchMisMatchScoreShown);
 		
 	}
 	
