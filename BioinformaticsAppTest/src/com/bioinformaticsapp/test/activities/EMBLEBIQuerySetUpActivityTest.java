@@ -1,5 +1,8 @@
 package com.bioinformaticsapp.test.activities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.ActivityInstrumentationTestCase2;
@@ -10,6 +13,7 @@ import android.widget.Spinner;
 import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
 import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.data.DatabaseHelper;
+import com.bioinformaticsapp.data.OptionalParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.OptionalParameter;
@@ -141,9 +145,19 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		
 		Intent intent = new Intent();
 		BLASTQueryController controller = new BLASTQueryController(getInstrumentation().getTargetContext());
+		OptionalParameterController parametersController = new OptionalParameterController(getInstrumentation().getTargetContext());
 		long id = controller.save(blastQuery);
 		blastQuery.setPrimaryKeyId(id);
 		controller.close();
+		List<OptionalParameter> theParameters = new ArrayList<OptionalParameter>();
+		List<OptionalParameter> parameters = blastQuery.getAllParameters();
+		for(OptionalParameter parameter: parameters){
+			long parameterId = parametersController.save(parameter);
+			parameter.setPrimaryKey(parameterId);
+			theParameters.add(parameter);
+		}
+		blastQuery.updateAllParameters(theParameters);
+		parametersController.close();
 		intent.putExtra("query", blastQuery);
 		setActivityIntent(intent);
 		EMBLEBISetUpQueryActivity setupActivity = getActivity();

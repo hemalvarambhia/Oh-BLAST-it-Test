@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.Instrumentation.ActivityMonitor;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
@@ -19,9 +16,9 @@ import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.data.DatabaseHelper;
 import com.bioinformaticsapp.data.OptionalParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
+import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.OptionalParameter;
-import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.jayway.android.robotium.solo.Solo;
 
 public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2<NCBIQuerySetUpActivity> {
