@@ -1,16 +1,13 @@
 package com.bioinformaticsapp.test.activities;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 
 import com.bioinformaticsapp.BioinformaticsAppHomeActivity;
 import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
 import com.bioinformaticsapp.NCBIQuerySetUpActivity;
 import com.bioinformaticsapp.R;
-import com.bioinformaticsapp.data.DatabaseHelper;
-import com.bioinformaticsapp.models.BLASTQuery;
+import com.bioinformaticsapp.test.helpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 //Test case for the home screen
 public class BioInformaticsAppHomeActivityTest extends ActivityInstrumentationTestCase2<BioinformaticsAppHomeActivity> {
@@ -28,26 +25,13 @@ public class BioInformaticsAppHomeActivityTest extends ActivityInstrumentationTe
 		
 		ctx = getInstrumentation().getTargetContext();
 		
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper();
+		
+		helper.cleanDatabase(ctx);
+		
 		solo = new Solo(getInstrumentation(), getActivity());
-		DatabaseHelper helper = new DatabaseHelper(ctx);
 		
-		//Create the database if it does not exist already, or open it if it does
-		SQLiteDatabase db = helper.getWritableDatabase();
 		
-		if(db.delete(BLASTQuery.BLAST_SEARCH_PARAMS_TABLE, null, null) > 0){
-			Log.i(TAG, "Data from "+BLASTQuery.BLAST_SEARCH_PARAMS_TABLE+" deleted");
-		}else{
-			Log.i(TAG, BLASTQuery.BLAST_SEARCH_PARAMS_TABLE+" already clean");
-		}
-		
-		if(db.delete(BLASTQuery.BLAST_QUERY_TABLE, null, null) > 0){
-			Log.i(TAG, "Data from "+BLASTQuery.BLAST_QUERY_TABLE+" deleted");
-		}else{
-
-			Log.i(TAG, BLASTQuery.BLAST_QUERY_TABLE+" already clean");
-		}
-	
-		db.close();
 	}
 	
 	protected void tearDown() throws Exception {
