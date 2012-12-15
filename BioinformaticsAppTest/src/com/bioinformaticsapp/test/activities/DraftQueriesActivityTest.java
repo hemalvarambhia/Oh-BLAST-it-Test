@@ -2,6 +2,13 @@ package com.bioinformaticsapp.test.activities;
 
 import java.util.List;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
+import android.widget.ListView;
+import android.widget.TextView;
+
 import com.bioinformaticsapp.DraftBLASTQueriesActivity;
 import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
 import com.bioinformaticsapp.NCBIQuerySetUpActivity;
@@ -10,18 +17,10 @@ import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.data.DatabaseHelper;
 import com.bioinformaticsapp.data.OptionalParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
+import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.OptionalParameter;
-import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.jayway.android.robotium.solo.Solo;
-
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.test.ActivityInstrumentationTestCase2;
-import android.test.InstrumentationTestCase;
-import android.util.Log;
-import android.widget.ListView;
-import android.widget.TextView;
 
 public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<DraftBLASTQueriesActivity> {
 
