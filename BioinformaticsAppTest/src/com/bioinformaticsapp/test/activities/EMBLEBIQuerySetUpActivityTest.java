@@ -39,9 +39,9 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		
 		blastQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
 		
-		OhBLASTItTestHelper helper = new OhBLASTItTestHelper();
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
 		
-		helper.cleanDatabase(getInstrumentation().getTargetContext());
+		helper.cleanDatabase();
 		
 	}
 	

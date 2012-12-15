@@ -40,9 +40,9 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		
 		exampleNCBIQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		
-		OhBLASTItTestHelper helper = new OhBLASTItTestHelper();
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
 		
-		helper.cleanDatabase(getInstrumentation().getTargetContext());
+		helper.cleanDatabase();
 		
 	}
 	

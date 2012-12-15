@@ -25,9 +25,9 @@ public class BioInformaticsAppHomeActivityTest extends ActivityInstrumentationTe
 		
 		ctx = getInstrumentation().getTargetContext();
 		
-		OhBLASTItTestHelper helper = new OhBLASTItTestHelper();
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(ctx);
 		
-		helper.cleanDatabase(ctx);
+		helper.cleanDatabase();
 		
 		solo = new Solo(getInstrumentation(), getActivity());
 		

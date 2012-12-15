@@ -21,8 +21,8 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		OhBLASTItTestHelper helper = new OhBLASTItTestHelper();
-		helper.cleanDatabase(getInstrumentation().getTargetContext());
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
+		helper.cleanDatabase();
 		
 		controller = new BLASTQueryController(getInstrumentation().getTargetContext());
 		optionalParameterController = new OptionalParameterController(getInstrumentation().getTargetContext());
@@ -192,5 +192,22 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		
 	}
 	
+	public void testWeCanDeleteAQuery(){
+		BLASTQuery query = new BLASTQuery("blastn", BLASTVendor.NCBI);
+		
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
+		
+		long id = helper.save(query);
+		
+		controller.delete(id);
+		
+		assertTrue("Deleting a query", controller.findBLASTQueryById(id) == null);
+		
+		optionalParameterController.deleteParametersFor(id);
+		
+		assertTrue("No search parameters for the query", optionalParameterController.getParametersForQuery(id) == null);
+		
+		
+	}
 	
 }

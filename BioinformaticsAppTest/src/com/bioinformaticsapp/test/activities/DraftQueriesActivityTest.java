@@ -35,8 +35,8 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 		super.setUp();
 		ctx = getInstrumentation().getTargetContext();
 		
-		OhBLASTItTestHelper helper = new OhBLASTItTestHelper();
-		helper.cleanDatabase(ctx);
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(ctx);
+		helper.cleanDatabase();
 		
 	}
 	
