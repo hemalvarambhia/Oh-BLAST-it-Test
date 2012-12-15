@@ -116,8 +116,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		EditText sequenceEditor = (EditText)activity.findViewById(com.bioinformaticsapp.R.id.ncbi_sequence_edittext);
 		assertEquals("Enter a sequence", sequenceEditor.getHint().toString());
 	}
-	
-	
+		
 	public void testSequenceEditTextViewIsSetToValueInQuery(){
 		Intent intent = new Intent();
 		exampleNCBIQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
@@ -361,7 +360,28 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
         
 	}
 	
-	
+	public void testWeCannotSendAnInvalidQuery(){
+		Intent intent = new Intent();
+		intent.putExtra("query", exampleNCBIQuery);
+		setActivityIntent(intent);
+		
+		NCBIQuerySetUpActivity setupQueryActivity = (NCBIQuerySetUpActivity)getActivity();
+		
+		solo = new Solo(getInstrumentation(), setupQueryActivity);
+		
+		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.ncbi_sequence_edittext);
+		
+		solo.typeText(sequenceEditor, "INVALID SEQUENCE");
+		
+		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.send_query);
+		
+		solo.waitForDialogToClose(SENDING_DIALOG_TIMEOUT);
+		
+		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
+		
+		assertEquals( "Expected query to be ready for sending", Status.DRAFT, q.getStatus());
+		
+	}
 	
 	
 	

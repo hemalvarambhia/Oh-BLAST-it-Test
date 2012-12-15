@@ -267,6 +267,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	}
 	
 	public void testWeCanSendAValidQuery(){
+
 		Intent intent = new Intent();
 		
 		intent.putExtra("query", blastQuery);
@@ -292,7 +293,36 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
 		
 		assertEquals( "Expected query to be ready for sending", Status.PENDING, q.getStatus());
-		
-        
+		        
 	}
+	
+	public void testWeCannotSendAnInvalidQuery(){
+		Intent intent = new Intent();
+		
+		intent.putExtra("query", blastQuery);
+		
+		setActivityIntent(intent);
+		
+		EMBLEBISetUpQueryActivity setupQueryActivity = (EMBLEBISetUpQueryActivity)getActivity();
+		
+		solo = new Solo(getInstrumentation(), setupQueryActivity);
+		
+		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_sequence_editor);
+		
+		solo.typeText(sequenceEditor, "INVALIDSEQUENCE");
+		
+		EditText emailEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_send_to_email);
+		
+		solo.typeText(emailEditor, "h.n.varambhia@gmail.com");
+		
+		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.send_query);
+		
+		solo.waitForDialogToClose(SENDING_DIALOG_TIMEOUT);
+		
+		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
+		
+		assertEquals( "Expected query to be ready for sending", Status.DRAFT, q.getStatus());
+		        
+	}
+	
 }
