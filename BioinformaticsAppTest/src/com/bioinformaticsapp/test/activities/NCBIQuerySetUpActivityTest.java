@@ -19,6 +19,7 @@ import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.OptionalParameter;
+import com.bioinformaticsapp.test.helpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
 public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2<NCBIQuerySetUpActivity> {
@@ -39,28 +40,12 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 	
 	protected void setUp() throws Exception {
 		super.setUp();
+		
 		exampleNCBIQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		
-		DatabaseHelper helper = new DatabaseHelper(getInstrumentation().getTargetContext());
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper();
 		
-		//Create the database if it does not exist already, or open it if it does
-		SQLiteDatabase db = helper.getWritableDatabase();
-		
-		if(db.delete(BLASTQuery.BLAST_SEARCH_PARAMS_TABLE, null, null) > 0){
-			Log.i(TAG, "Data from "+BLASTQuery.BLAST_SEARCH_PARAMS_TABLE+" deleted");
-		}else{
-			Log.i(TAG, BLASTQuery.BLAST_SEARCH_PARAMS_TABLE+" already clean");
-		}
-		
-		if(db.delete(BLASTQuery.BLAST_QUERY_TABLE, null, null) > 0){
-			Log.i(TAG, "Data from "+BLASTQuery.BLAST_QUERY_TABLE+" deleted");
-		}else{
-
-			Log.i(TAG, BLASTQuery.BLAST_QUERY_TABLE+" already clean");
-		}
-	
-		db.close();
-		
+		helper.cleanDatabase(getInstrumentation().getTargetContext());
 		
 	}
 	

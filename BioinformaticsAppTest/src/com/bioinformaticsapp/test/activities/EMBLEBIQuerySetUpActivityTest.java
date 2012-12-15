@@ -4,20 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
 import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.DatabaseHelper;
 import com.bioinformaticsapp.data.OptionalParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
+import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.OptionalParameter;
-import com.bioinformaticsapp.models.BLASTQuery.Status;
+import com.bioinformaticsapp.test.helpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
 public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2<EMBLEBISetUpQueryActivity> {
@@ -38,25 +36,12 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
+		
 		blastQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		DatabaseHelper helper = new DatabaseHelper(getInstrumentation().getTargetContext());
 		
-		SQLiteDatabase db = helper.getWritableDatabase();
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper();
 		
-		if(db.delete(BLASTQuery.BLAST_SEARCH_PARAMS_TABLE, null, null) > 0){
-			Log.i(TAG, "Data from "+BLASTQuery.BLAST_SEARCH_PARAMS_TABLE+" deleted");
-		}else{
-			Log.i(TAG, BLASTQuery.BLAST_SEARCH_PARAMS_TABLE+" already clean");
-		}
-		
-		if(db.delete(BLASTQuery.BLAST_QUERY_TABLE, null, null) > 0){
-			Log.i(TAG, "Data from "+BLASTQuery.BLAST_QUERY_TABLE+" deleted");
-		}else{
-
-			Log.i(TAG, BLASTQuery.BLAST_QUERY_TABLE+" already clean");
-		}
-		
-		db.close();
+		helper.cleanDatabase(getInstrumentation().getTargetContext());
 		
 	}
 	
