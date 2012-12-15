@@ -1,17 +1,14 @@
 package com.bioinformaticsapp.test.helpers;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.data.DatabaseHelper;
 import com.bioinformaticsapp.data.OptionalParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.OptionalParameter;
-
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 public class OhBLASTItTestHelper {
 
@@ -47,16 +44,10 @@ public class OhBLASTItTestHelper {
 		BLASTQueryController queryController = new BLASTQueryController(mContext);
 		OptionalParameterController parameterController = new OptionalParameterController(mContext);
 		long queryPrimaryKey = queryController.save(query);
-		query.setPrimaryKeyId(queryPrimaryKey);
-		List<OptionalParameter> parameters = new ArrayList<OptionalParameter>();
 		for(OptionalParameter parameter: query.getAllParameters()){
 			parameter.setBlastQueryId(queryPrimaryKey);
-			long parameterPrimaryKey = parameterController.save(parameter);
-			parameter.setPrimaryKey(parameterPrimaryKey);
-			parameters.add(parameter);
+			parameterController.save(parameter);
 		}
-		
-		query.updateAllParameters(parameters);
 		
 		parameterController.close();
 		queryController.close();
