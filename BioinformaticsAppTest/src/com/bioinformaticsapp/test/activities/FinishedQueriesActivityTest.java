@@ -1,22 +1,29 @@
 package com.bioinformaticsapp.test.activities;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import android.content.Context;
+import android.test.ActivityInstrumentationTestCase2;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.bioinformaticsapp.FinishedQueriesActivity;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.DatabaseHelper;
 import com.bioinformaticsapp.data.OptionalParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.OptionalParameter;
+import com.bioinformaticsapp.test.helpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
-
-import android.database.sqlite.SQLiteDatabase;
-import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
-import android.widget.TextView;
 
 public class FinishedQueriesActivityTest extends
 		ActivityInstrumentationTestCase2<FinishedQueriesActivity> {
@@ -25,8 +32,10 @@ public class FinishedQueriesActivityTest extends
 
 	private Solo solo;
 	
+	private String exampleEMBLJobId = "ncbiblast-R20120418-133731-0240-81389354-pg";
 	private BLASTQuery emblQuery;
 	
+	private String exampleNCBIJobId = "YAMJ8623016";
 	private BLASTQuery ncbiQuery;
 	
 	public FinishedQueriesActivityTest(
@@ -40,21 +49,10 @@ public class FinishedQueriesActivityTest extends
 	}
 	
 	public void setUp() throws Exception {
+		
 		super.setUp();
-		cleanDatabase();
-		
-		emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		emblQuery.setStatus(BLASTQuery.Status.FINISHED);
-		emblQuery.setJobIdentifier("EXAM123PLE_JOB_1D");		
-		emblQuery.setSearchParameter("email", "example@email.com");
-		saveQuery(emblQuery);
-		
-		ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
-		ncbiQuery.setStatus(BLASTQuery.Status.FINISHED);
-		ncbiQuery.setJobIdentifier("ANOTHER_EXAM123PLE_JOB_1D");		
-		saveQuery(ncbiQuery);
-		
-		solo = new Solo(getInstrumentation(), getActivity());
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
+		helper.cleanDatabase();
 		
 	}
 	
@@ -68,6 +66,13 @@ public class FinishedQueriesActivityTest extends
 	
 	public void testContextMenuContainsOptionToSeeParameters(){
 		
+		emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		emblQuery.setStatus(BLASTQuery.Status.FINISHED);
+		emblQuery.setJobIdentifier(exampleEMBLJobId);		
+		emblQuery.setSearchParameter("email", "example@email.com");
+		saveQuery(emblQuery);
+		
+		solo = new Solo(getInstrumentation(), getActivity());
 		
 		solo.waitForView(TextView.class);
 		
@@ -83,6 +88,13 @@ public class FinishedQueriesActivityTest extends
 
 	public void testThatTappingOptionToSeeParametersShowsParametersOfSelectedEMBLQuery(){
 		
+		emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		emblQuery.setStatus(BLASTQuery.Status.FINISHED);
+		emblQuery.setJobIdentifier(exampleEMBLJobId);		
+		emblQuery.setSearchParameter("email", "example@email.com");
+		saveQuery(emblQuery);
+		
+		solo = new Solo(getInstrumentation(), getActivity());
 		
 		solo.waitForView(TextView.class);
 		
@@ -140,10 +152,16 @@ public class FinishedQueriesActivityTest extends
 	
 	public void testThatTappingOptionToSeeParametersShowsParametersOfSelectedNCBIQuery(){
 		
+		ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
+		ncbiQuery.setStatus(BLASTQuery.Status.FINISHED);
+		ncbiQuery.setJobIdentifier(exampleNCBIJobId);		
+		saveQuery(ncbiQuery);
+		
+		solo = new Solo(getInstrumentation(), getActivity());
 		
 		solo.waitForView(TextView.class);
 		
-		solo.clickLongInList(2);
+		solo.clickLongInList(1);
 		
 		String viewParametersOption = getInstrumentation().getTargetContext().getResources().getString(R.string.view_query_parameters);
 		
@@ -195,28 +213,44 @@ public class FinishedQueriesActivityTest extends
 		
 	}
 	
-	
-	private void cleanDatabase(){
-		DatabaseHelper helper = new DatabaseHelper(getInstrumentation().getTargetContext());
+	public void testWeCanDeleteABLASTQuery() throws IOException{
 		
-		//Create the database if it does not exist already, or open it if it does
-		SQLiteDatabase db = helper.getWritableDatabase();
+		emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		emblQuery.setStatus(BLASTQuery.Status.FINISHED);
+		emblQuery.setJobIdentifier(exampleEMBLJobId);		
+		emblQuery.setSearchParameter("email", "example@email.com");
+		copyBLASTHitsFileToAppDataDir(exampleEMBLJobId+".xml");
+		saveQuery(emblQuery);
 		
-		if(db.delete(BLASTQuery.BLAST_SEARCH_PARAMS_TABLE, null, null) > 0){
-			Log.i(TAG, "Data from "+BLASTQuery.BLAST_SEARCH_PARAMS_TABLE+" deleted");
-		}else{
-			Log.i(TAG, BLASTQuery.BLAST_SEARCH_PARAMS_TABLE+" already clean");
+		solo = new Solo(getInstrumentation(), getActivity());
+		
+		solo.waitForView(TextView.class);
+		
+		solo.clickLongInList(1);
+		
+		String delete = "Delete";
+		
+		solo.clickOnText(delete);
+		
+		solo.clickOnText("OK");
+		
+		ArrayList<ListView> listViews = solo.getCurrentListViews();
+		
+		for(ListView listView : listViews){
+			
+			assertEquals("Should be able to delete a query", 0, listView.getAdapter().getCount());
+			
 		}
 		
-		if(db.delete(BLASTQuery.BLAST_QUERY_TABLE, null, null) > 0){
-			Log.i(TAG, "Data from "+BLASTQuery.BLAST_QUERY_TABLE+" deleted");
-		}else{
-
-			Log.i(TAG, BLASTQuery.BLAST_QUERY_TABLE+" already clean");
-		}
-	
-		db.close();
+		boolean blastHitsFileDeleted = false;
 		
+		try{
+			getInstrumentation().getTargetContext().openFileInput(exampleEMBLJobId+".xml");
+		}catch(FileNotFoundException e){
+			blastHitsFileDeleted = true;
+		}
+		
+		assertTrue("The file containing the BLAST hits should be deleted", blastHitsFileDeleted);
 	}
 	
 	private long saveQuery(BLASTQuery query){
@@ -239,4 +273,20 @@ public class FinishedQueriesActivityTest extends
 		return primaryKey;
 	}
 	
+	private void copyBLASTHitsFileToAppDataDir(String fileName) throws IOException {
+		InputStream input = getInstrumentation().getContext().getAssets().open(fileName);
+		
+		BufferedReader reader = new BufferedReader(new InputStreamReader(input)); 
+		FileOutputStream dest = getInstrumentation().getTargetContext().openFileOutput(fileName, Context.MODE_PRIVATE);
+		PrintWriter writer = new PrintWriter(dest);
+		
+		String line = null;
+		while((line = reader.readLine()) != null){
+			
+			writer.println(line);
+		
+		}
+		
+		writer.close();
+	}
 }

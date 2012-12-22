@@ -29,7 +29,7 @@ public class ViewBLASTHitsActivityTest extends
 	
 	private String exampleNCBIJobIdentifier = "YAMJ8623016";
 	private String exampleEMBLJobIdentifier = "ncbiblast-R20120418-133731-0240-81389354-pg";
-	
+	private String fileWithNoHits = "NOH86ITs.xml";
 	public ViewBLASTHitsActivityTest(){
 		super(ViewBLASTHitsActivity.class);
 	}
@@ -40,13 +40,14 @@ public class ViewBLASTHitsActivityTest extends
 		
 		getInstrumentation().getTargetContext().deleteFile(exampleEMBLJobIdentifier+".xml");
 		getInstrumentation().getTargetContext().deleteFile(exampleEMBLJobIdentifier+".xml");
+		getInstrumentation().getTargetContext().deleteFile(fileWithNoHits);
 		
 		
 		copyBLASTHitsFileToAppDataDir(exampleNCBIJobIdentifier+".xml");
 		
 		copyBLASTHitsFileToAppDataDir(exampleEMBLJobIdentifier+".xml");
 		
-		copyBLASTHitsFileToAppDataDir("NOH86ITs.xml");
+		copyBLASTHitsFileToAppDataDir(fileWithNoHits);
 	}
 	
 	public void tearDown() throws Exception {
