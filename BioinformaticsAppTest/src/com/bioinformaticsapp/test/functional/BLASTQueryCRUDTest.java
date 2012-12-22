@@ -174,7 +174,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		
 	}
 	
-	public void testWeCanUpdateAQueryInTheDatabase(){
+	public void testWeCanUpdateAQuery(){
 		BLASTQuery draftQuery = queryAsInsertedInDatebase();
 		BLASTQuery retrieved = controller.findBLASTQueryById(draftQuery.getPrimaryKey());
 		List<OptionalParameter> parameters = optionalParameterController.getParametersForQuery(retrieved.getPrimaryKey());

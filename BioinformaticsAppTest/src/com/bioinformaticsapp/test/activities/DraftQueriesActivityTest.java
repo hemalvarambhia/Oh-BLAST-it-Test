@@ -1,5 +1,6 @@
 package com.bioinformaticsapp.test.activities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -49,8 +50,8 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 
 	}
 	
-	private void createSampleNCBIDraftQuery(){
-		BLASTQuery sampleNCBIQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
+	private void createSampleDraftQuery(int blastVendor){
+		BLASTQuery sampleNCBIQuery = new BLASTQuery("blastn", blastVendor);
 		BLASTQueryController queryController = new BLASTQueryController(ctx);
 		OptionalParameterController parametersController = new OptionalParameterController(ctx);
 		long blastQueryId = queryController.save(sampleNCBIQuery);
@@ -63,24 +64,10 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 		queryController.close();
 	}
 	
-	private void createSampleEMBLDraftQuery(){
+	public void testWeCanViewAllDraftQueries(){
+		//This could be any query
+		createSampleDraftQuery(BLASTVendor.EMBL_EBI);
 		
-		BLASTQuery sampleEMBLQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		BLASTQueryController queryController = new BLASTQueryController(ctx);
-		OptionalParameterController parametersController = new OptionalParameterController(ctx);
-		
-		long blastQueryId = queryController.save(sampleEMBLQuery);
-		for(OptionalParameter parameter: sampleEMBLQuery.getAllParameters()){
-			parameter.setBlastQueryId(blastQueryId);			
-			parametersController.save(parameter);
-		}
-		
-		parametersController.close();
-		queryController.close();
-	}
-	
-	public void testActivityShowsAllDraftQueries(){
-		createSampleEMBLDraftQuery();
 		solo = new Solo(getInstrumentation(), getActivity());
 		
 		List<ListView> listViews = solo.getCurrentListViews();
@@ -96,7 +83,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 	}
 	
 	public void testWeCanOpenAnNCBIQueryWhenTappingOnTheCorrespondingListItem(){
-		createSampleNCBIDraftQuery();
+		createSampleDraftQuery(BLASTVendor.NCBI);
 		solo = new Solo(getInstrumentation(), getActivity());
 		
 		solo.waitForView(TextView.class);
@@ -106,7 +93,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 	}
 	
 	public void testWeCanOpenAnEMBLQueryWhenTappingOnTheCorrespondingListItem(){
-		createSampleEMBLDraftQuery();
+		createSampleDraftQuery(BLASTVendor.EMBL_EBI);
 		solo = new Solo(getInstrumentation(), getActivity());
 		
 		solo.waitForView(TextView.class);
@@ -135,5 +122,59 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 		
 		solo.assertCurrentActivity("Expected the NCBI Query set up screen", NCBIQuerySetUpActivity.class);
 	}
+	
+	public void testWeCanDeleteABLASTQuery(){
+		
+		createSampleDraftQuery(BLASTVendor.EMBL_EBI);
+		
+		solo = new Solo(getInstrumentation(), getActivity());
+		
+		solo.waitForView(TextView.class);
+		
+		solo.clickLongInList(1);
+		
+		String delete = "Delete";
+		
+		solo.clickOnText(delete);
+		
+		//Confirm deletion
+		solo.clickOnButton("OK");
+		
+		ArrayList<ListView> listViews = solo.getCurrentListViews();
+		
+		for(ListView listView : listViews){
+			
+			assertEquals("Should be able to delete a query", 0, listView.getAdapter().getCount());
+			
+		}
+		
+	}
 
+	public void testWeCanCancelADeleteQueryAction(){
+		createSampleDraftQuery(BLASTVendor.EMBL_EBI);
+		
+		solo = new Solo(getInstrumentation(), getActivity());
+		
+		solo.waitForView(TextView.class);
+		
+		solo.clickLongInList(1);
+		
+		String delete = "Delete";
+		
+		solo.clickOnText(delete);
+		
+		//Cancel deletion
+		solo.clickOnButton("Cancel");
+		
+		ArrayList<ListView> listViews = solo.getCurrentListViews();
+		BLASTQueryController queryController = new BLASTQueryController(ctx);
+		List<BLASTQuery> draftQueries = queryController.findBLASTQueriesByStatus(Status.DRAFT);
+		queryController.close();
+		for(ListView listView : listViews){
+			
+			assertEquals("Should be able to cancel delete a query", draftQueries.size(), listView.getAdapter().getCount());
+			
+		}
+	}
+	
 }
