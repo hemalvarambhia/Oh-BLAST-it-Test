@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.bioinformaticsapp.FinishedQueriesActivity;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.OptionalParameterController;
+import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.SearchParameter;
@@ -292,7 +292,7 @@ public class FinishedQueriesActivityTest extends
 		query.setPrimaryKeyId(primaryKey);
 		List<SearchParameter> parameters = query.getAllParameters();
 		List<SearchParameter> newSetOfParameters = new ArrayList<SearchParameter>();
-		OptionalParameterController parametersControllers = new OptionalParameterController(getInstrumentation().getTargetContext());
+		SearchParameterController parametersControllers = new SearchParameterController(getInstrumentation().getTargetContext());
 		for(SearchParameter parameter: parameters){
 			parameter.setBlastQueryId(query.getPrimaryKey());
 			long parameterPrimaryKey = parametersControllers.save(parameter);

@@ -13,7 +13,7 @@ import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
 import com.bioinformaticsapp.NCBIQuerySetUpActivity;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.OptionalParameterController;
+import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
@@ -53,7 +53,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 	private void createSampleDraftQuery(int blastVendor){
 		BLASTQuery sampleNCBIQuery = new BLASTQuery("blastn", blastVendor);
 		BLASTQueryController queryController = new BLASTQueryController(ctx);
-		OptionalParameterController parametersController = new OptionalParameterController(ctx);
+		SearchParameterController parametersController = new SearchParameterController(ctx);
 		long blastQueryId = queryController.save(sampleNCBIQuery);
 		for(SearchParameter parameter: sampleNCBIQuery.getAllParameters()){
 			parameter.setBlastQueryId(blastQueryId);

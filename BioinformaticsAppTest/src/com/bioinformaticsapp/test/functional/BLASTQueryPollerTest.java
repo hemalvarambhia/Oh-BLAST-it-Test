@@ -12,7 +12,7 @@ import android.util.Log;
 
 import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.data.DatabaseHelper;
-import com.bioinformaticsapp.data.OptionalParameterController;
+import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.SearchParameter;
@@ -81,7 +81,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	
 	private void save(BLASTQuery query){
 		BLASTQueryController queryController = new BLASTQueryController(context);
-		OptionalParameterController parameterController = new OptionalParameterController(context);
+		SearchParameterController parameterController = new SearchParameterController(context);
 		long queryPrimaryKey = queryController.save(query);
 		query.setPrimaryKeyId(queryPrimaryKey);
 		List<SearchParameter> parameters = new ArrayList<SearchParameter>();

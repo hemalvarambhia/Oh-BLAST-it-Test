@@ -10,7 +10,7 @@ import android.widget.Spinner;
 
 import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
 import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.OptionalParameterController;
+import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
@@ -130,7 +130,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		
 		Intent intent = new Intent();
 		BLASTQueryController controller = new BLASTQueryController(getInstrumentation().getTargetContext());
-		OptionalParameterController parametersController = new OptionalParameterController(getInstrumentation().getTargetContext());
+		SearchParameterController parametersController = new SearchParameterController(getInstrumentation().getTargetContext());
 		long id = controller.save(blastQuery);
 		blastQuery.setPrimaryKeyId(id);
 		controller.close();

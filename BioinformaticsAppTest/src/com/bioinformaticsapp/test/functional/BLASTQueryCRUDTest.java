@@ -6,7 +6,7 @@ import java.util.List;
 import android.test.InstrumentationTestCase;
 
 import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.OptionalParameterController;
+import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
@@ -17,7 +17,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 
 	private static final String TAG = "BLASTQueryCRUDTest";
 	private BLASTQueryController controller;
-	private OptionalParameterController optionalParameterController;
+	private SearchParameterController searchParameterController;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -25,12 +25,12 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		helper.cleanDatabase();
 		
 		controller = new BLASTQueryController(getInstrumentation().getTargetContext());
-		optionalParameterController = new OptionalParameterController(getInstrumentation().getTargetContext());
+		searchParameterController = new SearchParameterController(getInstrumentation().getTargetContext());
 		
 	}
 	
 	protected void tearDown() throws Exception {
-		optionalParameterController.close();
+		searchParameterController.close();
 		controller.close();
 		
 		super.tearDown();
@@ -48,7 +48,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		
 		for(SearchParameter searchParameter: parameters){
 			searchParameter.setBlastQueryId(primaryKeyId);
-			long parameterPrimaryKeyId = optionalParameterController.save(searchParameter);
+			long parameterPrimaryKeyId = searchParameterController.save(searchParameter);
 			assertTrue(parameterPrimaryKeyId > 0);
 		}
 		
@@ -74,7 +74,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		List<SearchParameter> parameters = new ArrayList<SearchParameter>();
 		for(SearchParameter parameter: queryInDatabase.getAllParameters()){
 			parameter.setBlastQueryId(primaryKeyId);
-			long parameterPK = optionalParameterController.save(parameter);
+			long parameterPK = searchParameterController.save(parameter);
 			parameter.setPrimaryKey(parameterPK);
 			parameters.add(parameter);
 		}
@@ -93,7 +93,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	public void testWeCanRetrieveTheOptionalParametersOfAQuery(){
 		BLASTQuery query = queryAsInsertedInDatebase();
 		
-		List<SearchParameter> parameters = optionalParameterController.getParametersForQuery(query.getPrimaryKey());
+		List<SearchParameter> parameters = searchParameterController.getParametersForQuery(query.getPrimaryKey());
 		
 		List<SearchParameter> expectedParameters = query.getAllParameters();
 		boolean sameSize = (parameters.size() == expectedParameters.size());
@@ -108,7 +108,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		BLASTQuery queryInDatabase = queryAsInsertedInDatebase();
 		
 		BLASTQuery retrievedFromDatabase = controller.findBLASTQueryById(queryInDatabase.getPrimaryKey());
-		List<SearchParameter> parametersForRetrievedQuery = optionalParameterController.getParametersForQuery(queryInDatabase.getPrimaryKey());
+		List<SearchParameter> parametersForRetrievedQuery = searchParameterController.getParametersForQuery(queryInDatabase.getPrimaryKey());
 		retrievedFromDatabase.updateAllParameters(parametersForRetrievedQuery);
 		assertEquals(queryInDatabase, retrievedFromDatabase);
 	
@@ -156,7 +156,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		long blastQueryId = controller.save(sampleQuery);
 		for(SearchParameter parameter: sampleQuery.getAllParameters()){
 			parameter.setBlastQueryId(blastQueryId);			
-			optionalParameterController.save(parameter);
+			searchParameterController.save(parameter);
 		}
 		
 		//controller is closed in the tearDown message so no need to do it here
@@ -177,7 +177,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	public void testWeCanUpdateAQuery(){
 		BLASTQuery draftQuery = queryAsInsertedInDatebase();
 		BLASTQuery retrieved = controller.findBLASTQueryById(draftQuery.getPrimaryKey());
-		List<SearchParameter> parameters = optionalParameterController.getParametersForQuery(retrieved.getPrimaryKey());
+		List<SearchParameter> parameters = searchParameterController.getParametersForQuery(retrieved.getPrimaryKey());
 		retrieved.updateAllParameters(parameters);
 		retrieved.setSearchParameter("match_mismatch_score", "1, -1");
 		retrieved.setSearchParameter("exp_threshold", "0.1");
@@ -185,7 +185,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		int noUpdated = controller.update(retrieved.getPrimaryKey(), retrieved);
 		
 		for(SearchParameter parameter: retrieved.getAllParameters()){
-			noUpdated += optionalParameterController.update(parameter.getPrimaryKey(), parameter);
+			noUpdated += searchParameterController.update(parameter.getPrimaryKey(), parameter);
 		}
 		
 		assertEquals(retrieved.getAllParameters().size() + 1, noUpdated);
@@ -203,9 +203,9 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		
 		assertTrue("Deleting a query", controller.findBLASTQueryById(id) == null);
 		
-		optionalParameterController.deleteParametersFor(id);
+		searchParameterController.deleteParametersFor(id);
 		
-		assertTrue("No search parameters for the query", optionalParameterController.getParametersForQuery(id) == null);
+		assertTrue("No search parameters for the query", searchParameterController.getParametersForQuery(id) == null);
 		
 		
 	}

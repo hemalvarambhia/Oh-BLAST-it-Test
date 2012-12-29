@@ -11,7 +11,7 @@ import android.widget.Spinner;
 
 import com.bioinformaticsapp.NCBIQuerySetUpActivity;
 import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.OptionalParameterController;
+import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
@@ -262,7 +262,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		exampleNCBIQuery.setPrimaryKeyId(primaryKey);
 		List<SearchParameter> parameters = exampleNCBIQuery.getAllParameters();
 		List<SearchParameter> newSetOfParameters = new ArrayList<SearchParameter>();
-		OptionalParameterController parametersControllers = new OptionalParameterController(getInstrumentation().getTargetContext());
+		SearchParameterController parametersControllers = new SearchParameterController(getInstrumentation().getTargetContext());
 		for(SearchParameter parameter: parameters){
 			parameter.setBlastQueryId(exampleNCBIQuery.getPrimaryKey());
 			long parameterPrimaryKey = parametersControllers.save(parameter);
@@ -281,7 +281,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		
 		//Get the query we loaded in the database
 		BLASTQueryController queryController = new BLASTQueryController(getInstrumentation().getTargetContext());
-		OptionalParameterController parametersController = new OptionalParameterController(getInstrumentation().getTargetContext());
+		SearchParameterController parametersController = new SearchParameterController(getInstrumentation().getTargetContext());
 		
 		BLASTQuery query = queryController.findBLASTQueryById(pk);
 		List<SearchParameter> parameters = parametersController.getParametersForQuery(pk);

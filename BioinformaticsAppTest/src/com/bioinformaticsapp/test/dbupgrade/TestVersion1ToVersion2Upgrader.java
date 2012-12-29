@@ -12,7 +12,7 @@ import android.util.Log;
 
 import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.data.DatabaseHelper;
-import com.bioinformaticsapp.data.OptionalParameterController;
+import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.data.Version1ToVersion2Upgrader;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
@@ -223,7 +223,7 @@ public class TestVersion1ToVersion2Upgrader extends InstrumentationTestCase {
 	private List<BLASTQuery> getQueriesFromNewTables(){
 		Cursor allQueriesInNewTable = db.query(BLASTQuery.BLAST_QUERY_TABLE, new String[]{BLASTJob.COLUMN_NAME_PRIMARY_KEY}, null, null, null, null, BLASTJob.COLUMN_NAME_PRIMARY_KEY);
 		BLASTQueryController controller = new BLASTQueryController(getInstrumentation().getTargetContext());
-		OptionalParameterController optionalParametersController = new OptionalParameterController(getInstrumentation().getTargetContext());
+		SearchParameterController optionalParametersController = new SearchParameterController(getInstrumentation().getTargetContext());
 		List<BLASTQuery> queriesInNewTable = new ArrayList<BLASTQuery>();
 		
 		while(allQueriesInNewTable.moveToNext()){

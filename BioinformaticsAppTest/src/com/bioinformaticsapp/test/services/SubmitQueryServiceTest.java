@@ -5,7 +5,7 @@ import java.util.List;
 import com.bioinformaticsapp.SubmitQueryService;
 import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.data.DatabaseHelper;
-import com.bioinformaticsapp.data.OptionalParameterController;
+import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.SearchParameter;
@@ -29,7 +29,7 @@ public class SubmitQueryServiceTest extends ServiceTestCase<SubmitQueryService> 
 	
 
 	private BLASTQueryController queryController;
-	private OptionalParameterController parameterController;
+	private SearchParameterController parameterController;
 	private static final String TAG = "SubmitQueryServiceTest";
 	private Context ctx;
 	protected void setUp() throws Exception {
@@ -62,7 +62,7 @@ public class SubmitQueryServiceTest extends ServiceTestCase<SubmitQueryService> 
 		
 		
 		queryController = new BLASTQueryController(ctx);
-		parameterController = new OptionalParameterController(ctx);
+		parameterController = new SearchParameterController(ctx);
 		long queryId = queryController.save(query);
 		List<SearchParameter> parameters = query.getAllParameters();
 		
