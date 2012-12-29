@@ -22,6 +22,7 @@ import com.bioinformaticsapp.data.OptionalParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.SearchParameter;
+import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.test.helpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
@@ -251,6 +252,38 @@ public class FinishedQueriesActivityTest extends
 		}
 		
 		assertTrue("The file containing the BLAST hits should be deleted", blastHitsFileDeleted);
+	}
+	
+	public void testWeCanCancelADeleteQueryAction() throws IOException{
+		emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		emblQuery.setStatus(BLASTQuery.Status.FINISHED);
+		emblQuery.setJobIdentifier(exampleEMBLJobId);		
+		emblQuery.setSearchParameter("email", "example@email.com");
+		copyBLASTHitsFileToAppDataDir(exampleEMBLJobId+".xml");
+		saveQuery(emblQuery);
+		
+		solo = new Solo(getInstrumentation(), getActivity());
+		
+		solo.waitForView(TextView.class);
+		
+		solo.clickLongInList(1);
+		
+		String delete = "Delete";
+		
+		solo.clickOnText(delete);
+		
+		//Cancel deletion
+		solo.clickOnButton("Cancel");
+		
+		ArrayList<ListView> listViews = solo.getCurrentListViews();
+		BLASTQueryController queryController = new BLASTQueryController(getInstrumentation().getTargetContext());
+		List<BLASTQuery> finishedQueries = queryController.findBLASTQueriesByStatus(Status.FINISHED);
+		queryController.close();
+		for(ListView listView : listViews){
+			
+			assertEquals("Cancellation should not delete the query", finishedQueries.size(), listView.getAdapter().getCount());
+			
+		}
 	}
 	
 	private long saveQuery(BLASTQuery query){
