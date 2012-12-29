@@ -39,13 +39,13 @@ public class PendingQueriesActivityTest extends
 		
 		emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
 		emblQuery.setStatus(BLASTQuery.Status.PENDING);
-		emblQuery.setJobIdentifier("EXAM123PLE_JOB_1D");		
+		emblQuery.setJobIdentifier("ncbiblast-R20120418-133731-0240-81389354-pg");		
 		emblQuery.setSearchParameter("email", "example@email.com");
 		saveQuery(emblQuery);
 		
 		ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		ncbiQuery.setStatus(BLASTQuery.Status.PENDING);
-		ncbiQuery.setJobIdentifier("ANOTHER_EXAM123PLE_JOB_1D");		
+		ncbiQuery.setJobIdentifier("YAMJ8623016");		
 		saveQuery(ncbiQuery);
 		
 		solo = new Solo(getInstrumentation(), getActivity());
