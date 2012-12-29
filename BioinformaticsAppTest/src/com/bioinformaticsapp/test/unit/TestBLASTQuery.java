@@ -6,7 +6,7 @@ import android.util.Patterns;
 
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.OptionalParameter;
+import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 
 
@@ -18,13 +18,13 @@ public class TestBLASTQuery extends TestCase {
 		
 		assertEquals("blastn", emblQuery.getBLASTProgram());
 		
-		assertEquals(new OptionalParameter("database", "em_rel_fun"), emblQuery.getSearchParameter("database"));
+		assertEquals(new SearchParameter("database", "em_rel_fun"), emblQuery.getSearchParameter("database"));
 		
-		assertEquals(new OptionalParameter("exp_threshold", "10"), emblQuery.getSearchParameter("exp_threshold"));
+		assertEquals(new SearchParameter("exp_threshold", "10"), emblQuery.getSearchParameter("exp_threshold"));
 		
-		assertEquals(new OptionalParameter("score", "50"), emblQuery.getSearchParameter("score"));
+		assertEquals(new SearchParameter("score", "50"), emblQuery.getSearchParameter("score"));
 		
-		assertEquals(new OptionalParameter("match_mismatch_score", "1,-2"), emblQuery.getSearchParameter("match_mismatch_score"));
+		assertEquals(new SearchParameter("match_mismatch_score", "1,-2"), emblQuery.getSearchParameter("match_mismatch_score"));
 		
 		assertEquals("EMBL-EBI", emblQuery.getDestination());
 		
@@ -34,13 +34,13 @@ public class TestBLASTQuery extends TestCase {
 		
 		BLASTQuery ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		
-		assertEquals(new OptionalParameter("database", "nr"), ncbiQuery.getSearchParameter("database"));
+		assertEquals(new SearchParameter("database", "nr"), ncbiQuery.getSearchParameter("database"));
 		
-		assertEquals(new OptionalParameter("word_size", "28"), ncbiQuery.getSearchParameter("word_size"));
+		assertEquals(new SearchParameter("word_size", "28"), ncbiQuery.getSearchParameter("word_size"));
 		
-		assertEquals(new OptionalParameter("exp_threshold", "10"), ncbiQuery.getSearchParameter("exp_threshold"));
+		assertEquals(new SearchParameter("exp_threshold", "10"), ncbiQuery.getSearchParameter("exp_threshold"));
 		
-		assertEquals(new OptionalParameter("match_mismatch_score", "1,-2"), ncbiQuery.getSearchParameter("match_mismatch_score"));
+		assertEquals(new SearchParameter("match_mismatch_score", "1,-2"), ncbiQuery.getSearchParameter("match_mismatch_score"));
 		
 		assertEquals("NCBI", ncbiQuery.getDestination());
 	}

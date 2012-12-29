@@ -10,7 +10,7 @@ import com.bioinformaticsapp.data.OptionalParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.OptionalParameter;
+import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.test.helpers.OhBLASTItTestHelper;
 
 public class BLASTQueryCRUDTest extends InstrumentationTestCase {
@@ -41,14 +41,14 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	public void testWeCanSaveADraftQueryToDatabase(){
 		
 		BLASTQuery draftQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		List<OptionalParameter> parameters = draftQuery.getAllParameters();
+		List<SearchParameter> parameters = draftQuery.getAllParameters();
 		long primaryKeyId = controller.save(draftQuery);
 		
 		assertTrue(primaryKeyId > 0);
 		
-		for(OptionalParameter optionalParameter: parameters){
-			optionalParameter.setBlastQueryId(primaryKeyId);
-			long parameterPrimaryKeyId = optionalParameterController.save(optionalParameter);
+		for(SearchParameter searchParameter: parameters){
+			searchParameter.setBlastQueryId(primaryKeyId);
+			long parameterPrimaryKeyId = optionalParameterController.save(searchParameter);
 			assertTrue(parameterPrimaryKeyId > 0);
 		}
 		
@@ -71,8 +71,8 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		
 		//save the optional parameter in the optional parameter table that
 		//references the parent table
-		List<OptionalParameter> parameters = new ArrayList<OptionalParameter>();
-		for(OptionalParameter parameter: queryInDatabase.getAllParameters()){
+		List<SearchParameter> parameters = new ArrayList<SearchParameter>();
+		for(SearchParameter parameter: queryInDatabase.getAllParameters()){
 			parameter.setBlastQueryId(primaryKeyId);
 			long parameterPK = optionalParameterController.save(parameter);
 			parameter.setPrimaryKey(parameterPK);
@@ -93,9 +93,9 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	public void testWeCanRetrieveTheOptionalParametersOfAQuery(){
 		BLASTQuery query = queryAsInsertedInDatebase();
 		
-		List<OptionalParameter> parameters = optionalParameterController.getParametersForQuery(query.getPrimaryKey());
+		List<SearchParameter> parameters = optionalParameterController.getParametersForQuery(query.getPrimaryKey());
 		
-		List<OptionalParameter> expectedParameters = query.getAllParameters();
+		List<SearchParameter> expectedParameters = query.getAllParameters();
 		boolean sameSize = (parameters.size() == expectedParameters.size());
 		assertTrue(parameters.containsAll(expectedParameters) && sameSize);
 		
@@ -108,7 +108,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		BLASTQuery queryInDatabase = queryAsInsertedInDatebase();
 		
 		BLASTQuery retrievedFromDatabase = controller.findBLASTQueryById(queryInDatabase.getPrimaryKey());
-		List<OptionalParameter> parametersForRetrievedQuery = optionalParameterController.getParametersForQuery(queryInDatabase.getPrimaryKey());
+		List<SearchParameter> parametersForRetrievedQuery = optionalParameterController.getParametersForQuery(queryInDatabase.getPrimaryKey());
 		retrievedFromDatabase.updateAllParameters(parametersForRetrievedQuery);
 		assertEquals(queryInDatabase, retrievedFromDatabase);
 	
@@ -154,7 +154,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		sampleQuery.setStatus(status);
 		
 		long blastQueryId = controller.save(sampleQuery);
-		for(OptionalParameter parameter: sampleQuery.getAllParameters()){
+		for(SearchParameter parameter: sampleQuery.getAllParameters()){
 			parameter.setBlastQueryId(blastQueryId);			
 			optionalParameterController.save(parameter);
 		}
@@ -177,14 +177,14 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	public void testWeCanUpdateAQuery(){
 		BLASTQuery draftQuery = queryAsInsertedInDatebase();
 		BLASTQuery retrieved = controller.findBLASTQueryById(draftQuery.getPrimaryKey());
-		List<OptionalParameter> parameters = optionalParameterController.getParametersForQuery(retrieved.getPrimaryKey());
+		List<SearchParameter> parameters = optionalParameterController.getParametersForQuery(retrieved.getPrimaryKey());
 		retrieved.updateAllParameters(parameters);
 		retrieved.setSearchParameter("match_mismatch_score", "1, -1");
 		retrieved.setSearchParameter("exp_threshold", "0.1");
 		
 		int noUpdated = controller.update(retrieved.getPrimaryKey(), retrieved);
 		
-		for(OptionalParameter parameter: retrieved.getAllParameters()){
+		for(SearchParameter parameter: retrieved.getAllParameters()){
 			noUpdated += optionalParameterController.update(parameter.getPrimaryKey(), parameter);
 		}
 		

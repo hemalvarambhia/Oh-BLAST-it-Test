@@ -15,7 +15,7 @@ import com.bioinformaticsapp.data.OptionalParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.OptionalParameter;
+import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.test.helpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
@@ -224,9 +224,9 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
         BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
 		
 		assertTrue("Expected query primary key to be more than 0, but got "+q.getPrimaryKey(), q.getPrimaryKey() > 0);
-		List<OptionalParameter> parameters = q.getAllParameters();
+		List<SearchParameter> parameters = q.getAllParameters();
 		for(int i = 0; i < q.getAllParameters().size(); i++){
-			OptionalParameter parameter = parameters.get(i);
+			SearchParameter parameter = parameters.get(i);
 			assertTrue("Expected parameter primary key to be more than 0, but got "+parameter.getPrimaryKey(), parameter.getPrimaryKey() > 0);
 			
 			//Check the query ID foreign key in the parameters table is equal to the primary key
@@ -249,7 +249,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
 		
 		assertNull("Primary Key should be null. Instead got "+q.getPrimaryKey(), q.getPrimaryKey());
-		List<OptionalParameter> parameters = q.getAllParameters();
+		List<SearchParameter> parameters = q.getAllParameters();
 		for(int i = 0; i < q.getAllParameters().size(); i++){
 			assertNull(parameters.get(i).getPrimaryKey());
 			
@@ -260,10 +260,10 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		BLASTQueryController queryController = new BLASTQueryController(getInstrumentation().getTargetContext());
 		long primaryKey = queryController.save(exampleNCBIQuery);
 		exampleNCBIQuery.setPrimaryKeyId(primaryKey);
-		List<OptionalParameter> parameters = exampleNCBIQuery.getAllParameters();
-		List<OptionalParameter> newSetOfParameters = new ArrayList<OptionalParameter>();
+		List<SearchParameter> parameters = exampleNCBIQuery.getAllParameters();
+		List<SearchParameter> newSetOfParameters = new ArrayList<SearchParameter>();
 		OptionalParameterController parametersControllers = new OptionalParameterController(getInstrumentation().getTargetContext());
-		for(OptionalParameter parameter: parameters){
+		for(SearchParameter parameter: parameters){
 			parameter.setBlastQueryId(exampleNCBIQuery.getPrimaryKey());
 			long parameterPrimaryKey = parametersControllers.save(parameter);
 			parameter.setPrimaryKey(parameterPrimaryKey);
@@ -284,7 +284,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		OptionalParameterController parametersController = new OptionalParameterController(getInstrumentation().getTargetContext());
 		
 		BLASTQuery query = queryController.findBLASTQueryById(pk);
-		List<OptionalParameter> parameters = parametersController.getParametersForQuery(pk);
+		List<SearchParameter> parameters = parametersController.getParametersForQuery(pk);
 		query.updateAllParameters(parameters);
 		
 		Intent intent = new Intent();
@@ -307,7 +307,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		getInstrumentation().waitForIdleSync();
 		
 		BLASTQuery queryFromDatabase = queryController.findBLASTQueryById(pk);
-		List<OptionalParameter> parametersFromDatabase = parametersController.getParametersForQuery(exampleNCBIQuery.getPrimaryKey());
+		List<SearchParameter> parametersFromDatabase = parametersController.getParametersForQuery(exampleNCBIQuery.getPrimaryKey());
 		queryFromDatabase.updateAllParameters(parametersFromDatabase);
 		
 		parametersController.close();

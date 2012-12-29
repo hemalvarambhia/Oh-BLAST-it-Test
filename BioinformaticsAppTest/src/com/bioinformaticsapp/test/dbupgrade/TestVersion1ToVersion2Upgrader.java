@@ -16,7 +16,7 @@ import com.bioinformaticsapp.data.OptionalParameterController;
 import com.bioinformaticsapp.data.Version1ToVersion2Upgrader;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.OptionalParameter;
+import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.models.BLASTQuery.BLASTJob;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 
@@ -228,7 +228,7 @@ public class TestVersion1ToVersion2Upgrader extends InstrumentationTestCase {
 		
 		while(allQueriesInNewTable.moveToNext()){
 			BLASTQuery query = controller.findBLASTQueryById(allQueriesInNewTable.getLong(0));
-			List<OptionalParameter> parameters = optionalParametersController.getParametersForQuery(query.getPrimaryKey());
+			List<SearchParameter> parameters = optionalParametersController.getParametersForQuery(query.getPrimaryKey());
 			query.updateAllParameters(parameters);
 			queriesInNewTable.add(query);
 		}

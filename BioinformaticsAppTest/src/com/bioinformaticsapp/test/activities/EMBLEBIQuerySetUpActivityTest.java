@@ -14,7 +14,7 @@ import com.bioinformaticsapp.data.OptionalParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.OptionalParameter;
+import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.test.helpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
@@ -119,7 +119,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		
         assertTrue("Query primary key expected to be more than 0 but got "+q.getPrimaryKey(), q.getPrimaryKey() > 0l);
         
-        for(OptionalParameter parameter: q.getAllParameters()){
+        for(SearchParameter parameter: q.getAllParameters()){
         	assertTrue("parameters primary key expected to be more than 0, but got "+parameter.getPrimaryKey(), parameter.getPrimaryKey() > 0l);
         	assertEquals(q.getPrimaryKey().longValue(), parameter.getBlastQueryId().longValue());
         }
@@ -134,9 +134,9 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		long id = controller.save(blastQuery);
 		blastQuery.setPrimaryKeyId(id);
 		controller.close();
-		List<OptionalParameter> theParameters = new ArrayList<OptionalParameter>();
-		List<OptionalParameter> parameters = blastQuery.getAllParameters();
-		for(OptionalParameter parameter: parameters){
+		List<SearchParameter> theParameters = new ArrayList<SearchParameter>();
+		List<SearchParameter> parameters = blastQuery.getAllParameters();
+		for(SearchParameter parameter: parameters){
 			long parameterId = parametersController.save(parameter);
 			parameter.setPrimaryKey(parameterId);
 			theParameters.add(parameter);

@@ -10,7 +10,7 @@ import com.bioinformaticsapp.data.DatabaseHelper;
 import com.bioinformaticsapp.data.OptionalParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.OptionalParameter;
+import com.bioinformaticsapp.models.SearchParameter;
 import com.jayway.android.robotium.solo.Solo;
 
 import android.database.sqlite.SQLiteDatabase;
@@ -215,10 +215,10 @@ public class PendingQueriesActivityTest extends
 		BLASTQueryController queryController = new BLASTQueryController(getInstrumentation().getTargetContext());
 		long primaryKey = queryController.save(query);
 		query.setPrimaryKeyId(primaryKey);
-		List<OptionalParameter> parameters = query.getAllParameters();
-		List<OptionalParameter> newSetOfParameters = new ArrayList<OptionalParameter>();
+		List<SearchParameter> parameters = query.getAllParameters();
+		List<SearchParameter> newSetOfParameters = new ArrayList<SearchParameter>();
 		OptionalParameterController parametersControllers = new OptionalParameterController(getInstrumentation().getTargetContext());
-		for(OptionalParameter parameter: parameters){
+		for(SearchParameter parameter: parameters){
 			parameter.setBlastQueryId(query.getPrimaryKey());
 			long parameterPrimaryKey = parametersControllers.save(parameter);
 			parameter.setPrimaryKey(parameterPrimaryKey);

@@ -16,7 +16,7 @@ import com.bioinformaticsapp.data.OptionalParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.OptionalParameter;
+import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.web.BLASTQuerySender;
 import com.bioinformaticsapp.web.BLASTQuerySender.Report;
 
@@ -87,8 +87,8 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		OptionalParameterController parameterController = new OptionalParameterController(context);
 		long queryPrimaryKey = queryController.save(query);
 		query.setPrimaryKeyId(queryPrimaryKey);
-		List<OptionalParameter> parameters = new ArrayList<OptionalParameter>();
-		for(OptionalParameter parameter: query.getAllParameters()){
+		List<SearchParameter> parameters = new ArrayList<SearchParameter>();
+		for(SearchParameter parameter: query.getAllParameters()){
 			parameter.setBlastQueryId(queryPrimaryKey);
 			long parameterPrimaryKey = parameterController.save(parameter);
 			parameter.setPrimaryKey(parameterPrimaryKey);

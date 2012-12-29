@@ -8,7 +8,7 @@ import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.data.DatabaseHelper;
 import com.bioinformaticsapp.data.OptionalParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.OptionalParameter;
+import com.bioinformaticsapp.models.SearchParameter;
 
 public class OhBLASTItTestHelper {
 
@@ -44,7 +44,7 @@ public class OhBLASTItTestHelper {
 		BLASTQueryController queryController = new BLASTQueryController(mContext);
 		OptionalParameterController parameterController = new OptionalParameterController(mContext);
 		long queryPrimaryKey = queryController.save(query);
-		for(OptionalParameter parameter: query.getAllParameters()){
+		for(SearchParameter parameter: query.getAllParameters()){
 			parameter.setBlastQueryId(queryPrimaryKey);
 			parameterController.save(parameter);
 		}

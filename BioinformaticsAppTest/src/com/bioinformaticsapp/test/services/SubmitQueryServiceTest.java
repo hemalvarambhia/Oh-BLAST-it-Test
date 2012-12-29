@@ -8,7 +8,7 @@ import com.bioinformaticsapp.data.DatabaseHelper;
 import com.bioinformaticsapp.data.OptionalParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.OptionalParameter;
+import com.bioinformaticsapp.models.SearchParameter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -64,9 +64,9 @@ public class SubmitQueryServiceTest extends ServiceTestCase<SubmitQueryService> 
 		queryController = new BLASTQueryController(ctx);
 		parameterController = new OptionalParameterController(ctx);
 		long queryId = queryController.save(query);
-		List<OptionalParameter> parameters = query.getAllParameters();
+		List<SearchParameter> parameters = query.getAllParameters();
 		
-		for(OptionalParameter parameter: parameters){
+		for(SearchParameter parameter: parameters){
 			parameter.setBlastQueryId(queryId);
 			parameterController.save(parameter);
 		}

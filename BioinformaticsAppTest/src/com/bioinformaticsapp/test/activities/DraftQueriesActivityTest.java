@@ -17,7 +17,7 @@ import com.bioinformaticsapp.data.OptionalParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.OptionalParameter;
+import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.test.helpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
@@ -55,7 +55,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 		BLASTQueryController queryController = new BLASTQueryController(ctx);
 		OptionalParameterController parametersController = new OptionalParameterController(ctx);
 		long blastQueryId = queryController.save(sampleNCBIQuery);
-		for(OptionalParameter parameter: sampleNCBIQuery.getAllParameters()){
+		for(SearchParameter parameter: sampleNCBIQuery.getAllParameters()){
 			parameter.setBlastQueryId(blastQueryId);
 			parametersController.save(parameter);
 		}
