@@ -4,6 +4,7 @@ import com.bioinformaticsapp.exception.IllegalBLASTQueryException;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.web.BLASTSequenceQueryingService;
+import com.bioinformaticsapp.web.SearchStatus;
 
 public class BLASTQueryingServiceBuilder {
 
@@ -21,7 +22,7 @@ public class BLASTQueryingServiceBuilder {
 				return null;
 			}
 			
-			public Status pollQuery(String jobId) {
+			public SearchStatus pollQuery(String jobId) {
 				// Not tested
 				return null;
 			}

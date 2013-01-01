@@ -14,6 +14,7 @@ import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.web.BLASTSequenceQueryingService;
 import com.bioinformaticsapp.web.NCBIBLASTService;
+import com.bioinformaticsapp.web.SearchStatus;
 
 /**
  * @author Hemal N Varambhia
@@ -69,10 +70,10 @@ public class NCBIBLASTServiceTest extends TestCase {
 			e.printStackTrace();
 		}
 		
-		Status statusOfQuery = ncbiBLASTService.pollQuery(jobIdentifier);
+		SearchStatus statusOfQuery = ncbiBLASTService.pollQuery(jobIdentifier);
 		
-		Status[] allStatuses = new Status[]{BLASTQuery.Status.RUNNING, BLASTQuery.Status.FINISHED};
-		List<Status> listOfAllStatuses = Arrays.asList(allStatuses);
+		SearchStatus[] allStatuses = new SearchStatus[]{SearchStatus.RUNNING, SearchStatus.FINISHED};
+		List<SearchStatus> listOfAllStatuses = Arrays.asList(allStatuses);
 		
 		boolean isAValidStatus = listOfAllStatuses.contains(statusOfQuery);
 		
@@ -83,10 +84,10 @@ public class NCBIBLASTServiceTest extends TestCase {
 		
 		String nonExistentJobIdentifier = "NONEXISTENT123";
 		
-		Status theStatus = Status.UNSURE;
+		SearchStatus theStatus = SearchStatus.UNSURE;
 		theStatus = ncbiBLASTService.pollQuery(nonExistentJobIdentifier);
 		
-		assertEquals(Status.NOT_FOUND, theStatus);
+		assertEquals(SearchStatus.NOT_FOUND, theStatus);
 		
 	}
 

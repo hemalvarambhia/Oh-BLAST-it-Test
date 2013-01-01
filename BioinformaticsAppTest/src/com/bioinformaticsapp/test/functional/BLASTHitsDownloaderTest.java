@@ -14,14 +14,17 @@ import android.util.Log;
 import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.data.DatabaseHelper;
 import com.bioinformaticsapp.data.SearchParameterController;
+import com.bioinformaticsapp.helpers.StatusTranslator;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.SearchParameter;
+import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.bioinformaticsapp.web.BLASTHitsDownloadingTask;
 import com.bioinformaticsapp.web.BLASTQuerySender;
 import com.bioinformaticsapp.web.BLASTSequenceQueryingService;
 import com.bioinformaticsapp.web.EMBLEBIBLASTService;
 import com.bioinformaticsapp.web.NCBIBLASTService;
+import com.bioinformaticsapp.web.SearchStatus;
 
 public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 
@@ -37,8 +40,8 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 	
 	public void setUp() throws Exception {
 		context = getInstrumentation().getTargetContext();
-		
-		clearDatabase();
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(context);
+		helper.cleanDatabase();
 		
 		sender = new BLASTQuerySender(context);
 		downloader = new BLASTHitsDownloadingTask(context);
@@ -56,27 +59,6 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 				Log.i(TAG, "BLAST hits file deleted");
 			}
 		}
-	}
-	
-	private void clearDatabase(){
-		DatabaseHelper helper = new DatabaseHelper(context);
-		
-		SQLiteDatabase db = helper.getWritableDatabase();
-		
-		if(db.delete(BLASTQuery.BLAST_SEARCH_PARAMS_TABLE, null, null) > 0){
-			Log.i(TAG, "Data from "+BLASTQuery.BLAST_SEARCH_PARAMS_TABLE+" deleted");
-		}else{
-			Log.i(TAG, BLASTQuery.BLAST_SEARCH_PARAMS_TABLE+" already clean");
-		}
-		
-		if(db.delete(BLASTQuery.BLAST_QUERY_TABLE, null, null) > 0){
-			Log.i(TAG, "Data from "+BLASTQuery.BLAST_QUERY_TABLE+" deleted");
-		}else{
-
-			Log.i(TAG, BLASTQuery.BLAST_QUERY_TABLE+" already clean");
-		}
-		
-		db.close();
 	}
 	
 	private void save(BLASTQuery query){
@@ -105,13 +87,13 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 	}
 	
 	private void waitUntilFinished(BLASTQuery query) throws InterruptedException, ExecutionException{
-		
+		StatusTranslator translator = new StatusTranslator();
 		BLASTSequenceQueryingService service = getServiceFor(query.getVendorID());
-		BLASTQuery.Status current = service.pollQuery(query.getJobIdentifier());
-		query.setStatus(current);
-		while(query.getStatus().equals(BLASTQuery.Status.RUNNING)){
+		SearchStatus current = service.pollQuery(query.getJobIdentifier());
+		query.setStatus(translator.translate(current));
+		while(current.equals(SearchStatus.RUNNING)){
 			current = service.pollQuery(query.getJobIdentifier());
-			query.setStatus(current);
+			query.setStatus(translator.translate(current));
 		}
 		Log.i(TAG, "BLAST search finished. Status of query is "+query.getStatus());
 	}

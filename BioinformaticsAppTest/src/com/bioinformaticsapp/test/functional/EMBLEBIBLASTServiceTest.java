@@ -12,6 +12,7 @@ import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.web.BLASTSequenceQueryingService;
 import com.bioinformaticsapp.web.EMBLEBIBLASTService;
+import com.bioinformaticsapp.web.SearchStatus;
 
 
 public class EMBLEBIBLASTServiceTest extends TestCase {
@@ -52,8 +53,8 @@ public class EMBLEBIBLASTServiceTest extends TestCase {
 	}
 	
 	public void testWeCanPollStatusOfAQuery(){
-		Status[] validOutcomes = Status.values();
-		List<Status> outcomes=  Arrays.asList(validOutcomes);
+		SearchStatus[] validOutcomes = SearchStatus.values();
+		List<SearchStatus> outcomes=  Arrays.asList(validOutcomes);
 		
 		BLASTQuery query = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
 		query.setSearchParameter("email", "h.n.varambhia@gmail.com");
@@ -68,7 +69,7 @@ public class EMBLEBIBLASTServiceTest extends TestCase {
 		}
 		assertNotNull("Job identifier was not generated for the query", jobIdentifier);
 		
-		Status status = service.pollQuery(jobIdentifier);
+		SearchStatus status = service.pollQuery(jobIdentifier);
 		
 		boolean isValidStatus = outcomes.contains(status);
 		
@@ -80,7 +81,7 @@ public class EMBLEBIBLASTServiceTest extends TestCase {
 		String jobIdentifier = null;
 		try {
 			@SuppressWarnings("unused")
-			Status status = service.pollQuery(jobIdentifier);
+			SearchStatus status = service.pollQuery(jobIdentifier);
 			
 		} catch(IllegalArgumentException e){
 			
@@ -91,10 +92,10 @@ public class EMBLEBIBLASTServiceTest extends TestCase {
 	public void testWeGetNotFoundForANonExistentBlastQuery(){
 		String nonExistentJobIdentifier = "NONEXISTENT123";
 		
-		Status status = Status.UNSURE;
+		SearchStatus status = SearchStatus.UNSURE;
 		status = service.pollQuery(nonExistentJobIdentifier);
 		
-		assertEquals(Status.NOT_FOUND, status);
+		assertEquals(SearchStatus.NOT_FOUND, status);
 		
 	}
 	
