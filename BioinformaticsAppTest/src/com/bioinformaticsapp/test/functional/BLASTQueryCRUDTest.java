@@ -11,7 +11,7 @@ import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.SearchParameter;
-import com.bioinformaticsapp.test.helpers.OhBLASTItTestHelper;
+import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 
 public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 

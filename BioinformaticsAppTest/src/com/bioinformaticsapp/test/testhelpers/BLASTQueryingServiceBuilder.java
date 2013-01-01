@@ -1,4 +1,4 @@
-package com.bioinformaticsapp.test.helpers;
+package com.bioinformaticsapp.test.testhelpers;
 
 import com.bioinformaticsapp.exception.IllegalBLASTQueryException;
 import com.bioinformaticsapp.models.BLASTQuery;

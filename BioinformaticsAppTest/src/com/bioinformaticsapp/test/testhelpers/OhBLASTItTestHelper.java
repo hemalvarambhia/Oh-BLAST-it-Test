@@ -1,4 +1,4 @@
-package com.bioinformaticsapp.test.helpers;
+package com.bioinformaticsapp.test.testhelpers;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

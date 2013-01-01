@@ -7,7 +7,7 @@ import com.bioinformaticsapp.BioinformaticsAppHomeActivity;
 import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
 import com.bioinformaticsapp.NCBIQuerySetUpActivity;
 import com.bioinformaticsapp.R;
-import com.bioinformaticsapp.test.helpers.OhBLASTItTestHelper;
+import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 //Test case for the home screen
 public class BioInformaticsAppHomeActivityTest extends ActivityInstrumentationTestCase2<BioinformaticsAppHomeActivity> {
