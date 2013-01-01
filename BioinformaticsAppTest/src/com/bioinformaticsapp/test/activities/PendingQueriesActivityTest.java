@@ -11,6 +11,7 @@ import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
+import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
@@ -38,13 +39,13 @@ public class PendingQueriesActivityTest extends
 		helper.cleanDatabase();
 		
 		emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		emblQuery.setStatus(BLASTQuery.Status.PENDING);
+		emblQuery.setStatus(Status.SUBMITTED);
 		emblQuery.setJobIdentifier("ncbiblast-R20120418-133731-0240-81389354-pg");		
 		emblQuery.setSearchParameter("email", "example@email.com");
 		saveQuery(emblQuery);
 		
 		ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
-		ncbiQuery.setStatus(BLASTQuery.Status.PENDING);
+		ncbiQuery.setStatus(Status.SUBMITTED);
 		ncbiQuery.setJobIdentifier("YAMJ8623016");		
 		saveQuery(ncbiQuery);
 		
