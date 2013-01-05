@@ -63,7 +63,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		queryInDatabase.setSearchParameter("match_mismatch_score", "1, 2");
 		queryInDatabase.setSearchParameter("database", "em_rel");
 		queryInDatabase.setJobIdentifier("ABC348948934D");
-		queryInDatabase.setStatus(Status.RUNNING);
+		queryInDatabase.setStatus(Status.DRAFT);
 		
 		//Save the sequnce, status, job ID into the parent table 
 		long primaryKeyId = controller.save(queryInDatabase);
@@ -163,14 +163,13 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		
 	}
 	
-	public void testWeCanRetrieveSubmittedAndRunningBLASTQueries(){
+	public void testWeCanRetrieveSubmittedBLASTQueries(){
 		insertBLASTQueryWithStatus(Status.DRAFT);
-		insertBLASTQueryWithStatus(Status.RUNNING);
 		insertBLASTQueryWithStatus(Status.SUBMITTED);
 		
 		List<BLASTQuery> runningAndSubmittedQueries = controller.getSubmittedAndRunningQueries();
 		
-		assertEquals(2, runningAndSubmittedQueries.size());
+		assertEquals(1, runningAndSubmittedQueries.size());
 		
 	}
 	
