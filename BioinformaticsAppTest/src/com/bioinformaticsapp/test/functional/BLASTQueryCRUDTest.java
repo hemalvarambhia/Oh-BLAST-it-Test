@@ -167,7 +167,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		insertBLASTQueryWithStatus(Status.DRAFT);
 		insertBLASTQueryWithStatus(Status.SUBMITTED);
 		
-		List<BLASTQuery> runningAndSubmittedQueries = controller.getSubmittedAndRunningQueries();
+		List<BLASTQuery> runningAndSubmittedQueries = controller.getSubmittedBLASTQueries();
 		
 		assertEquals(1, runningAndSubmittedQueries.size());
 		
