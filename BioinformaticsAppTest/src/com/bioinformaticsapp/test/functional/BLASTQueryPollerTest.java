@@ -6,16 +6,14 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.test.InstrumentationTestCase;
-import android.util.Log;
 
 import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.DatabaseHelper;
 import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.SearchParameter;
+import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.bioinformaticsapp.web.BLASTQueryPoller;
 import com.bioinformaticsapp.web.BLASTQuerySender;
 
@@ -30,8 +28,8 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	
 	protected void setUp() throws Exception {
 		context = getInstrumentation().getTargetContext();
-		
-		clearDatabase();
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(context);
+		helper.cleanDatabase();
 		
 		emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
 		emblQuery.setSearchParameter("email", "h.n.varambhia@gmail.com");
@@ -57,28 +55,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 		context = null;
 		super.tearDown();
 	}
-	
-	private void clearDatabase(){
-		DatabaseHelper helper = new DatabaseHelper(context);
-		
-		SQLiteDatabase db = helper.getWritableDatabase();
-		
-		if(db.delete(BLASTQuery.BLAST_SEARCH_PARAMS_TABLE, null, null) > 0){
-			Log.i(TAG, "Data from "+BLASTQuery.BLAST_SEARCH_PARAMS_TABLE+" deleted");
-		}else{
-			Log.i(TAG, BLASTQuery.BLAST_SEARCH_PARAMS_TABLE+" already clean");
-		}
-		
-		if(db.delete(BLASTQuery.BLAST_QUERY_TABLE, null, null) > 0){
-			Log.i(TAG, "Data from "+BLASTQuery.BLAST_QUERY_TABLE+" deleted");
-		}else{
 
-			Log.i(TAG, BLASTQuery.BLAST_QUERY_TABLE+" already clean");
-		}
-		
-		db.close();
-	}
-	
 	private void save(BLASTQuery query){
 		BLASTQueryController queryController = new BLASTQueryController(context);
 		SearchParameterController parameterController = new SearchParameterController(context);
@@ -119,7 +96,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 		} catch (ExecutionException e) {
 			fail("There was a problem in poller the query");
 		}
-		BLASTQuery.Status[] possibilities = new BLASTQuery.Status[] { BLASTQuery.Status.RUNNING, BLASTQuery.Status.FINISHED };
+		BLASTQuery.Status[] possibilities = new BLASTQuery.Status[] { BLASTQuery.Status.SUBMITTED, BLASTQuery.Status.FINISHED };
 		boolean pollingYieldsValidStatus = Arrays.binarySearch(possibilities, emblQuery.getStatus()) > -1;
 		assertTrue(pollingYieldsValidStatus);
 		
@@ -138,7 +115,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 		} catch (ExecutionException e) {
 			fail("There was a problem in polling the query");
 		}
-		BLASTQuery.Status[] possibilities = new BLASTQuery.Status[] { BLASTQuery.Status.RUNNING, BLASTQuery.Status.FINISHED };
+		BLASTQuery.Status[] possibilities = new BLASTQuery.Status[] { BLASTQuery.Status.SUBMITTED, BLASTQuery.Status.FINISHED };
 		boolean pollingYieldsValidStatus = Arrays.binarySearch(possibilities, ncbiQuery.getStatus()) > -1;
 		assertTrue(pollingYieldsValidStatus);
 		
@@ -171,11 +148,11 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 		} catch (ExecutionException e) {
 			fail("There was a problem in poller the query");
 		}
-		BLASTQuery.Status[] possibilities = new BLASTQuery.Status[] { BLASTQuery.Status.RUNNING, BLASTQuery.Status.FINISHED };
+		BLASTQuery.Status[] possibilities = new BLASTQuery.Status[] { BLASTQuery.Status.SUBMITTED, BLASTQuery.Status.FINISHED };
 		
 		for(BLASTQuery query: queries){
 			boolean pollingYieldsValidStatus = Arrays.binarySearch(possibilities, query.getStatus()) > -1;
-			assertTrue("query does not have a status of RUNNING or FINISHED; it has a status of "+query.getStatus(), pollingYieldsValidStatus);
+			assertTrue("query does not have a status of SUBMITTED or FINISHED; it has a status of "+query.getStatus(), pollingYieldsValidStatus);
 		} 
 		
 	}
