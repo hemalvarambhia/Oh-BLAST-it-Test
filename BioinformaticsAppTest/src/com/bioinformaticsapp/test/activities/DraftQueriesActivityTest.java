@@ -212,7 +212,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 		
 		solo.clickOnText(viewParametersOption);
 		
-		boolean hasATitle = solo.searchText("BLAST Query parameters");
+		boolean hasATitle = solo.searchText("BLAST Query Parameters");
 
 		assertTrue("There should be an appropriate title", hasATitle);
 		
