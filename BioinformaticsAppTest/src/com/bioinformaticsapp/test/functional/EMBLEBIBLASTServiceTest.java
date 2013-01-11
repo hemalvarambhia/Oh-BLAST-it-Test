@@ -4,12 +4,10 @@ import java.util.List;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import android.util.Log;
 
 import com.bioinformaticsapp.exception.IllegalBLASTQueryException;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.web.BLASTSequenceQueryingService;
 import com.bioinformaticsapp.web.EMBLEBIBLASTService;
 import com.bioinformaticsapp.web.SearchStatus;
