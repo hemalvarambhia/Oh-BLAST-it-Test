@@ -22,8 +22,8 @@ public class BLASTQuerySearchParametersActivityTest extends
 	}
 	
 	public void tearDown(){
-		anyQuery = null;
 		solo.finishOpenedActivities();
+		anyQuery = null;
 	}
 	
 	
