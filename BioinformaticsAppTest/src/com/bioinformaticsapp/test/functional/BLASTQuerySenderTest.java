@@ -5,17 +5,16 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
 
 import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.DatabaseHelper;
 import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.SearchParameter;
+import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.bioinformaticsapp.web.BLASTQuerySender;
 
 /**
@@ -36,7 +35,8 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 	
 	protected void setUp() throws Exception {
 		context = getInstrumentation().getTargetContext();
-		clearDatabase();
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(context);
+		helper.cleanDatabase();
 		
 		query = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		query.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
@@ -58,28 +58,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		context = null;
 		super.tearDown();
 	}
-	
-	private void clearDatabase(){
-		DatabaseHelper helper = new DatabaseHelper(context);
-		
-		SQLiteDatabase db = helper.getWritableDatabase();
-		
-		if(db.delete(BLASTQuery.BLAST_SEARCH_PARAMS_TABLE, null, null) > 0){
-			Log.i(TAG, "Data from "+BLASTQuery.BLAST_SEARCH_PARAMS_TABLE+" deleted");
-		}else{
-			Log.i(TAG, BLASTQuery.BLAST_SEARCH_PARAMS_TABLE+" already clean");
-		}
-		
-		if(db.delete(BLASTQuery.BLAST_QUERY_TABLE, null, null) > 0){
-			Log.i(TAG, "Data from "+BLASTQuery.BLAST_QUERY_TABLE+" deleted");
-		}else{
 
-			Log.i(TAG, BLASTQuery.BLAST_QUERY_TABLE+" already clean");
-		}
-		
-		db.close();
-	}
-	
 	private void save(BLASTQuery query){
 		BLASTQueryController queryController = new BLASTQueryController(context);
 		SearchParameterController parameterController = new SearchParameterController(context);
