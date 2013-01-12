@@ -15,6 +15,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
 import com.bioinformaticsapp.FinishedQueriesActivity;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.data.BLASTQueryController;
@@ -87,7 +88,7 @@ public class FinishedQueriesActivityTest extends
 		
 	}
 
-	public void testThatTappingOptionToSeeParametersShowsParametersOfSelectedEMBLQuery(){
+	public void testWeCanSeeTheParametersOfSelectedEMBLQuery(){
 		
 		emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
 		emblQuery.setStatus(BLASTQuery.Status.FINISHED);
@@ -105,53 +106,16 @@ public class FinishedQueriesActivityTest extends
 		
 		solo.clickOnText(viewParametersOption);
 		
+		solo.assertCurrentActivity("Should show the search parameters activity", BLASTQuerySearchParametersActivity.class);
+		
 		boolean checkJobIdIsShownAsTitle = solo.searchText(emblQuery.getJobIdentifier());
 		
 		assertTrue("Title is the job identifier", checkJobIdIsShownAsTitle);
 		
-		boolean programLabelShown = solo.searchText("Program");
-		
-		assertTrue("Should see the program label", programLabelShown);
-		
-		boolean valueOfProgramShown = solo.searchText(emblQuery.getBLASTProgram());
-		
-		assertTrue("Should see the value of the program parameter", valueOfProgramShown);
-		
-		boolean databaseLabelShown = solo.searchText("Program");
-		
-		assertTrue("Should see the database label", databaseLabelShown);
-		
-		boolean valueOfDatabaseShown = solo.searchText(emblQuery.getSearchParameter("database").getValue());
-		
-		assertTrue("Should see the value of the database parameter", valueOfDatabaseShown);
-		
-		boolean expThresholdLabelShown = solo.searchText("Exp. Threshold");
-		
-		assertTrue("Should see the exp threshold label", expThresholdLabelShown);
-		
-		boolean valueOfExpThresholdShown = solo.searchText(emblQuery.getSearchParameter("exp_threshold").getValue());
-		
-		assertTrue("Should see the value of the exp. threshold parameter", valueOfExpThresholdShown);
-		
-		boolean scoreLabelShown = solo.searchText("Score");
-		
-		assertTrue("Should see the score label", scoreLabelShown);
-		
-		boolean valueOfScoreShown = solo.searchText(emblQuery.getSearchParameter("score").getValue());
-		
-		assertTrue("Should see the value of the score parameter", valueOfScoreShown);
-		
-		boolean emailLabelShown = solo.searchText("E-mail");
-		
-		assertTrue("Should see the email label", emailLabelShown);
-		
-		boolean valueOfEmailShown = solo.searchText(emblQuery.getSearchParameter("email").getValue());
-		
-		assertTrue("Should see the value of the e-mail parameter", valueOfEmailShown);
-		
+			
 	}
 	
-	public void testThatTappingOptionToSeeParametersShowsParametersOfSelectedNCBIQuery(){
+	public void testWeCanSeeTheParametersOfSelectedNCBIQuery(){
 		
 		ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		ncbiQuery.setStatus(BLASTQuery.Status.FINISHED);
@@ -168,50 +132,12 @@ public class FinishedQueriesActivityTest extends
 		
 		solo.clickOnText(viewParametersOption);
 		
+		solo.assertCurrentActivity("Should show the search parameters activity", BLASTQuerySearchParametersActivity.class);
+		
 		boolean checkJobIdIsShownAsTitle = solo.searchText(ncbiQuery.getJobIdentifier());
 		
 		assertTrue("Title is the job identifier", checkJobIdIsShownAsTitle);
-		
-		boolean programLabelShown = solo.searchText("Program");
-		
-		assertTrue("Should see the program label", programLabelShown);
-		
-		boolean valueOfProgramShown = solo.searchText(ncbiQuery.getBLASTProgram());
-		
-		assertTrue("Should see the value of the program parameter", valueOfProgramShown);
-		
-		boolean databaseLabelShown = solo.searchText("Database");
-		
-		assertTrue("Should see the database label", databaseLabelShown);
-		
-		boolean valueOfDatabaseShown = solo.searchText(ncbiQuery.getSearchParameter("database").getValue());
-		
-		assertTrue("Should see the value of the database parameter", valueOfDatabaseShown);
-		
-		boolean expThresholdLabelShown = solo.searchText("Exp. Threshold");
-		
-		assertTrue("Should see the exp threshold label", expThresholdLabelShown);
-		
-		boolean valueOfExpThresholdShown = solo.searchText(ncbiQuery.getSearchParameter("exp_threshold").getValue());
-		
-		assertTrue("Should see the value of the exp. threshold parameter", valueOfExpThresholdShown);
-		
-		boolean wordSizeLabelShown = solo.searchText("Word Size");
-		
-		assertTrue("Should see the word size label", wordSizeLabelShown);
-		
-		boolean valueOfWordSizeShown = solo.searchText(ncbiQuery.getSearchParameter("word_size").getValue());
-		
-		assertTrue("Should see the value of the word size parameter", valueOfWordSizeShown);
-		
-		boolean matchMismatchScoreLabelShown = solo.searchText("Match/Mis-Match Score");
-		
-		assertTrue("Should see the word size label", matchMismatchScoreLabelShown);
-		
-		boolean valueOfMatchMisMatchScoreShown = solo.searchText(ncbiQuery.getSearchParameter("match_mismatch_score").getValue());
-		
-		assertTrue("Should see the value of the match mis-match score parameter", valueOfMatchMisMatchScoreShown);
-		
+			
 	}
 	
 	public void testWeCanDeleteABLASTQuery() throws IOException{
