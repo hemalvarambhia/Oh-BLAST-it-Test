@@ -93,4 +93,21 @@ public class BLASTQuerySearchParametersActivityTest extends
 		
 	}
 	
+	public void testWeCanSeeTheScoreParameterOfAnEBIQuery(){
+		BLASTQuery ebiemblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		Intent intent = new Intent();
+		intent.putExtra("query", ebiemblQuery);
+		setActivityIntent(intent);
+		
+		solo = new Solo(getInstrumentation(), getActivity());
+		solo.waitForView(ListView.class);
+		
+		boolean hasScoreLabel = solo.searchText("Maximum number of scores");
+		assertTrue("should display the 'Maximum number of scores' label", hasScoreLabel);
+		
+		boolean displaysScoreParameter = solo.searchText(ebiemblQuery.getSearchParameter("score").getValue());
+		assertTrue("should display the score parameter", displaysScoreParameter);
+		
+	}
+	
 }
