@@ -7,7 +7,6 @@ import java.util.concurrent.ExecutionException;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.InstrumentationTestCase;
-import android.test.MoreAsserts;
 import android.util.Log;
 
 import com.bioinformaticsapp.data.BLASTQueryController;
@@ -18,7 +17,6 @@ import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.web.BLASTQuerySender;
-import com.bioinformaticsapp.web.BLASTQuerySender.Report;
 
 /**
  * Here we will set the status of the queries to <code>PENDING</code>
@@ -328,7 +326,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		
 	}
 	
-	public void testSenderSetsAnErrorneousQueryToERROR(){
+	public void testSenderSetsAnErrorneousQueryToDRAFT(){
 		final BLASTQuery invalidQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
 		invalidQuery.setStatus(BLASTQuery.Status.PENDING);
 		save(invalidQuery);
@@ -354,7 +352,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 			fail(e.getMessage());
 		}
 		
-		assertEquals(BLASTQuery.Status.ERROR, invalidQuery.getStatus());
+		assertEquals(BLASTQuery.Status.DRAFT, invalidQuery.getStatus());
 	}
 	
 	
