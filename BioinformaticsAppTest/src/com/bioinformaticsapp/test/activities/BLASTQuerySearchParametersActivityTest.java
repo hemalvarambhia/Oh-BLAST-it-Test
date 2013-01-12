@@ -110,4 +110,21 @@ public class BLASTQuerySearchParametersActivityTest extends
 		
 	}
 	
+	public void testWeCanSeeTheWordSizeParameterOfAnNCBIQuery(){
+		BLASTQuery ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
+		Intent intent = new Intent();
+		intent.putExtra("query", ncbiQuery);
+		setActivityIntent(intent);
+		
+		solo = new Solo(getInstrumentation(), getActivity());
+		solo.waitForView(ListView.class);
+		
+		boolean hasWordSizeLabel = solo.searchText("Word size");
+		assertTrue("should display the 'Word size' label", hasWordSizeLabel);
+		
+		boolean displaysWordSizeParameter = solo.searchText(ncbiQuery.getSearchParameter("word_size").getValue());
+		assertTrue("should display the word size parameter", displaysWordSizeParameter);
+		
+	}
+	
 }
