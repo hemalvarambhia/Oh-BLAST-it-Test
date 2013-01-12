@@ -12,26 +12,23 @@ import android.widget.ListView;
 public class BLASTQuerySearchParametersActivityTest extends
 		ActivityInstrumentationTestCase2<BLASTQuerySearchParametersActivity> {
 
-	private BLASTQuery anyQuery;
 	private Solo solo;
 	public BLASTQuerySearchParametersActivityTest(){
 		super(BLASTQuerySearchParametersActivity.class);
 	}
 	
-	public void setUp() throws Exception {
-		anyQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+	public void tearDown() throws Exception {
+		if(solo != null)	
+			solo.finishOpenedActivities();
+		super.tearDown();
+	}
+	
+	public void testWeCanSeeTheDatabaseParameterDetails(){
+		BLASTQuery anyQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
 		Intent intent = new Intent();
 		intent.putExtra("query", anyQuery);
 		setActivityIntent(intent);
 		
-	}
-	
-	public void tearDown(){
-		solo.finishOpenedActivities();
-		anyQuery = null;
-	}
-	
-	public void testWeCanSeeTheDatabaseParameterDetails(){
 		solo = new Solo(getInstrumentation(), getActivity());
 		solo.waitForView(ListView.class);
 		
@@ -44,6 +41,11 @@ public class BLASTQuerySearchParametersActivityTest extends
 	}
 	
 	public void testWeCanSeeTheExpThresholdDetails(){
+		BLASTQuery anyQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		Intent intent = new Intent();
+		intent.putExtra("query", anyQuery);
+		setActivityIntent(intent);
+		
 		solo = new Solo(getInstrumentation(), getActivity());
 		solo.waitForView(ListView.class);
 		
@@ -56,6 +58,11 @@ public class BLASTQuerySearchParametersActivityTest extends
 	}
 	
 	public void testWeCanSeeTheMatchMismatchScoreDetails(){
+		BLASTQuery anyQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		Intent intent = new Intent();
+		intent.putExtra("query", anyQuery);
+		setActivityIntent(intent);
+		
 		solo = new Solo(getInstrumentation(), getActivity());
 		solo.waitForView(ListView.class);
 		
@@ -64,6 +71,25 @@ public class BLASTQuerySearchParametersActivityTest extends
 		
 		boolean displaysMatchMismatchScoreParameter = solo.searchText(anyQuery.getSearchParameter("match_mismatch_score").getValue());
 		assertTrue("should display the value of the match/mismatch score parameter", displaysMatchMismatchScoreParameter);
+		
+	}
+	
+	public void testWeCanSeeTheEmailParameterOfAnEBIQuery(){
+		BLASTQuery ebiemblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		String email = "test.user@ohblastit.com";
+		ebiemblQuery.setSearchParameter("email", email);
+		Intent intent = new Intent();
+		intent.putExtra("query", ebiemblQuery);
+		setActivityIntent(intent);
+		
+		solo = new Solo(getInstrumentation(), getActivity());
+		solo.waitForView(ListView.class);
+		
+		boolean hasEmailLabel = solo.searchText("E-mail");
+		assertTrue("should display the 'E-mail' label", hasEmailLabel);
+		
+		boolean displaysEmailParameter = solo.searchText(ebiemblQuery.getSearchParameter("email").getValue());
+		assertTrue("should display the email address parameter", displaysEmailParameter);
 		
 	}
 	
