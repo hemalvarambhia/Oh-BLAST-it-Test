@@ -216,6 +216,21 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		
 	}
 	
+	public void testWeCanEditMatchMisMatchScore(){
+		Intent intent = new Intent();
+		intent.putExtra("query", blastQuery);
+		setActivityIntent(intent);
+		
+		EMBLEBISetUpQueryActivity setupActivity = getActivity();
+		solo = new Solo(getInstrumentation(), setupActivity);
+		solo.pressSpinnerItem(4, -2);
+		getInstrumentation().waitForIdleSync();
+		Spinner matchMismatchScoreSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.ebi_match_mismatch_score_spinner);
+		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
+		assertEquals(matchMismatchScoreSpinner.getSelectedItem().toString(), q.getSearchParameter("match_mismatch_score").getValue());
+		
+	}
+	
 	public void testWeCanEditTheExpThresholdOfADraftQuery(){
 		Intent intent = new Intent();
 		intent.putExtra("query", blastQuery);
@@ -223,7 +238,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		
 		EMBLEBISetUpQueryActivity setupActivity = getActivity();
 		solo = new Solo(getInstrumentation(), setupActivity);
-		solo.pressSpinnerItem(3, 2);
+		solo.pressSpinnerItem(3, 3);
 		getInstrumentation().waitForIdleSync();
 		Spinner scoreSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_expthreshold_spinner);
 		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
