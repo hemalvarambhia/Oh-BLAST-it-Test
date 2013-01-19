@@ -1,14 +1,12 @@
 package com.bioinformatics.test.content;
 
-import java.util.List;
+import android.test.LoaderTestCase;
 
 import com.bioinformatics.content.BLASTQueryLoader;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
-
-import android.test.LoaderTestCase;
 
 public class BLASTQueryLoaderTest extends LoaderTestCase {
 
@@ -34,9 +32,9 @@ public class BLASTQueryLoaderTest extends LoaderTestCase {
 	}
 	
 	public void testWeCanRetrieveDraftQueries(){
-		List<BLASTQuery> draftQueries = getLoaderResultSynchronously(mBLASTQueryloader);
+		BLASTQuery[] draftQueries = getLoaderResultSynchronously(mBLASTQueryloader);
 		
-		assertEquals(1, draftQueries.size());
+		assertEquals(1, draftQueries.length);
 	}
 	
 }
