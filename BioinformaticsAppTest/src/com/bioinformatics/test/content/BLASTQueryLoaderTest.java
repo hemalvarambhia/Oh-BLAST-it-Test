@@ -22,7 +22,7 @@ public class BLASTQueryLoaderTest extends LoaderTestCase {
 		super.tearDown();
 	}
 	
-	public void testWeCanLoadQueriesByStatus(){
+	public void testWeCanLoadQueryByStatus(){
 		BLASTQuery draftQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
 		BLASTQuery finished = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
 		finished.setStatus(Status.FINISHED);
@@ -37,6 +37,28 @@ public class BLASTQueryLoaderTest extends LoaderTestCase {
 		
 		for(BLASTQuery query: draftQueries){
 			assertEquals("Should be able to load queries by status", Status.DRAFT, query.getStatus());
+		}
+		
+	}
+	
+	public void testWeCanLoadManyQueriesByStatus(){
+		BLASTQuery draftQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		BLASTQuery anotherDraftQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		
+		BLASTQuery finished = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		finished.setStatus(Status.FINISHED);
+		helper.save(draftQuery);
+		helper.save(anotherDraftQuery);
+		helper.save(finished);
+		
+		mBLASTQueryloader = new BLASTQueryLoader(getContext(), Status.DRAFT);
+		
+		BLASTQuery[] draftQueries = getLoaderResultSynchronously(mBLASTQueryloader);
+		
+		assertEquals(2, draftQueries.length);
+		
+		for(BLASTQuery query: draftQueries){
+			assertEquals("Should be able to load many queries by status", Status.DRAFT, query.getStatus());
 		}
 		
 	}
