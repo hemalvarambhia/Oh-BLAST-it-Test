@@ -44,6 +44,19 @@ public class BLASTQueryAdapterTest extends InstrumentationTestCase {
 		
 	}
 	
+	public void testWeShowTheAnAppropriateTextIfNoJobIdentifier(){
+		
+		BLASTQuery[] queries = new BLASTQuery[]{new BLASTQuery("blastn", BLASTVendor.EMBL_EBI)};
+		adapter = new BLASTQueryAdapter(getInstrumentation().getTargetContext(), queries);
+		
+		View view = adapter.getView(0, null, null);
+		
+		TextView jobIdentifier = (TextView)view.findViewById(R.id.query_job_id_label);
+		
+		assertEquals("Should show appropriate text if the job identifier of the query is not known", "N/A", jobIdentifier.getText());
+		
+	}
+	
 	public void testWeShowTheStatusOfTheQuery(){
 		View view = adapter.getView(0, null, null);
 		
