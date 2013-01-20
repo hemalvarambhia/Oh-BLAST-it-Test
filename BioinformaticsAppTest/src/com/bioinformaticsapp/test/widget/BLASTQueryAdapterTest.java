@@ -66,5 +66,26 @@ public class BLASTQueryAdapterTest extends InstrumentationTestCase {
 		
 	}
 	
+	public void testWeShowTheRecipientOfTheQuery(){
+		View view = adapter.getView(0, null, null);
+		
+		TextView recipient = (TextView)view.findViewById(R.id.to_label);
+		
+		assertEquals("Should show the recipient of the query", query.getDestination().toString(), recipient.getText());
+		
+	}
+	
+	public void testWeShowTheSequenceWeOfTheQuery(){
+		String aSequence = "CCTTTATCTAATCTTTGGAGCATGAGCTGG";
+		query.setSequence(aSequence);
+		
+		View view = adapter.getView(0, null, null);
+		
+		TextView sequenceToSearch = (TextView)view.findViewById(R.id.query_sequence_label);
+		
+		assertEquals("Should show the sequence we want to search", query.getSequence(), sequenceToSearch.getText());
+		
+		
+	}
 	
 }
