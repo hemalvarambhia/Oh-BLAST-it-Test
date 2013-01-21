@@ -18,12 +18,11 @@ import android.widget.TextView;
 import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
 import com.bioinformaticsapp.FinishedQueriesActivity;
 import com.bioinformaticsapp.R;
+import com.bioinformaticsapp.ViewBLASTHitsActivity;
 import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
+import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
@@ -32,6 +31,7 @@ public class FinishedQueriesActivityTest extends
 
 	private static final String TAG = "FinishedQueriesActivityTest";
 
+	private OhBLASTItTestHelper helper;
 	private Solo solo;
 	
 	private String exampleEMBLJobId = "ncbiblast-R20120418-133731-0240-81389354-pg";
@@ -53,7 +53,7 @@ public class FinishedQueriesActivityTest extends
 	public void setUp() throws Exception {
 		
 		super.setUp();
-		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
+		helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
 		helper.cleanDatabase();
 		
 	}
@@ -72,7 +72,7 @@ public class FinishedQueriesActivityTest extends
 		emblQuery.setStatus(BLASTQuery.Status.FINISHED);
 		emblQuery.setJobIdentifier(exampleEMBLJobId);		
 		emblQuery.setSearchParameter("email", "example@email.com");
-		saveQuery(emblQuery);
+		helper.save(emblQuery);
 		
 		solo = new Solo(getInstrumentation(), getActivity());
 		
@@ -94,7 +94,7 @@ public class FinishedQueriesActivityTest extends
 		emblQuery.setStatus(BLASTQuery.Status.FINISHED);
 		emblQuery.setJobIdentifier(exampleEMBLJobId);		
 		emblQuery.setSearchParameter("email", "example@email.com");
-		saveQuery(emblQuery);
+		helper.save(emblQuery);
 		
 		solo = new Solo(getInstrumentation(), getActivity());
 		
@@ -120,7 +120,7 @@ public class FinishedQueriesActivityTest extends
 		ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		ncbiQuery.setStatus(BLASTQuery.Status.FINISHED);
 		ncbiQuery.setJobIdentifier(exampleNCBIJobId);		
-		saveQuery(ncbiQuery);
+		helper.save(ncbiQuery);
 		
 		solo = new Solo(getInstrumentation(), getActivity());
 		
@@ -147,7 +147,7 @@ public class FinishedQueriesActivityTest extends
 		emblQuery.setJobIdentifier(exampleEMBLJobId);		
 		emblQuery.setSearchParameter("email", "example@email.com");
 		copyBLASTHitsFileToAppDataDir(exampleEMBLJobId+".xml");
-		saveQuery(emblQuery);
+		helper.save(emblQuery);
 		
 		solo = new Solo(getInstrumentation(), getActivity());
 		
@@ -160,6 +160,8 @@ public class FinishedQueriesActivityTest extends
 		solo.clickOnText(delete);
 		
 		solo.clickOnText("OK");
+		
+		solo.waitForView(ListView.class);
 		
 		ArrayList<ListView> listViews = solo.getCurrentListViews();
 		
@@ -186,7 +188,7 @@ public class FinishedQueriesActivityTest extends
 		emblQuery.setJobIdentifier(exampleEMBLJobId);		
 		emblQuery.setSearchParameter("email", "example@email.com");
 		copyBLASTHitsFileToAppDataDir(exampleEMBLJobId+".xml");
-		saveQuery(emblQuery);
+		helper.save(emblQuery);
 		
 		solo = new Solo(getInstrumentation(), getActivity());
 		
@@ -212,24 +214,22 @@ public class FinishedQueriesActivityTest extends
 		}
 	}
 	
-	private long saveQuery(BLASTQuery query){
-		BLASTQueryController queryController = new BLASTQueryController(getInstrumentation().getTargetContext());
-		long primaryKey = queryController.save(query);
-		query.setPrimaryKeyId(primaryKey);
-		List<SearchParameter> parameters = query.getAllParameters();
-		List<SearchParameter> newSetOfParameters = new ArrayList<SearchParameter>();
-		SearchParameterController parametersControllers = new SearchParameterController(getInstrumentation().getTargetContext());
-		for(SearchParameter parameter: parameters){
-			parameter.setBlastQueryId(query.getPrimaryKey());
-			long parameterPrimaryKey = parametersControllers.save(parameter);
-			parameter.setPrimaryKey(parameterPrimaryKey);
-			newSetOfParameters.add(parameter);
-		}
+	public void testWeCanViewTheBLASTHitsOfAQuery() throws IOException{
+		emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		emblQuery.setStatus(BLASTQuery.Status.FINISHED);
+		emblQuery.setJobIdentifier(exampleEMBLJobId);		
+		emblQuery.setSearchParameter("email", "example@email.com");
+		helper.save(emblQuery);
 		
-		query.updateAllParameters(newSetOfParameters);
-		parametersControllers.close();
-		queryController.close();
-		return primaryKey;
+		copyBLASTHitsFileToAppDataDir(exampleEMBLJobId+".xml");
+		
+		solo = new Solo(getInstrumentation(), getActivity());
+		int firstLine = 0;
+		solo.clickInList(firstLine);
+		solo.waitForActivity(ViewBLASTHitsActivity.class.getName());
+		
+		solo.assertCurrentActivity("Should show the activity that renders the BLAST hits", ViewBLASTHitsActivity.class);
+		
 	}
 	
 	private void copyBLASTHitsFileToAppDataDir(String fileName) throws IOException {
