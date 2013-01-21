@@ -140,6 +140,7 @@ public class PendingQueriesActivityTest extends
 		solo.clickOnText(delete);
 		
 		solo.clickOnText("OK");
+		solo.waitForView(ListView.class);
 		
 		ArrayList<ListView> listViews = solo.getCurrentListViews();
 		
