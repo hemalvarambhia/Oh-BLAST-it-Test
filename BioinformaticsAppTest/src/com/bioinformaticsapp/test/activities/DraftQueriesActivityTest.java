@@ -160,6 +160,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 		
 		//Confirm deletion
 		solo.clickOnButton("OK");
+		solo.waitForView(ListView.class);
 		
 		ArrayList<ListView> listViews = solo.getCurrentListViews();
 		
