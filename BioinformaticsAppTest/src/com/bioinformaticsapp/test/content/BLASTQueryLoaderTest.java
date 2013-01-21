@@ -1,4 +1,4 @@
-package com.bioinformatics.test.content;
+package com.bioinformaticsapp.test.content;
 
 import android.test.LoaderTestCase;
 
