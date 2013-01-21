@@ -3,14 +3,14 @@ package com.bioinformaticsapp.test.testhelpers;
 import com.bioinformaticsapp.exception.IllegalBLASTQueryException;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
-import com.bioinformaticsapp.web.BLASTSequenceQueryingService;
+import com.bioinformaticsapp.web.BLASTSearchEngine;
 import com.bioinformaticsapp.web.SearchStatus;
 
 public class BLASTQueryingServiceBuilder {
 
-	public BLASTSequenceQueryingService buildServiceThatReturnsJobIdentifier(final String jobIdentifier){
+	public BLASTSearchEngine buildServiceThatReturnsJobIdentifier(final String jobIdentifier){
 		
-		BLASTSequenceQueryingService mockService = new BLASTSequenceQueryingService() {
+		BLASTSearchEngine mockService = new BLASTSearchEngine() {
 			
 			public String submit(BLASTQuery query) throws IllegalBLASTQueryException {
 				return jobIdentifier;

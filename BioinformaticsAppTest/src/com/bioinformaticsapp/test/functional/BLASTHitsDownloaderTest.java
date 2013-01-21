@@ -21,7 +21,7 @@ import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.bioinformaticsapp.web.BLASTHitsDownloadingTask;
 import com.bioinformaticsapp.web.BLASTQuerySender;
-import com.bioinformaticsapp.web.BLASTSequenceQueryingService;
+import com.bioinformaticsapp.web.BLASTSearchEngine;
 import com.bioinformaticsapp.web.EMBLEBIBLASTService;
 import com.bioinformaticsapp.web.NCBIBLASTService;
 import com.bioinformaticsapp.web.SearchStatus;
@@ -88,7 +88,7 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 	
 	private void waitUntilFinished(BLASTQuery query) throws InterruptedException, ExecutionException{
 		StatusTranslator translator = new StatusTranslator();
-		BLASTSequenceQueryingService service = getServiceFor(query.getVendorID());
+		BLASTSearchEngine service = getServiceFor(query.getVendorID());
 		SearchStatus current = service.pollQuery(query.getJobIdentifier());
 		query.setStatus(translator.translate(current));
 		while(current.equals(SearchStatus.RUNNING)){
@@ -98,7 +98,7 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 		Log.i(TAG, "BLAST search finished. Status of query is "+query.getStatus());
 	}
 	
-	private BLASTSequenceQueryingService getServiceFor(int vendor){
+	private BLASTSearchEngine getServiceFor(int vendor){
 		switch(vendor){
 		case BLASTVendor.NCBI:
 			return new NCBIBLASTService();

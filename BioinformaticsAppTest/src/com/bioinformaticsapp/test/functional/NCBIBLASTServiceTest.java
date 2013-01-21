@@ -12,7 +12,7 @@ import com.bioinformaticsapp.exception.IllegalBLASTQueryException;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
-import com.bioinformaticsapp.web.BLASTSequenceQueryingService;
+import com.bioinformaticsapp.web.BLASTSearchEngine;
 import com.bioinformaticsapp.web.NCBIBLASTService;
 import com.bioinformaticsapp.web.SearchStatus;
 
@@ -26,7 +26,7 @@ public class NCBIBLASTServiceTest extends TestCase {
 	private static final String TAG = "NCBIBLASTServiceTest";
 	private BLASTQuery query;
 	
-	private BLASTSequenceQueryingService ncbiBLASTService;
+	private BLASTSearchEngine ncbiBLASTService;
 	
 
 	public void setUp(){

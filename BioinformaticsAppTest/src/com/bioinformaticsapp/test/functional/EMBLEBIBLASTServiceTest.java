@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 import com.bioinformaticsapp.exception.IllegalBLASTQueryException;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.web.BLASTSequenceQueryingService;
+import com.bioinformaticsapp.web.BLASTSearchEngine;
 import com.bioinformaticsapp.web.EMBLEBIBLASTService;
 import com.bioinformaticsapp.web.SearchStatus;
 
@@ -16,7 +16,7 @@ import com.bioinformaticsapp.web.SearchStatus;
 public class EMBLEBIBLASTServiceTest extends TestCase {
 
 	private static final String TAG = "EMBLEBIBLASTServiceTest";
-	private BLASTSequenceQueryingService service;
+	private BLASTSearchEngine service;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
