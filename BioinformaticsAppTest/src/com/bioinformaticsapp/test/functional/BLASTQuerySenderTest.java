@@ -78,7 +78,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		queryController.close();
 	}
 	
-	public void testSenderSetsQueryStatusToSUBMITTEDAfterSend(){
+	public void testSenderCanSendValidBLASTQuery(){
 		
 		final BLASTQuerySender sender = new BLASTQuerySender(context);
 		
@@ -93,21 +93,21 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		} catch (Throwable e) {
 			fail();
 		}
-		
+		Integer numberOfQueriesSent = null;
 		try {
-			sender.get();
+			numberOfQueriesSent = sender.get();
 		} catch (InterruptedException e) {
 			fail();
 		} catch (ExecutionException e) {
 			fail();
 		}
 		
-		assertEquals(Status.SUBMITTED, query.getStatus());
-		
+		assertEquals("Query should have been sent", Status.SUBMITTED, query.getStatus());
+		assertEquals("Queries should be sent", 1, numberOfQueriesSent.intValue());
 		
 	}
 	
-	public void testSenderSetsQueryJobIdentifierWhenSentSuccessfully(){
+	public void testBLASTQueryHasAJobIdentifierWhenSentSuccessfully(){
 		
 		final BLASTQuerySender sender = new BLASTQuerySender(context);
 		
@@ -136,7 +136,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		
 	}
 	
-	public void testSenderDoesNotSendWhenWebConnectionIsNotAvailable(){
+	public void testQueriesNotSentWhenThereIsNoWebConnection(){
 		
 		final BLASTQuerySender sender = new BLASTQuerySender(context){
 			protected boolean connectedToWeb(){
@@ -168,7 +168,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		
 	}
 	
-	public void testQueryJobIdentifierIsNullWhenThereIsNoWebConnection(){
+	public void testQueryJobIdentifierIsNotSetWhenThereIsNoWebConnection(){
 		
 		final BLASTQuerySender sender = new BLASTQuerySender(context){
 			protected boolean connectedToWeb(){
@@ -305,7 +305,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		
 	}
 	
-	public void testSenderSetsAnErrorneousQueryToDRAFT(){
+	public void testInvalidQueriesAreNotSent(){
 		final BLASTQuery invalidQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
 		invalidQuery.setStatus(BLASTQuery.Status.PENDING);
 		save(invalidQuery);
