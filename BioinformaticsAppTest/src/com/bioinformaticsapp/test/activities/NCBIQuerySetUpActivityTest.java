@@ -1,6 +1,5 @@
 package com.bioinformaticsapp.test.activities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -26,9 +25,6 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 	
 	private static final String TAG = "NCBIQuerySetUpActivityTest";
 	private Solo solo;
-
-	
-	
 	private static final int SENDING_DIALOG_TIMEOUT = 40000;
 	
 	public NCBIQuerySetUpActivityTest() {
@@ -257,34 +253,13 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		}
 	}
 	
-	private long saveQuery(){
-		BLASTQueryController queryController = new BLASTQueryController(getInstrumentation().getTargetContext());
-		long primaryKey = queryController.save(exampleNCBIQuery);
-		exampleNCBIQuery.setPrimaryKeyId(primaryKey);
-		List<SearchParameter> parameters = exampleNCBIQuery.getAllParameters();
-		List<SearchParameter> newSetOfParameters = new ArrayList<SearchParameter>();
-		SearchParameterController parametersControllers = new SearchParameterController(getInstrumentation().getTargetContext());
-		for(SearchParameter parameter: parameters){
-			parameter.setBlastQueryId(exampleNCBIQuery.getPrimaryKey());
-			long parameterPrimaryKey = parametersControllers.save(parameter);
-			parameter.setPrimaryKey(parameterPrimaryKey);
-			newSetOfParameters.add(parameter);
-		}
-		
-		exampleNCBIQuery.updateAllParameters(newSetOfParameters);
-		parametersControllers.close();
-		queryController.close();
-		return primaryKey;
-	}
-	
-	public void testWeCanUpdateAQueryFromDatabase(){
-		
-		long pk = saveQuery();
+	public void testWeCanUpdateAnExistingBLASTQuery(){
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
+		long pk = helper.save(exampleNCBIQuery);
 		
 		//Get the query we loaded in the database
 		BLASTQueryController queryController = new BLASTQueryController(getInstrumentation().getTargetContext());
 		SearchParameterController parametersController = new SearchParameterController(getInstrumentation().getTargetContext());
-		
 		BLASTQuery query = queryController.findBLASTQueryById(pk);
 		List<SearchParameter> parameters = parametersController.getParametersForQuery(pk);
 		query.updateAllParameters(parameters);
@@ -308,7 +283,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		getInstrumentation().waitForIdleSync();
 		
 		BLASTQuery queryFromDatabase = queryController.findBLASTQueryById(pk);
-		List<SearchParameter> parametersFromDatabase = parametersController.getParametersForQuery(exampleNCBIQuery.getPrimaryKey());
+		List<SearchParameter> parametersFromDatabase = parametersController.getParametersForQuery(pk);
 		queryFromDatabase.updateAllParameters(parametersFromDatabase);
 		
 		parametersController.close();
