@@ -3,6 +3,7 @@ package com.bioinformaticsapp.test.activities;
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 
+import com.bioinformaticsapp.AppPreferences;
 import com.bioinformaticsapp.BioinformaticsAppHomeActivity;
 import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
 import com.bioinformaticsapp.NCBIQuerySetUpActivity;
@@ -54,6 +55,13 @@ public class BioInformaticsAppHomeActivityTest extends ActivityInstrumentationTe
 		solo.clickOnActionBarItem(R.id.create_ncbi_query);
 		
 		solo.assertCurrentActivity("Expected the NCBI set up activity to be launched", NCBIQuerySetUpActivity.class);
+	}
+	
+	public void testWeCanGoToThePreferencesActivity(){
+		solo.clickOnActionBarItem(R.menu.main_menu);
+		solo.clickOnActionBarItem(R.id.settings_item);
+		
+		solo.assertCurrentActivity("Expected the preferences activity to be launched", AppPreferences.class);
 	}
 	
 }
