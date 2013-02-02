@@ -156,16 +156,17 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 			fail();
 		}
 		
+		Integer numberOfQueries = null;
 		try {
-			sender.get();
+			numberOfQueries = sender.get();
 		} catch (InterruptedException e) {
 			fail("Execution of the thread was interrupted");
 		} catch (ExecutionException e) {
 			fail();
 		}
 		
-		assertEquals("Status was modified", BLASTQuery.Status.PENDING, query.getStatus());
-		
+		assertEquals("Query should be pending", BLASTQuery.Status.PENDING, query.getStatus());
+		assertEquals("Query should not be sent", 0, numberOfQueries.intValue());
 	}
 	
 	public void testQueryJobIdentifierIsNotSetWhenThereIsNoWebConnection(){
