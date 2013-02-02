@@ -12,7 +12,7 @@ import com.bioinformaticsapp.models.BLASTHit;
 
 public class TestEMBLEBIBLASTHitsParser extends InstrumentationTestCase {
 
-	EMBLEBIBLASTHitsParser parser;
+	private EMBLEBIBLASTHitsParser parser;
 	
 	private static final String TAG = "TestBLASTHitsParser";
 	private AssetManager assetManager;

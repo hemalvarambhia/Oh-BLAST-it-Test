@@ -15,7 +15,6 @@ public class TestNCBIBLASTHitsParser extends InstrumentationTestCase {
 
 	private AssetManager assetManager;
 
-	
 	private NCBIBLASTHitsParser parser;
 	
 	private static final String TAG = "TestNCBIBLASTHitsParser";
