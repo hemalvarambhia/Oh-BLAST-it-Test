@@ -216,9 +216,9 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 			fail();
 		}
 		
-		BLASTQuerySender.Report sendReport = null;
+		Integer numberSent = null;
 		try {
-			sendReport = sender.get();
+			numberSent = sender.get();
 		} catch (InterruptedException e) {
 			fail("Execution of the thread was interrupted");
 		} catch (ExecutionException e) {
@@ -228,7 +228,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		assertNotNull("Query was not assigned a job identifier by the service", query.getJobIdentifier());
 		assertFalse("Job identifier was found to be an empty string", query.getJobIdentifier().isEmpty());
 		assertEquals("Query status was not updated to SUBMITTED", Status.SUBMITTED, query.getStatus());
-		assertEquals(Status.SUBMITTED, sendReport.getOutcomeFor(query));
+		assertEquals("Query should have been sent", 1, numberSent.intValue());
 	}
 	
 	public void testWeCanSendAnEBIEMBLQuery(){
