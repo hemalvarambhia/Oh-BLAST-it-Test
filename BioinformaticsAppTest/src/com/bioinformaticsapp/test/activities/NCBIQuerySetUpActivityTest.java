@@ -293,7 +293,6 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		intent.putExtra("query", query);
 		
 		setActivityIntent(intent);
-		//ActivityMonitor am = getInstrumentation().addMonitor(NCBIQuerySetUpActivity.class.getName(), null, false);
 		NCBIQuerySetUpActivity setupQueryActivity = (NCBIQuerySetUpActivity)getActivity();
 		
 		//Change a couple of the query parameters
