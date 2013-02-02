@@ -78,7 +78,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		queryController.close();
 	}
 	
-	public void testWeCanSendValidBLASTQuery(){
+	public void testWeCanSendAValidBLASTQuery(){
 		
 		final BLASTQuerySender sender = new BLASTQuerySender(context);
 		
@@ -231,7 +231,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		assertEquals("Query should have been sent", 1, numberSent.intValue());
 	}
 	
-	public void testWeCanSendAnEBIEMBLQuery(){
+	public void testWeCanSendAnEBI_EMBLQuery(){
 		
 		final BLASTQuerySender sender = new BLASTQuerySender(context);
 		
@@ -287,13 +287,16 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 			fail();
 		}
 		
+		Integer numberOfQueriesSent = null;
 		try {
-			sender.get();
+			numberOfQueriesSent = sender.get();
 		} catch (InterruptedException e) {
 			fail("Execution of the thread was interrupted");
 		} catch (ExecutionException e) {
 			fail(e.getMessage());
 		}
+		
+		assertEquals("All valid queries should be sent", pendingBlastQueries.length, numberOfQueriesSent.intValue());
 		
 		for(BLASTQuery query : pendingBlastQueries){
 			assertNotNull("Query was not assigned a job identifier by the service", query.getJobIdentifier());
