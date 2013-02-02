@@ -9,6 +9,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.bioinformaticsapp.AppPreferences;
 import com.bioinformaticsapp.NCBIQuerySetUpActivity;
 import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.data.SearchParameterController;
@@ -277,6 +278,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 	}
 	
 	public void testWeCanUpdateAQueryFromDatabase(){
+		
 		long pk = saveQuery();
 		
 		//Get the query we loaded in the database
@@ -365,6 +367,19 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		
 	}
 	
-	
+	public void testWeCanGoToTheApplicationPreferencesScreen(){
+
+		Intent intent = new Intent();
+		
+		intent.putExtra("query", exampleNCBIQuery);
+		
+		setActivityIntent(intent);
+		
+		solo = new Solo(getInstrumentation(), getActivity());
+		
+		solo.clickOnMenuItem("Settings");
+		
+		solo.assertCurrentActivity("Should be able to go to the settings screen", AppPreferences.class);
+	}
 	
 }

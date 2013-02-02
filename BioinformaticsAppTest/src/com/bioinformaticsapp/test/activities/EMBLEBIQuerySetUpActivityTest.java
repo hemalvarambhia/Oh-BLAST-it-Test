@@ -8,6 +8,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.bioinformaticsapp.AppPreferences;
 import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
 import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.data.SearchParameterController;
@@ -323,6 +324,21 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		
 		assertEquals( "Expected query to be ready for sending", Status.DRAFT, q.getStatus());
 		        
+	}
+	
+	public void testWeCanGoToTheApplicationPreferencesScreen(){
+
+		Intent intent = new Intent();
+		
+		intent.putExtra("query", blastQuery);
+		
+		setActivityIntent(intent);
+		
+		solo = new Solo(getInstrumentation(), getActivity());
+		
+		solo.clickOnMenuItem("Settings");
+		
+		solo.assertCurrentActivity("Should be able to go to the settings screen", AppPreferences.class);
 	}
 	
 }
