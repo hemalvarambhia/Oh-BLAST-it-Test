@@ -78,7 +78,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		queryController.close();
 	}
 	
-	public void testSenderCanSendValidBLASTQuery(){
+	public void testWeCanSendValidBLASTQuery(){
 		
 		final BLASTQuerySender sender = new BLASTQuerySender(context);
 		
@@ -322,16 +322,18 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 			fail();
 		}
 		
-		
+		Integer numberOfQueriesSent = null;
 		try {
-			sender.get();
+			numberOfQueriesSent = sender.get();
 		} catch (InterruptedException e) {
 			fail("Execution of the thread was interrupted");
 		} catch (ExecutionException e) {
 			fail(e.getMessage());
 		}
 		
-		assertEquals(BLASTQuery.Status.DRAFT, invalidQuery.getStatus());
+		assertEquals("Invalid queries should never be sent", BLASTQuery.Status.DRAFT, invalidQuery.getStatus());
+		assertEquals("Invalid queries should never be sent", 0, numberOfQueriesSent.intValue());
+		
 	}
 	
 	
