@@ -1,15 +1,10 @@
 package com.bioinformaticsapp.test.functional;
 
-import java.util.List;
 import java.util.Map;
 
-import org.biojava.bio.Annotation;
-
-import android.util.Log;
+import junit.framework.TestCase;
 
 import com.bioinformaticsapp.web.EntryFetcher;
-
-import junit.framework.TestCase;
 
 public class TestEntryFetcher extends TestCase {
 
