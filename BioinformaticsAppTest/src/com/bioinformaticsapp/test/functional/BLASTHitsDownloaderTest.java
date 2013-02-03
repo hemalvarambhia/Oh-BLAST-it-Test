@@ -7,12 +7,10 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
 
 import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.DatabaseHelper;
 import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.helpers.StatusTranslator;
 import com.bioinformaticsapp.models.BLASTQuery;
