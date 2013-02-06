@@ -4,20 +4,20 @@ import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.bioinformaticsapp.AppPreferences;
-import com.bioinformaticsapp.BioinformaticsAppHomeActivity;
+import com.bioinformaticsapp.OhBLASTItAppHomeActivity;
 import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
 import com.bioinformaticsapp.NCBIQuerySetUpActivity;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 //Test case for the home screen
-public class BioInformaticsAppHomeActivityTest extends ActivityInstrumentationTestCase2<BioinformaticsAppHomeActivity> {
+public class OhBLASTItHomeActivityTest extends ActivityInstrumentationTestCase2<OhBLASTItAppHomeActivity> {
 
 	private final static String TAG = "BioInformaticsAppHomeActivityTest";
 	private Solo solo;
 	private Context ctx;
-	public BioInformaticsAppHomeActivityTest() {
-		super(BioinformaticsAppHomeActivity.class);
+	public OhBLASTItHomeActivityTest() {
+		super(OhBLASTItAppHomeActivity.class);
 		
 	}
 
