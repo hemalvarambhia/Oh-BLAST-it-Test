@@ -1,5 +1,6 @@
 package com.bioinformaticsapp.test.functional;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -70,4 +71,25 @@ public class TestBLASTHitsLoadingTask extends InstrumentationTestCase {
 		
 	}
 	
+	public void testWeGetNoHitsIfTheFileDoesNotExist(){
+		
+		FileInputStream fileDoesNotExist = null;
+		
+		loader = new BLASTHitsLoadingTask(BLASTVendor.EMBL_EBI);
+		
+		loader.execute(fileDoesNotExist);
+		List<Map<String, String>> noHits = null;
+		try {
+			noHits = loader.get();
+		} catch (InterruptedException e) {
+			fail("The task was interrupted");
+		} catch (ExecutionException e) {
+			fail("There was an unexpected exception thrown while performing the task");
+		}
+		
+		assertNotNull(noHits);
+		
+		assertTrue(noHits.isEmpty());
+		
+	}
 }
