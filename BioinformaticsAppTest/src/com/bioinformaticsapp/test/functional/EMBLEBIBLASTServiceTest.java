@@ -26,6 +26,7 @@ public class EMBLEBIBLASTServiceTest extends TestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		service.close();
+		service = null;
 	}
 
 	public void testSubmitWeCanSubmitQueryToEMBL() {

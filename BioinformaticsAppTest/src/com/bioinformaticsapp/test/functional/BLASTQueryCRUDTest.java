@@ -32,7 +32,8 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	protected void tearDown() throws Exception {
 		searchParameterController.close();
 		controller.close();
-		
+		searchParameterController = null;
+		controller = null;
 		super.tearDown();
 		
 		

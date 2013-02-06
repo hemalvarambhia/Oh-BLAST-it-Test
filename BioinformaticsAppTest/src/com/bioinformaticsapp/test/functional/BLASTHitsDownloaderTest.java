@@ -57,6 +57,8 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 				Log.i(TAG, "BLAST hits file deleted");
 			}
 		}
+		query = null;
+		super.tearDown();
 	}
 	
 	private void save(BLASTQuery query){

@@ -29,14 +29,18 @@ public class NCBIBLASTServiceTest extends TestCase {
 	private BLASTSearchEngine ncbiBLASTService;
 	
 
-	public void setUp(){
+	public void setUp() throws Exception {
+		super.setUp();
 		ncbiBLASTService = new NCBIBLASTService();
 		query = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		query.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 	}
 	
-	protected void tearDown(){
+	protected void tearDown() throws Exception{
+		super.tearDown();
 		ncbiBLASTService.close();
+		ncbiBLASTService = null;
+		query = null;
 	}
 	/**
 	 * Test method for {@link com.bioinformaticsapp.web.NCBIBLASTService#submit(com.bioinformaticsapp.models.BLASTQuery)}.

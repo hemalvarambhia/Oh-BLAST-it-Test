@@ -25,6 +25,7 @@ public class TestEMBLEBIBLASTHitsParser extends InstrumentationTestCase {
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
+		parser = null;
 		
 	}
 

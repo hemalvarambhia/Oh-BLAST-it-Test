@@ -28,6 +28,7 @@ public class TestNCBIBLASTHitsParser extends InstrumentationTestCase {
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
+		parser = null;
 	
 	}
 

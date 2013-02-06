@@ -18,6 +18,7 @@ public class TestEntryFetcher extends TestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		fetcher.closeHttpConnection();
+		fetcher = null;
 	}
 
 	public void testFetchEntryThrowsExceptionWhenAccessionNumberEmpty() {
