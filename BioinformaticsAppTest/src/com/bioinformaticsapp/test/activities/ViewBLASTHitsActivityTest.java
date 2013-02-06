@@ -113,7 +113,7 @@ public class ViewBLASTHitsActivityTest extends
 		
 	}
 	
-	public void testAlertDialogIsShownIsHitsCouldNotBeLoaded(){
+	public void testAnAppropriateMessageIsShownIfHitsCouldNotBeLoaded(){
 		
 		BLASTQuery query = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		query.setJobIdentifier("NOH86ITs");
