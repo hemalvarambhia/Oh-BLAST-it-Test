@@ -2,12 +2,10 @@ package com.bioinformaticsapp.test.unit;
 
 import junit.framework.TestCase;
 
-import android.util.Patterns;
-
 import com.bioinformaticsapp.models.BLASTQuery;
+import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.SearchParameter;
-import com.bioinformaticsapp.models.BLASTQuery.Status;
 
 
 public class TestBLASTQuery extends TestCase {

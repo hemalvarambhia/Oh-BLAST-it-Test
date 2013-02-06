@@ -2,18 +2,15 @@ package com.bioinformaticsapp.test.unit;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import junit.framework.TestCase;
-
-import android.test.MoreAsserts;
 
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.SearchParameter;
 
 public class TestSearchParameters extends TestCase {
 
-	private static final String TAG = "TestOptionalParameters";
+	private static final String TAG = "TestSearchParameters";
 	
 	public void testWeCanCreateDefaultOptionalParametersForEMBLEBI(){
 		
