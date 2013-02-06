@@ -50,7 +50,9 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	}
 	
 	protected void tearDown() throws Exception {
-		
+		sender = null;
+		poller = null;
+		ncbiQuery = null;
 		emblQuery = null;
 		context = null;
 		super.tearDown();
