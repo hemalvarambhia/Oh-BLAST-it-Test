@@ -55,7 +55,8 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 	
 	protected void tearDown() throws Exception {
 		query = null;
-		context = null;
+		emblQuery = null;
+		
 		super.tearDown();
 	}
 
