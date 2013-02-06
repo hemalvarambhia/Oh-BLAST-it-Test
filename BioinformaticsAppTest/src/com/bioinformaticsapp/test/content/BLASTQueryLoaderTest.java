@@ -20,6 +20,7 @@ public class BLASTQueryLoaderTest extends LoaderTestCase {
 	
 	public void tearDown() throws Exception {
 		super.tearDown();
+		mBLASTQueryloader = null;
 	}
 	
 	public void testWeCanLoadQueryByStatus(){
