@@ -11,7 +11,6 @@ import junit.framework.TestCase;
 import com.bioinformaticsapp.exception.IllegalBLASTQueryException;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.web.BLASTSearchEngine;
 import com.bioinformaticsapp.web.NCBIBLASTService;
 import com.bioinformaticsapp.web.SearchStatus;
@@ -50,8 +49,22 @@ public class NCBIBLASTServiceTest extends TestCase {
 		try {
 			jobIdentifier = ncbiBLASTService.submit(query);
 		} catch (IllegalBLASTQueryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("Unable to send a valid query");
+		}
+		
+		String requestIdRegexPattern = "[A-Z0-9]{11}";
+		boolean validRequestId = jobIdentifier.matches(requestIdRegexPattern);
+		assertTrue(validRequestId);
+		
+	}
+	
+	public void testWeCanSendAQueryWithNoExponentialThreshold(){
+		query.setSearchParameter("exp_threshold", "");
+		String jobIdentifier = null;
+		try {
+			jobIdentifier = ncbiBLASTService.submit(query);
+		} catch (IllegalBLASTQueryException e) {
+			fail("Unable to send a query with a blank exponential threshold");
 		}
 		
 		String requestIdRegexPattern = "[A-Z0-9]{11}";
@@ -70,8 +83,7 @@ public class NCBIBLASTServiceTest extends TestCase {
 		try {
 			jobIdentifier = ncbiBLASTService.submit(query);
 		} catch (IllegalBLASTQueryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("Could not send a valid Query");
 		}
 		
 		SearchStatus statusOfQuery = ncbiBLASTService.pollQuery(jobIdentifier);
