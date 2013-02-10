@@ -161,6 +161,21 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
         
 	}
 	
+	public void testWeCanEditTheProgramOfADraftQuery(){
+		Intent intent = new Intent();
+		intent.putExtra("query", blastQuery);
+		setActivityIntent(intent);
+		
+		EMBLEBISetUpQueryActivity setupActivity = getActivity();
+		solo = new Solo(getInstrumentation(), setupActivity);
+		solo.pressSpinnerItem(0, 1);
+		Spinner programSpinner = (Spinner)solo.getView(R.id.blastqueryentry_program_spinner);
+		getInstrumentation().waitForIdleSync();
+		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
+		assertEquals(programSpinner.getSelectedItem().toString(), q.getBLASTProgram());
+		
+	}
+	
 	public void testWeCanEditSequenceOfADraftQuery(){
 		Intent intent = new Intent();
 		intent.putExtra("query", blastQuery);
