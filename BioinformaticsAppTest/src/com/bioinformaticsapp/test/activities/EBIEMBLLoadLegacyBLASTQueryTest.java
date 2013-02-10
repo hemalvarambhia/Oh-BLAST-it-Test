@@ -34,6 +34,7 @@ public class EBIEMBLLoadLegacyBLASTQueryTest extends
 	public void setUp() throws Exception {
 		super.setUp();
 		legacy = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		legacy.setJobIdentifier("TODO");
 		legacy.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		List<SearchParameter> legacyParameters = new ArrayList<SearchParameter>();
 		Resources resources = getInstrumentation().getTargetContext().getResources();
@@ -92,6 +93,20 @@ public class EBIEMBLLoadLegacyBLASTQueryTest extends
 		SearchParameter email = legacyQuery.getSearchParameter("email");
 		assertNotNull(email);
 		assertNotNull(email.getValue());
+	}
+	
+	public void testLegacyDraftJobIdentifierCleared(){
+		Intent intentWithLegacyQuery = new Intent();
+		intentWithLegacyQuery.putExtra("query", legacy);
+		setActivityIntent(intentWithLegacyQuery);
+		
+		solo = new Solo(getInstrumentation(), getActivity());
+		
+		Intent activityIntent = getActivity().getIntent();
+		BLASTQuery legacyQuery = (BLASTQuery)activityIntent.getSerializableExtra("query");
+		
+		assertNull("Draft legacy query should not have a job identifier", legacyQuery.getJobIdentifier());
+		
 	}
 
 	public void testWeCanEditTheMatchMisMatchScoreOfADraftLegacyQuery(){
