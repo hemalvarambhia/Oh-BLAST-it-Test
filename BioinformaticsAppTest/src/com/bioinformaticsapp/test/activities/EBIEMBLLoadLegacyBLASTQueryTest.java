@@ -33,6 +33,10 @@ public class EBIEMBLLoadLegacyBLASTQueryTest extends
 	
 	public void setUp() throws Exception {
 		super.setUp();
+		
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
+		helper.cleanDatabase();
+		
 		legacy = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
 		legacy.setJobIdentifier("TODO");
 		legacy.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
