@@ -219,6 +219,21 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		assertEquals(databaseSpinner.getSelectedItem().toString(), q.getSearchParameter("database").getValue());
 		
 	}
+
+	public void testWeCanEditTheExpThresholdOfADraftQuery(){
+		Intent intent = new Intent();
+		intent.putExtra("query", blastQuery);
+		setActivityIntent(intent);
+		
+		EMBLEBISetUpQueryActivity setupActivity = getActivity();
+		solo = new Solo(getInstrumentation(), setupActivity);
+		solo.pressSpinnerItem(2, 3);
+		getInstrumentation().waitForIdleSync();
+		Spinner expThresholdSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_expthreshold_spinner);
+		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
+		assertEquals(expThresholdSpinner.getSelectedItem().toString(), q.getSearchParameter("exp_threshold").getValue());
+		
+	}
 	
 	public void testWeCanEditTheScoreOfADraftQuery(){
 		Intent intent = new Intent();
@@ -227,7 +242,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		
 		EMBLEBISetUpQueryActivity setupActivity = getActivity();
 		solo = new Solo(getInstrumentation(), setupActivity);
-		solo.pressSpinnerItem(2, -2);
+		solo.pressSpinnerItem(3, 1);
 		getInstrumentation().waitForIdleSync();
 		Spinner databaseSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_score_spinner);
 		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
@@ -250,20 +265,6 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		
 	}
 	
-	public void testWeCanEditTheExpThresholdOfADraftQuery(){
-		Intent intent = new Intent();
-		intent.putExtra("query", blastQuery);
-		setActivityIntent(intent);
-		
-		EMBLEBISetUpQueryActivity setupActivity = getActivity();
-		solo = new Solo(getInstrumentation(), setupActivity);
-		solo.pressSpinnerItem(2, 3);
-		getInstrumentation().waitForIdleSync();
-		Spinner expThresholdSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_expthreshold_spinner);
-		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
-		assertEquals(expThresholdSpinner.getSelectedItem().toString(), q.getSearchParameter("exp_threshold").getValue());
-		
-	}
 	
 	public void testWeCanEditTheEmailAddressParameter(){
 		Intent intent = new Intent();
