@@ -155,6 +155,23 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		
 	}
 	
+	public void testWeCanChangeTheWordSize(){
+		Intent intent = new Intent();
+		intent.putExtra("query", exampleNCBIQuery);
+		setActivityIntent(intent);
+		NCBIQuerySetUpActivity setupQueryActivity = (NCBIQuerySetUpActivity)getActivity();
+		
+		solo = new Solo(getInstrumentation(), setupQueryActivity);
+		
+		Spinner wordsizeSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.ncbi_wordsize_spinner);
+		solo.pressSpinnerItem(2, 3);
+		
+		getInstrumentation().waitForIdleSync();
+		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
+		assertEquals(wordsizeSpinner.getSelectedItem().toString(), q.getSearchParameter("word_size").getValue());
+		
+	}
+	
 	public void testWeCanChangeExpThreshold(){
 		Intent intent = new Intent();
 		intent.putExtra("query", exampleNCBIQuery);
@@ -185,23 +202,6 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		getInstrumentation().waitForIdleSync();
 		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
 		assertEquals(mismatchSpinner.getSelectedItem().toString(), q.getSearchParameter("match_mismatch_score").getValue());
-		
-	}
-	
-	public void testWeCanChangeTheWordSize(){
-		Intent intent = new Intent();
-		intent.putExtra("query", exampleNCBIQuery);
-		setActivityIntent(intent);
-		NCBIQuerySetUpActivity setupQueryActivity = (NCBIQuerySetUpActivity)getActivity();
-		
-		solo = new Solo(getInstrumentation(), setupQueryActivity);
-		
-		Spinner wordsizeSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.ncbi_wordsize_spinner);
-		solo.pressSpinnerItem(2, 3);
-		
-		getInstrumentation().waitForIdleSync();
-		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
-		assertEquals(wordsizeSpinner.getSelectedItem().toString(), q.getSearchParameter("word_size").getValue());
 		
 	}
 	
