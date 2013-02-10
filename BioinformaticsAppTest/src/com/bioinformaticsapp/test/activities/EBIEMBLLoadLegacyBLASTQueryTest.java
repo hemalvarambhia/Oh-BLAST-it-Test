@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
+import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
@@ -33,6 +34,7 @@ public class EBIEMBLLoadLegacyBLASTQueryTest extends
 	public void setUp() throws Exception {
 		super.setUp();
 		legacy = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		legacy.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		List<SearchParameter> legacyParameters = new ArrayList<SearchParameter>();
 		Resources resources = getInstrumentation().getTargetContext().getResources();
 		String[] databases = resources.getStringArray(com.bioinformaticsapp.R.array.blast_database_options);
@@ -59,7 +61,37 @@ public class EBIEMBLLoadLegacyBLASTQueryTest extends
 		solo = new Solo(getInstrumentation(), getActivity());
 		
 		solo.assertCurrentActivity("Should be able to load a legacy query", EMBLEBISetUpQueryActivity.class);
+		EMBLEBISetUpQueryActivity activity = getActivity();
+		Spinner programSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_program_spinner);
+		Spinner databaseSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_database_spinner);
+		Spinner thresholdSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_expthreshold_spinner);
+		Spinner scoreSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_score_spinner);
+		EditText sequenceEditorView = (EditText)activity.findViewById(R.id.embl_sequence_editor);
+		assertEquals(legacy.getBLASTProgram(), programSpinner.getSelectedItem());
+		assertEquals(legacy.getSearchParameter("database").getValue(), databaseSpinner.getSelectedItem());
+		assertEquals(legacy.getSearchParameter("exp_threshold").getValue(), thresholdSpinner.getSelectedItem());
+		assertEquals(legacy.getSearchParameter("score").getValue(), scoreSpinner.getSelectedItem());
+		assertEquals(legacy.getSequence(), sequenceEditorView.getText().toString());
 		
+	}
+	
+	public void testLegacyQueryHasTheNewParameters(){
+		Intent intentWithLegacyQuery = new Intent();
+		intentWithLegacyQuery.putExtra("query", legacy);
+		setActivityIntent(intentWithLegacyQuery);
+		
+		solo = new Solo(getInstrumentation(), getActivity());
+		
+		Intent activityIntent = getActivity().getIntent();
+		BLASTQuery legacyQuery = (BLASTQuery)activityIntent.getSerializableExtra("query");
+		
+		SearchParameter matchMismatchScore = legacyQuery.getSearchParameter("match_mismatch_score");
+		assertNotNull(matchMismatchScore);
+		assertNotNull(matchMismatchScore.getValue());
+		
+		SearchParameter email = legacyQuery.getSearchParameter("email");
+		assertNotNull(email);
+		assertNotNull(email.getValue());
 	}
 
 	public void testWeCanEditTheMatchMisMatchScoreOfADraftLegacyQuery(){
@@ -112,6 +144,21 @@ public class EBIEMBLLoadLegacyBLASTQueryTest extends
 		
 	}
 	
+	public void testWeCanEditTheExponentialThresholdOfADraftLegacyQuery(){
+		Intent intent = new Intent();
+		intent.putExtra("query", legacy);
+		setActivityIntent(intent);
+		
+		EMBLEBISetUpQueryActivity setupActivity = getActivity();
+		solo = new Solo(getInstrumentation(), setupActivity);
+		solo.pressSpinnerItem(2, 3);
+		getInstrumentation().waitForIdleSync();
+		Spinner expThresholdSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_expthreshold_spinner);
+		BLASTQuery legacyQuery = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
+		assertEquals(expThresholdSpinner.getSelectedItem().toString(), legacyQuery.getSearchParameter("exp_threshold").getValue());
+		
+	}
+	
 	public void testWeCanSaveALegacyDraftQuery(){
 		Context context = getInstrumentation().getTargetContext();
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(context);
@@ -128,11 +175,32 @@ public class EBIEMBLLoadLegacyBLASTQueryTest extends
 		Intent intentWithLegacyQuery = new Intent();
 		intentWithLegacyQuery.putExtra("query", theLegacyQuery);
 		setActivityIntent(intentWithLegacyQuery);
+		
 		solo = new Solo(getInstrumentation(), getActivity());
+		solo.clickOnActionBarItem(R.id.save_query);
+		getInstrumentation().waitForIdleSync();
 		
-		solo.assertCurrentActivity("Should be able to load a legacy query", EMBLEBISetUpQueryActivity.class);
+		Intent activityIntent = getActivity().getIntent();
+		BLASTQuery legacyQuery = (BLASTQuery)activityIntent.getSerializableExtra("query");
 		
-
+		SearchParameter matchMismatchScore = legacyQuery.getSearchParameter("match_mismatch_score");
+		assertNotNull(matchMismatchScore.getPrimaryKey());
+		assertNotNull(matchMismatchScore.getBlastQueryId());
+		
+	}
+	
+	public void testWeCanEditTheScoreOfADraftQuery(){
+		Intent intent = new Intent();
+		intent.putExtra("query", legacy);
+		setActivityIntent(intent);
+		
+		EMBLEBISetUpQueryActivity setupActivity = getActivity();
+		solo = new Solo(getInstrumentation(), setupActivity);
+		solo.pressSpinnerItem(2, -2);
+		getInstrumentation().waitForIdleSync();
+		Spinner databaseSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_score_spinner);
+		BLASTQuery legacyQuery = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
+		assertEquals(databaseSpinner.getSelectedItem().toString(), legacyQuery.getSearchParameter("score").getValue());
 		
 	}
 	

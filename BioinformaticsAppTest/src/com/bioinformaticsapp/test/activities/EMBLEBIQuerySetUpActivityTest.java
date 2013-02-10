@@ -10,6 +10,7 @@ import android.widget.Spinner;
 
 import com.bioinformaticsapp.AppPreferences;
 import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
+import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
@@ -65,15 +66,17 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		
 		EMBLEBISetUpQueryActivity activity = this.getActivity();
 		
-		Spinner programSpinner = (Spinner)activity.findViewById(com.bioinformaticsapp.R.id.blastqueryentry_program_spinner);
-		Spinner databaseSpinner = (Spinner)activity.findViewById(com.bioinformaticsapp.R.id.blastqueryentry_database_spinner);
-		Spinner thresholdSpinner = (Spinner)activity.findViewById(com.bioinformaticsapp.R.id.blastqueryentry_expthreshold_spinner);
-		Spinner scoreSpinner = (Spinner)activity.findViewById(com.bioinformaticsapp.R.id.blastqueryentry_score_spinner);
-		EditText sequenceEditorView = (EditText)activity.findViewById(com.bioinformaticsapp.R.id.embl_sequence_editor);
+		Spinner programSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_program_spinner);
+		Spinner databaseSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_database_spinner);
+		Spinner thresholdSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_expthreshold_spinner);
+		Spinner scoreSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_score_spinner);
+		EditText sequenceEditorView = (EditText)activity.findViewById(R.id.embl_sequence_editor);
+		Spinner matchMismatchScoreSpinner = (Spinner)activity.findViewById(R.array.ebi_match_mismatch_score_options);
 		assertEquals(blastQuery.getBLASTProgram(), programSpinner.getSelectedItem());
 		assertEquals(blastQuery.getSearchParameter("database").getValue(), databaseSpinner.getSelectedItem());
 		assertEquals(blastQuery.getSearchParameter("exp_threshold").getValue(), thresholdSpinner.getSelectedItem());
 		assertEquals(blastQuery.getSearchParameter("score").getValue(), scoreSpinner.getSelectedItem());
+		assertEquals(blastQuery.getSearchParameter("match_mismatch_score"), matchMismatchScoreSpinner.getSelectedItem());
 		assertEquals("Enter a sequence", sequenceEditorView.getHint().toString());
 	}
 	
@@ -239,11 +242,11 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		
 		EMBLEBISetUpQueryActivity setupActivity = getActivity();
 		solo = new Solo(getInstrumentation(), setupActivity);
-		solo.pressSpinnerItem(3, 3);
+		solo.pressSpinnerItem(2, 3);
 		getInstrumentation().waitForIdleSync();
-		Spinner scoreSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_expthreshold_spinner);
+		Spinner expThresholdSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_expthreshold_spinner);
 		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
-		assertEquals(scoreSpinner.getSelectedItem().toString(), q.getSearchParameter("exp_threshold").getValue());
+		assertEquals(expThresholdSpinner.getSelectedItem().toString(), q.getSearchParameter("exp_threshold").getValue());
 		
 	}
 	
