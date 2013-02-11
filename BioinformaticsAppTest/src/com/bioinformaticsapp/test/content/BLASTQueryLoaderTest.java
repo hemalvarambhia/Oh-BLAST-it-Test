@@ -64,4 +64,26 @@ public class BLASTQueryLoaderTest extends LoaderTestCase {
 		
 	}
 	
+	public void testWeCanLoadSentBLASTQueriesIncludingLegacyOnes(){
+		BLASTQuery sentQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		sentQuery.setJobIdentifier("ncbiblast-R20120418-133031-0240-81389354-pg");
+		sentQuery.setStatus(Status.SUBMITTED);
+		BLASTQuery anotherSentQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		anotherSentQuery.setJobIdentifier("ncbiblast-R20120418-133731-0240-81389354-pg");
+		anotherSentQuery.setStatus(Status.RUNNING); //This would represent a legacy query which has running status	
+		helper.save(sentQuery);
+		helper.save(anotherSentQuery);
+			
+		mBLASTQueryloader = new BLASTQueryLoader(getContext(), Status.SUBMITTED);
+			
+		BLASTQuery[] sentQueries = getLoaderResultSynchronously(mBLASTQueryloader);
+			
+		assertEquals(2, sentQueries.length);
+			
+		for(BLASTQuery query: sentQueries){
+			assertTrue("Should be able to load submitted", query.getStatus().equals(Status.SUBMITTED) || query.getStatus().equals(Status.RUNNING));
+		}
+			
+		
+	}
 }
