@@ -2,7 +2,6 @@ package com.bioinformaticsapp.test.testhelpers;
 
 import com.bioinformaticsapp.exception.IllegalBLASTQueryException;
 import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.web.BLASTSearchEngine;
 import com.bioinformaticsapp.web.SearchStatus;
 
