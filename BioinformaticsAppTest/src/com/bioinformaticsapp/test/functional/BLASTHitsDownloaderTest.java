@@ -141,7 +141,6 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 		} catch (FileNotFoundException e) {
 			fail("Could not find file for Query");
 		}
-		
 	}
 	
 	public void testWeCanDownloadResultsOfAFINISHEDEMBLQuery() throws InterruptedException, ExecutionException{
@@ -156,7 +155,6 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 		downloader.execute(emblQuery);
 		
 		String nameOfFile = downloader.get();
-		
 		assertNotNull("Name of file with BLAST hits being non-nulled: "+nameOfFile, nameOfFile);
 		
 		try {
@@ -170,7 +168,6 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 		if(context.deleteFile(emblQuery.getJobIdentifier()+".xml")){
 			Log.i(TAG, "BLAST hits file deleted");
 		}
-		
 	}
 	
 }

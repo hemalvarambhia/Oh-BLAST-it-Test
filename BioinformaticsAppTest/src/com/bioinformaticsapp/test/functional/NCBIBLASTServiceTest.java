@@ -21,13 +21,10 @@ import com.bioinformaticsapp.web.SearchStatus;
  */
 public class NCBIBLASTServiceTest extends TestCase {
 
-	
-	private static final String TAG = "NCBIBLASTServiceTest";
 	private BLASTQuery query;
 	
 	private BLASTSearchEngine ncbiBLASTService;
 	
-
 	public void setUp() throws Exception {
 		super.setUp();
 		ncbiBLASTService = new NCBIBLASTService();
@@ -55,7 +52,6 @@ public class NCBIBLASTServiceTest extends TestCase {
 		String requestIdRegexPattern = "[A-Z0-9]{11}";
 		boolean validRequestId = jobIdentifier.matches(requestIdRegexPattern);
 		assertTrue(validRequestId);
-		
 	}
 	
 	public void testWeCanSendAQueryWithNoExponentialThreshold(){
@@ -70,14 +66,12 @@ public class NCBIBLASTServiceTest extends TestCase {
 		String requestIdRegexPattern = "[A-Z0-9]{11}";
 		boolean validRequestId = jobIdentifier.matches(requestIdRegexPattern);
 		assertTrue(validRequestId);
-		
 	}
 
 	/**
 	 * Test method for {@link com.bioinformaticsapp.web.NCBIBLASTService#pollQuery(java.lang.String)}.
 	 */
 	public void testWeCanPollAValidQuery() {
-		
 		String jobIdentifier = null;
 		
 		try {
@@ -92,19 +86,15 @@ public class NCBIBLASTServiceTest extends TestCase {
 		List<SearchStatus> listOfAllStatuses = Arrays.asList(allStatuses);
 		
 		boolean isAValidStatus = listOfAllStatuses.contains(statusOfQuery);
-		
 		assertTrue(isAValidStatus);
 	}
 	
 	public void testWeGetNotFoundForNonExistentQuery(){
-		
 		String nonExistentJobIdentifier = "NONEXISTENT123";
-		
 		SearchStatus theStatus = SearchStatus.UNSURE;
 		theStatus = ncbiBLASTService.pollQuery(nonExistentJobIdentifier);
 		
 		assertEquals(SearchStatus.NOT_FOUND, theStatus);
-		
 	}
 
 	/**
