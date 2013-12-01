@@ -2,6 +2,11 @@ package com.bioinformaticsapp.test.unit;
 
 import junit.framework.TestCase;
 
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.core.Is.*;
+import static org.hamcrest.core.IsEqual.*;
+import static org.hamcrest.core.IsNot.*;
+
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
@@ -11,26 +16,16 @@ import com.bioinformaticsapp.models.SearchParameter;
 public class TestBLASTQuery extends TestCase {
 
 	public void testWeCanSetUpDraftNucleotideEMBLQueryWithDefaults(){
-		
 		BLASTQuery emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
 		
-		assertEquals("blastn", emblQuery.getBLASTProgram());
-		assertEquals(new SearchParameter("database", "em_rel_fun"), emblQuery.getSearchParameter("database"));
-		assertEquals(new SearchParameter("exp_threshold", "10"), emblQuery.getSearchParameter("exp_threshold"));
-		assertEquals(new SearchParameter("score", "50"), emblQuery.getSearchParameter("score"));
-		assertEquals(new SearchParameter("match_mismatch_score", "1,-2"), emblQuery.getSearchParameter("match_mismatch_score"));
-		assertEquals("EMBL-EBI", emblQuery.getDestination());
+		assertEMBLQueryHasSensibleDefaults(emblQuery);
 	}
 	
 	public void testWeCanSetUpDraftNucleotideNCBIQueryWithDefaults(){
 		
 		BLASTQuery ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		
-		assertEquals(new SearchParameter("database", "nr"), ncbiQuery.getSearchParameter("database"));
-		assertEquals(new SearchParameter("word_size", "28"), ncbiQuery.getSearchParameter("word_size"));
-		assertEquals(new SearchParameter("exp_threshold", "10"), ncbiQuery.getSearchParameter("exp_threshold"));
-		assertEquals(new SearchParameter("match_mismatch_score", "1,-2"), ncbiQuery.getSearchParameter("match_mismatch_score"));
-		assertEquals("NCBI", ncbiQuery.getDestination());
+		assertNCBIQueryHasSensibleDefaults(ncbiQuery);
 	}
 	
 	public void testEqualsMethodWhenPrimaryKeysAreDifferent(){
@@ -38,7 +33,8 @@ public class TestBLASTQuery extends TestCase {
 		ncbiQuery.setPrimaryKeyId(1l);
 		BLASTQuery anotherNCBIQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		anotherNCBIQuery.setPrimaryKeyId(2l);
-		assertFalse(ncbiQuery.equals(anotherNCBIQuery));
+		
+		assertThat(ncbiQuery, is(not(equalTo(anotherNCBIQuery))));
 	}
 	
 	public void testEqualsMethodWhenProgramsAreDifferent(){
@@ -46,7 +42,8 @@ public class TestBLASTQuery extends TestCase {
 		ncbiQuery.setPrimaryKeyId(1l);
 		BLASTQuery anotherNCBIQuery = new BLASTQuery("blastp", BLASTVendor.NCBI);
 		anotherNCBIQuery.setPrimaryKeyId(1l);
-		assertFalse(ncbiQuery.equals(anotherNCBIQuery));
+		
+		assertThat(ncbiQuery, is(not(equalTo(anotherNCBIQuery))));
 	}
 	
 	public void testEqualsMethodWhenBLASTJobIdsAreDifferent(){
@@ -56,7 +53,7 @@ public class TestBLASTQuery extends TestCase {
 		anotherNCBIQuery.setPrimaryKeyId(1l);
 		anotherNCBIQuery.setJobIdentifier("ABC-123");
 		
-		assertFalse(ncbiQuery.equals(anotherNCBIQuery));
+		assertThat(ncbiQuery, is(not(equalTo(anotherNCBIQuery))));
 	}
 	
 	public void testEqualsMethodWhenSequencesAreDifferent(){
@@ -170,6 +167,24 @@ public class TestBLASTQuery extends TestCase {
 		query.setSearchParameter("email", "");
 		
 		assertFalse("Query should be invalid when e-mail is invalid", query.isValid());
+	}
+	
+	private void assertEMBLQueryHasSensibleDefaults(BLASTQuery query){
+		assertThat(query.getBLASTProgram(), is("blastn"));
+		assertThat(query.getSearchParameter("database"), is(new SearchParameter("database", "em_rel_fun")));
+		assertThat(query.getSearchParameter("exp_threshold"), is(new SearchParameter("exp_threshold", "10")));
+		assertThat(query.getSearchParameter("score"), is(new SearchParameter("score", "50")));
+		assertThat(query.getSearchParameter("match_mismatch_score"), is(new SearchParameter("match_mismatch_score", "1,-2")));
+		assertThat(query.getDestination(), is("EMBL-EBI"));
+	}
+	
+	private void assertNCBIQueryHasSensibleDefaults(BLASTQuery query){
+		assertThat(query.getBLASTProgram(), is("blastn"));
+		assertThat(query.getSearchParameter("database"), is(new SearchParameter("database", "nr")));
+		assertThat(query.getSearchParameter("word_size"), is(new SearchParameter("word_size", "28")));
+		assertThat(query.getSearchParameter("exp_threshold"), is(new SearchParameter("exp_threshold", "10")));
+		assertThat(query.getSearchParameter("match_mismatch_score"), is(new SearchParameter("match_mismatch_score", "1,-2")));
+		assertThat(query.getDestination(), is("NCBI"));
 	}
 	
 }
