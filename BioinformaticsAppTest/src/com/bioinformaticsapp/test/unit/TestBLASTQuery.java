@@ -64,7 +64,7 @@ public class TestBLASTQuery extends TestCase {
 		anotherNCBIQuery.setPrimaryKeyId(1l);
 		anotherNCBIQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAG");
 		
-		assertFalse(ncbiQuery.equals(anotherNCBIQuery));
+		assertThat(ncbiQuery, is(not(equalTo(anotherNCBIQuery))));
 	}
 	
 	public void testEqualsMethodWhenJobStatusesAreDifferent(){
@@ -76,14 +76,14 @@ public class TestBLASTQuery extends TestCase {
 		anotherNCBIQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		anotherNCBIQuery.setStatus(Status.ERROR);
 		
-		assertFalse(ncbiQuery.equals(anotherNCBIQuery));
+		assertThat(ncbiQuery , is(not(equalTo(anotherNCBIQuery))));
 	}
 	
 	public void testEqualsMethodWhenVendorsAreDifferent(){
 		BLASTQuery ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		BLASTQuery emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
 		
-		assertFalse(ncbiQuery.equals(emblQuery));
+		assertThat(ncbiQuery, is(not(equalTo(emblQuery))));
 	}
 	
 	public void testEqualsMethodWhenDatabaseOptionalParameterIsDifferent(){
@@ -91,7 +91,7 @@ public class TestBLASTQuery extends TestCase {
 		BLASTQuery anotherNCBIQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		anotherNCBIQuery.setSearchParameter("database", "gss");
 		
-		assertFalse(ncbiQuery.equals(anotherNCBIQuery));
+		assertThat(ncbiQuery, is(not(equalTo(anotherNCBIQuery))));
 	}
 	
 	public void testEqualsMethodWhenScoreOptionalParameterIsDifferent(){
@@ -99,7 +99,7 @@ public class TestBLASTQuery extends TestCase {
 		BLASTQuery anotherNCBIQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		anotherNCBIQuery.setSearchParameter("exp_threshold", "1000");
 		
-		assertFalse(ncbiQuery.equals(anotherNCBIQuery));
+		assertThat(ncbiQuery, is(not(equalTo(anotherNCBIQuery))));
 	}
 	
 	public void testEqualsMethodWhenNoOfOptionalParametersIsDifferent(){
@@ -107,7 +107,7 @@ public class TestBLASTQuery extends TestCase {
 		BLASTQuery anotherNCBIQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		anotherNCBIQuery.setSearchParameter("some_parameter", "xyz");
 		
-		assertFalse(ncbiQuery.equals(anotherNCBIQuery));
+		assertThat(ncbiQuery, is(not(equalTo(anotherNCBIQuery))));
 	}
 	
 	//Here we check that the equals method is reflexive (x.equals(x))
@@ -115,14 +115,14 @@ public class TestBLASTQuery extends TestCase {
 	 	BLASTQuery ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		ncbiQuery.setPrimaryKeyId(1l);
 		
-		assertTrue(ncbiQuery.equals(ncbiQuery));
+		assertThat(ncbiQuery, is(equalTo(ncbiQuery)));
 	}
 	
 	public void testQueryIsNotValidWhenDNASequenceIsNotValid(){
 		BLASTQuery query = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		query.setSequence("VADSUC");
 		
-		assertFalse(query.isValid());
+		assertFalse("Queries with badly formed sequences", query.isValid());
 	}
 	
 	public void testQueryIsValidWhenDNASequenceIsValid(){
