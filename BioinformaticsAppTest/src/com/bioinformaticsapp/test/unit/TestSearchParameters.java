@@ -3,6 +3,11 @@ package com.bioinformaticsapp.test.unit;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hamcrest.MatcherAssert;
+
+import static org.hamcrest.core.Is.*;
+import static org.hamcrest.core.IsEqual.*;
+
 import junit.framework.TestCase;
 
 import com.bioinformaticsapp.models.BLASTVendor;
@@ -19,7 +24,7 @@ public class TestSearchParameters extends TestCase {
 		expectedOptionalParameters.add(new SearchParameter("match_mismatch_score", "1,-2"));
 		expectedOptionalParameters.add(new SearchParameter("email", ""));
 		
-		assertEquals(expectedOptionalParameters, searchParameters);
+		MatcherAssert.assertThat(searchParameters, is(equalTo(expectedOptionalParameters)));
 	}
 	
 	public void testWeCanCreateDefaultOptionalParametersForNCBI(){
