@@ -42,6 +42,7 @@ public class TestSearchParameters extends TestCase {
 		expectedOptionalParameters.add(new SearchParameter("score", "50"));
 		expectedOptionalParameters.add(new SearchParameter("match_mismatch_score", "1,-2"));
 		expectedOptionalParameters.add(new SearchParameter("email", ""));
+		
 		return expectedOptionalParameters;
 	}
 }
