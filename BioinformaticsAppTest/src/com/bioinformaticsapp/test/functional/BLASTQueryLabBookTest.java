@@ -14,7 +14,7 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 		aQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
 	}
 	
-	public void testWeCanSaveTheBLASTQuery(){
+	public void testWeCanSaveTheBLASTQueryToTheLabBook(){
 		
 	}
 }
