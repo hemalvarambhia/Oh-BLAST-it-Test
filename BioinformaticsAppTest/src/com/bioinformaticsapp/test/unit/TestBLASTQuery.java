@@ -147,7 +147,6 @@ public class TestBLASTQuery extends TestCase {
 		BLASTQuery query = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		query.setSequence("");
 		
-
 		boolean isInvalidQuery =  !query.isValid();
 		assertThat("A query with a blank sequence is invalid", isInvalidQuery);
 	}
