@@ -1,9 +1,9 @@
 package com.bioinformaticsapp.test.functional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.Is.*;
+import static org.hamcrest.core.IsNull.*;
 import android.test.InstrumentationTestCase;
 
 import com.bioinformaticsapp.data.BLASTQueryLabBook;
