@@ -26,23 +26,23 @@ public class TestSearchParameters extends TestCase {
 	}
 	
 	private List<SearchParameter> ncbiDefaults(){
-		List<SearchParameter> expectedOptionalParameters = new ArrayList<SearchParameter>();
-		expectedOptionalParameters.add(new SearchParameter("database", "nr"));
-		expectedOptionalParameters.add(new SearchParameter("word_size", "28"));
-		expectedOptionalParameters.add(new SearchParameter("exp_threshold", "10"));
-		expectedOptionalParameters.add(new SearchParameter("match_mismatch_score", "1,-2"));
+		List<SearchParameter> ncbiDefaultParameters = new ArrayList<SearchParameter>();
+		ncbiDefaultParameters.add(new SearchParameter("database", "nr"));
+		ncbiDefaultParameters.add(new SearchParameter("word_size", "28"));
+		ncbiDefaultParameters.add(new SearchParameter("exp_threshold", "10"));
+		ncbiDefaultParameters.add(new SearchParameter("match_mismatch_score", "1,-2"));
 		
-		return expectedOptionalParameters;
+		return ncbiDefaultParameters;
 	}
 	
 	private List<SearchParameter> emblDefaults(){
-		List<SearchParameter> expectedOptionalParameters = new ArrayList<SearchParameter>();
-		expectedOptionalParameters.add(new SearchParameter("database", "em_rel_fun"));
-		expectedOptionalParameters.add(new SearchParameter("exp_threshold", "10"));
-		expectedOptionalParameters.add(new SearchParameter("score", "50"));
-		expectedOptionalParameters.add(new SearchParameter("match_mismatch_score", "1,-2"));
-		expectedOptionalParameters.add(new SearchParameter("email", ""));
+		List<SearchParameter> emblDefaultParameters = new ArrayList<SearchParameter>();
+		emblDefaultParameters.add(new SearchParameter("database", "em_rel_fun"));
+		emblDefaultParameters.add(new SearchParameter("exp_threshold", "10"));
+		emblDefaultParameters.add(new SearchParameter("score", "50"));
+		emblDefaultParameters.add(new SearchParameter("match_mismatch_score", "1,-2"));
+		emblDefaultParameters.add(new SearchParameter("email", ""));
 		
-		return expectedOptionalParameters;
+		return emblDefaultParameters;
 	}
 }
