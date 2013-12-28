@@ -120,29 +120,36 @@ public class TestBLASTQuery extends TestCase {
 	
 	public void testQueryIsNotValidWhenDNASequenceIsNotValid(){
 		BLASTQuery query = new BLASTQuery("blastn", BLASTVendor.NCBI);
-		query.setSequence("VADSUC");
 		
-		assertFalse("Queries with badly formed sequences", query.isValid());
+		query.setSequence("VADSUC");
+
+		boolean isInvalidQuery =  !query.isValid();
+		assertThat("Queries with badly formed sequences", isInvalidQuery);
 	}
 	
 	public void testQueryIsValidWhenDNASequenceIsValid(){
 		BLASTQuery query = new BLASTQuery("blastn", BLASTVendor.NCBI);
+		
 		query.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		
-		assertTrue(query.isValid());
+		assertThat("Query with a valid sequence should be valid", query.isValid());
 	}
 	
 	public void testQueryIsInvalidWhenSequenceIsNull(){
 		BLASTQuery query = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		
-		assertFalse(query.isValid());
+		boolean isInvalidQuery =  !query.isValid();
+		
+		assertThat("A query with no sequence is invalid", isInvalidQuery);
 	}
 	
 	public void testQueryIsInvalidWhenSequenceIsEmpty(){
 		BLASTQuery query = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		query.setSequence("");
 		
-		assertFalse(query.isValid());
+
+		boolean isInvalidQuery =  !query.isValid();
+		assertThat("A query with a blank sequence is invalid", isInvalidQuery);
 	}
 
 	public void testQueryIsInvalidIfEmailAddressIsInvalid(){
