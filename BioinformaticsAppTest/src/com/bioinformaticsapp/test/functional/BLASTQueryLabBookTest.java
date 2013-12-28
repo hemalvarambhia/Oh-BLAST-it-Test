@@ -1,7 +1,9 @@
 package com.bioinformaticsapp.test.functional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNull.notNullValue;
 import android.test.InstrumentationTestCase;
 
 import com.bioinformaticsapp.data.BLASTQueryLabBook;
@@ -20,10 +22,13 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanSaveTheBLASTQueryToTheLabBook(){
-		boolean saved = labBook.save(aQuery);
+		BLASTQuery query = labBook.save(aQuery);
 		
+
 		assertThat("Should be able to save a BLASTQuery to the lab book",
-				saved, equalTo(true));
+				query.getPrimaryKey(), is(notNullValue()));
+		assertThat("Should be able to save a BLASTQuery to the lab book",
+				query, equalTo(aQuery));
 	}
 	
 	
