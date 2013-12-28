@@ -24,7 +24,6 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 	public void testWeCanSaveTheBLASTQueryToTheLabBook(){
 		BLASTQuery query = labBook.save(aQuery);
 		
-
 		assertThat("Should be able to save a BLASTQuery to the lab book",
 				query.getPrimaryKey(), is(notNullValue()));
 		assertThat("Should be able to save a BLASTQuery to the lab book",
