@@ -181,7 +181,6 @@ public class TestBLASTQuery extends TestCase {
 		query.setJobIdentifier("ncbiblast-20130923-23949sd");
 		query.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		query.setStatus(Status.FINISHED);
-		//TODO - test clone search parameters
 		query.setSearchParameter("exp_threshold", "100");
 		BLASTQuery clone = (BLASTQuery)query.clone();
 		
