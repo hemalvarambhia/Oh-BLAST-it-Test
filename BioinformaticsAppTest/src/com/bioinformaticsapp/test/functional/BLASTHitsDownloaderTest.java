@@ -43,7 +43,7 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 		
 		sender = new BLASTQuerySender(context);
 		downloader = new BLASTHitsDownloadingTask(context);
-		query = new BLASTQuery("blastn", BLASTVendor.NCBI);
+		query = BLASTQuery.ncbiBLASTQuery("blastn");
 		query.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		query.setStatus(BLASTQuery.Status.PENDING);
 		
@@ -144,7 +144,7 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanDownloadResultsOfAFINISHEDEMBLQuery() throws InterruptedException, ExecutionException{
-		BLASTQuery emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		BLASTQuery emblQuery = BLASTQuery.emblBLASTQuery("blastn");
 		emblQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		emblQuery.setSearchParameter("email", "h.n.varambhia@gmail.com");
 		emblQuery.setStatus(BLASTQuery.Status.PENDING);
