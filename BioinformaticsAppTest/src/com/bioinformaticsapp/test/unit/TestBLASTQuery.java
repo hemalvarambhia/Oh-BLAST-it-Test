@@ -187,6 +187,17 @@ public class TestBLASTQuery extends TestCase {
 		assertThat("Clone should be an exact copy of the original", clone, is(equalTo(query)));
 	}
 	
+	public void testCloneIsTheSameAsTheOriginalInTheAbsenceOfAPrimaryKey() throws CloneNotSupportedException{
+		BLASTQuery query = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		query.setJobIdentifier("ncbiblast-20130923-23949sd");
+		query.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
+		query.setStatus(Status.FINISHED);
+		query.setSearchParameter("exp_threshold", "100");
+		BLASTQuery clone = (BLASTQuery)query.clone();
+		
+		assertThat("Clone should be an exact copy of the original", clone, is(equalTo(query)));
+	}
+	
 	private void assertEMBLQueryHasSensibleDefaults(BLASTQuery query){
 		assertThat(query.getBLASTProgram(), is("blastn"));
 		assertThat(query.getSearchParameter("database"), is(new SearchParameter("database", "em_rel_fun")));
