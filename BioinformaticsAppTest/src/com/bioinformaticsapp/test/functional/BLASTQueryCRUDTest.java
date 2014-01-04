@@ -52,25 +52,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		assertThat("Should be able to save a BLASTQuery", primaryKeyId > 0);
 	}
 	
-	public void testWeCanSaveTheSearchParametersOfAQuery(){
-		long blastQueryId = 1l;
-		SearchParameter parameter = new SearchParameter("email", "h.n.varambhia@gmail.com");
-		
-		searchParameterController.saveFor(blastQueryId, parameter);
-		
-		SearchParameter parameterFromDatastore = searchParameterController.getParametersForQuery(blastQueryId).get(0);
-		assertThat("Should be able store a SearchParameter in datastore", parameterFromDatastore, is(parameter));
-	}
-
-	public void testWeCanRetrieveTheOptionalParametersOfAQuery(){
-		BLASTQuery query = queryAsInsertedInDatebase();
-		
-		List<SearchParameter> parameters = searchParameterController.getParametersForQuery(query.getPrimaryKey());
-		
-		List<SearchParameter> expectedParameters = query.getAllParameters();
-		boolean sameSize = (parameters.size() == expectedParameters.size());
-		assertTrue(parameters.containsAll(expectedParameters) && sameSize);
-	}
+	
 	
 	public void testWeCanRetrieveABLASTQueryByPrimaryKey(){
 		BLASTQuery queryInDatabase = queryAsInsertedInDatebase();
