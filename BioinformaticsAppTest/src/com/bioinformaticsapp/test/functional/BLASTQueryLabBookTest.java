@@ -2,6 +2,7 @@ package com.bioinformaticsapp.test.functional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.*;
 import static org.hamcrest.core.IsNull.notNullValue;
 import android.test.InstrumentationTestCase;
 
@@ -31,5 +32,12 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 		expected.setPrimaryKeyId(query.getPrimaryKey());
 	}
 	
+	public void testWeFindRetrieveAQueryByIdentifier(){
+		BLASTQuery query = labBook.save(aQuery);
+		
+		BLASTQuery fromStorage= labBook.findQueryById(query.getPrimaryKey());
+		
+		assertThat("Should be able to find the right query by ID", fromStorage, is(equalTo(query)));
+	}
 	
 }

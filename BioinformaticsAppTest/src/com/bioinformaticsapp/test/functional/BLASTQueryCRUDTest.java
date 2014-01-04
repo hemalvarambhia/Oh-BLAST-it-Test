@@ -1,6 +1,8 @@
 package com.bioinformaticsapp.test.functional;
 
-import java.util.ArrayList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+
 import java.util.List;
 
 import android.test.InstrumentationTestCase;
@@ -23,73 +25,41 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		super.setUp();
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
 		helper.cleanDatabase();
-		
 		controller = new BLASTQueryController(getInstrumentation().getTargetContext());
 		searchParameterController = new SearchParameterController(getInstrumentation().getTargetContext());
-		
 	}
 	
 	protected void tearDown() throws Exception {
 		searchParameterController.close();
 		controller.close();
-		searchParameterController = null;
-		controller = null;
-		super.tearDown();
-		
-		
+		super.tearDown();	
 	}
-	
-	public void testWeCanSaveADraftQueryToDatabase(){
 		
-		BLASTQuery draftQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		List<SearchParameter> parameters = draftQuery.getAllParameters();
-		long primaryKeyId = controller.save(draftQuery);
-		
-		assertTrue(primaryKeyId > 0);
-		
-		for(SearchParameter searchParameter: parameters){
-			searchParameter.setBlastQueryId(primaryKeyId);
-			long parameterPrimaryKeyId = searchParameterController.save(searchParameter);
-			assertTrue(parameterPrimaryKeyId > 0);
-		}
-		
-		
-	}
-	
 	private BLASTQuery queryAsInsertedInDatebase(){
-		BLASTQuery queryInDatabase = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		queryInDatabase.setSequence("");
-		queryInDatabase.setSearchParameter("exp_threshold", "1000");
-		queryInDatabase.setSearchParameter("score", "50");
-		queryInDatabase.setSearchParameter("match_mismatch_score", "1, 2");
-		queryInDatabase.setSearchParameter("database", "em_rel");
-		queryInDatabase.setJobIdentifier("ABC348948934D");
-		queryInDatabase.setStatus(Status.DRAFT);
-		
-		//Save the sequnce, status, job ID into the parent table 
+		BLASTQuery queryInDatabase = BLASTQuery.emblBLASTQuery("blastn");
 		long primaryKeyId = controller.save(queryInDatabase);
 		queryInDatabase.setPrimaryKeyId(primaryKeyId);
-		
-		//save the optional parameter in the optional parameter table that
-		//references the parent table
-		List<SearchParameter> parameters = new ArrayList<SearchParameter>();
-		for(SearchParameter parameter: queryInDatabase.getAllParameters()){
-			parameter.setBlastQueryId(primaryKeyId);
-			long parameterPK = searchParameterController.save(parameter);
-			parameter.setPrimaryKey(parameterPK);
-			parameters.add(parameter);
-		}
-		
-		
-		queryInDatabase.updateAllParameters(parameters);
-		
 
-		//controller is closed in the tearDown message so no need to do it here
+		return queryInDatabase;				
+	}
+
+	
+	public void testWeCanSaveABLASTQueryToDatabase(){
+		BLASTQuery draftQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		long primaryKeyId = controller.save(draftQuery);
 		
-		return queryInDatabase;
-				
+		assertThat("Should be able to save a BLASTQuery", primaryKeyId > 0);
 	}
 	
+	public void testWeCanSaveTheSearchParametersOfAQuery(){
+		long blastQueryId = 1l;
+		SearchParameter parameter = new SearchParameter("email", "h.n.varambhia@gmail.com");
+		
+		searchParameterController.saveFor(blastQueryId, parameter);
+		
+		SearchParameter parameterFromDatastore = searchParameterController.getParametersForQuery(blastQueryId).get(0);
+		assertThat("Should be able store a SearchParameter in datastore", parameterFromDatastore, is(parameter));
+	}
 
 	public void testWeCanRetrieveTheOptionalParametersOfAQuery(){
 		BLASTQuery query = queryAsInsertedInDatebase();
@@ -99,19 +69,13 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		List<SearchParameter> expectedParameters = query.getAllParameters();
 		boolean sameSize = (parameters.size() == expectedParameters.size());
 		assertTrue(parameters.containsAll(expectedParameters) && sameSize);
-		
-		
 	}
 	
 	public void testWeCanRetrieveABLASTQueryByPrimaryKey(){
-		
-		//The query inserted into the database, with primary keys, foreign keys etc.
 		BLASTQuery queryInDatabase = queryAsInsertedInDatebase();
 		
 		BLASTQuery retrievedFromDatabase = controller.findBLASTQueryById(queryInDatabase.getPrimaryKey());
-		List<SearchParameter> parametersForRetrievedQuery = searchParameterController.getParametersForQuery(queryInDatabase.getPrimaryKey());
-		retrievedFromDatabase.updateAllParameters(parametersForRetrievedQuery);
-		assertEquals(queryInDatabase, retrievedFromDatabase);
+		assertThat("Should be able to retrive a query by its ID", retrievedFromDatabase, is(queryInDatabase));
 	
 	}
 	
