@@ -46,6 +46,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	
 	public void testWeCanSaveABLASTQueryToDatabase(){
 		BLASTQuery draftQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		
 		long primaryKeyId = controller.save(draftQuery);
 		
 		assertThat("Should be able to save a BLASTQuery", primaryKeyId > 0);
