@@ -1,7 +1,8 @@
 package com.bioinformaticsapp.test.functional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.Is.*;
+import static org.hamcrest.core.IsNull.*;
 
 import java.util.List;
 
@@ -141,20 +142,12 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	
 	public void testWeCanDeleteAQuery(){
 		BLASTQuery query = new BLASTQuery("blastn", BLASTVendor.NCBI);
-		
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
-		
 		long id = helper.save(query);
 		
 		controller.delete(id);
 		
-		assertTrue("Deleting a query", controller.findBLASTQueryById(id) == null);
-		
-		searchParameterController.deleteParametersFor(id);
-		
-		assertTrue("No search parameters for the query", searchParameterController.getParametersForQuery(id) == null);
-		
-		
+		assertThat("Deleting a query", controller.findBLASTQueryById(id), is(nullValue()));
 	}
 	
 }
