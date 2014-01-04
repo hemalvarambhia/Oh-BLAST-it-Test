@@ -38,7 +38,7 @@ public class SearchParameterControllerTest extends InstrumentationTestCase {
 		assertThat("Should be able store a SearchParameter in datastore", parameterFromDatastore, is(parameter));
 	}
 
-	public void testWeCanRetrieveTheOptionalParametersOfAQuery(){
+	public void testWeCanRetrieveTheSearchParametersOfAQuery(){
 		long blastQueryId = 1l;
 		SearchParameter parameter = new SearchParameter("email", "h.n.varambhia@gmail.com");
 		searchParameterController.saveFor(blastQueryId, parameter);
@@ -48,6 +48,17 @@ public class SearchParameterControllerTest extends InstrumentationTestCase {
 		List<SearchParameter> expected = new ArrayList<SearchParameter>();
 		expected.add(parameter);
 		assertThat("Should be able to retrieve the search parameters of a query", parameters, is(expected));
+	}
+	
+	public void testWeCanDeleteTheSearchParametersOfAQuery(){
+		long blastQueryId = 1l;
+		SearchParameter parameter = new SearchParameter("email", "h.n.varambhia@gmail.com");
+		searchParameterController.saveFor(blastQueryId, parameter);
+		
+		searchParameterController.deleteParametersFor(blastQueryId);
+		
+		List<SearchParameter> parameters = searchParameterController.getParametersForQuery(blastQueryId);
+		assertThat("Should be able to delete all search parameters of a query", parameters.isEmpty());
 	}
 	
 }
