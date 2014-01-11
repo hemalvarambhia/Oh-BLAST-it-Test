@@ -28,8 +28,6 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 		
 		assertThat("Saved BLAST query must have a primary key",
 				query.getPrimaryKey(), is(notNullValue()));
-		BLASTQuery expected = (BLASTQuery)aQuery.clone();
-		expected.setPrimaryKeyId(query.getPrimaryKey());
 	}
 	
 	public void testWeFindRetrieveAQueryByIdentifier(){
@@ -38,6 +36,16 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 		BLASTQuery fromStorage= labBook.findQueryById(query.getPrimaryKey());
 		
 		assertThat("Should be able to find the right query by ID", fromStorage, is(equalTo(query)));
+	}
+	
+	public void testWeCanEditAnExistingQuery(){
+		BLASTQuery query = labBook.save(aQuery);
+		query.setSearchParameter("email", "h.n.varambhia@gmail.com");
+		long primaryKey = query.getPrimaryKey();
+		query = labBook.save(query);
+		
+		BLASTQuery fromStorage= labBook.findQueryById(primaryKey);
+		assertThat("Should store query changes to a BLASTquery", fromStorage, is(query));
 	}
 	
 }
