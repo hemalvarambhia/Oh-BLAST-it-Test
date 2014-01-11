@@ -1,7 +1,7 @@
 package com.bioinformaticsapp.test.functional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.*;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 
 import java.util.List;
@@ -10,8 +10,7 @@ import android.test.InstrumentationTestCase;
 
 import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.models.BLASTQuery;
-import static com.bioinformaticsapp.models.BLASTQuery.Status;
-import com.bioinformaticsapp.models.BLASTVendor;
+import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 
 public class BLASTQueryCRUDTest extends InstrumentationTestCase {
@@ -39,7 +38,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanSaveABLASTQueryToDatabase(){
-		BLASTQuery draftQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		BLASTQuery draftQuery = BLASTQuery.emblBLASTQuery("blastn");
 		
 		long primaryKeyId = controller.save(draftQuery);
 		
@@ -55,7 +54,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanRetrieveABLASTQueryWithDRAFTStatus(){
-		BLASTQuery draft = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		BLASTQuery draft = BLASTQuery.emblBLASTQuery("blastn");
 		controller.save(draft);
 		
 		List<BLASTQuery> draftQueries = controller.findBLASTQueriesByStatus(Status.DRAFT);
@@ -66,9 +65,9 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	
 	public void testWeCanRetrieveABLASTQueryByStatus(){
 		//Default status is DRAFT
-		BLASTQuery draft = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		BLASTQuery draft = BLASTQuery.emblBLASTQuery("blastn");
 		controller.save(draft);
-		BLASTQuery submitted = new BLASTQuery("blastn", BLASTVendor.NCBI);
+		BLASTQuery submitted = BLASTQuery.ncbiBLASTQuery("blastn");
 		submitted.setStatus(Status.SUBMITTED);
 		controller.save(submitted);
 		
@@ -80,7 +79,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	}
 	
 	private void insertBLASTQueryWithStatus(BLASTQuery.Status status){
-		BLASTQuery sampleQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		BLASTQuery sampleQuery = BLASTQuery.emblBLASTQuery("blastn");
 		sampleQuery.setStatus(status);
 		
 		controller.save(sampleQuery);
@@ -106,7 +105,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanDeleteAQuery(){
-		BLASTQuery query = new BLASTQuery("blastn", BLASTVendor.NCBI);
+		BLASTQuery query = BLASTQuery.ncbiBLASTQuery("blastn");
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
 		long id = helper.save(query);
 		
