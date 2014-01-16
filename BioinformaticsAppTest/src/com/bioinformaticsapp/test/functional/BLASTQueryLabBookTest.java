@@ -42,6 +42,7 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 		BLASTQuery query = labBook.save(aQuery);
 		query.setSearchParameter("email", "h.n.varambhia@gmail.com");
 		long primaryKey = query.getPrimaryKey();
+		
 		query = labBook.save(query);
 		
 		BLASTQuery fromStorage= labBook.findQueryById(primaryKey);
