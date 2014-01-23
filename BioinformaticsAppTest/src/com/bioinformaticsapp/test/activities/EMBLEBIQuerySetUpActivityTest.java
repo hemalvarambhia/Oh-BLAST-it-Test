@@ -1,8 +1,8 @@
 package com.bioinformaticsapp.test.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
@@ -11,11 +11,9 @@ import android.widget.Spinner;
 import com.bioinformaticsapp.AppPreferences;
 import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
 import com.bioinformaticsapp.R;
-import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.SearchParameterController;
+import com.bioinformaticsapp.data.BLASTQueryLabBook;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
-import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
@@ -31,32 +29,23 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	
 	public EMBLEBIQuerySetUpActivityTest() {
 		super("com.bioinformaticsapp", EMBLEBISetUpQueryActivity.class);
-		
 	}
-	
 	
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		
-		blastQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		
+		blastQuery = BLASTQuery.emblBLASTQuery("blastn");
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
-		
 		helper.cleanDatabase();
-		
 	}
 	
 	@Override
 	protected void tearDown() throws Exception {
 		blastQuery = null;
-
 		if(solo != null){
 			solo.finishOpenedActivities();
 		}
-		
 		super.tearDown();
-		
 	}
 	
 	public void testUIComponentsSetToQueryDefaults(){
@@ -66,53 +55,35 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		
 		EMBLEBISetUpQueryActivity activity = this.getActivity();
 		
-		Spinner programSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_program_spinner);
-		Spinner databaseSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_database_spinner);
-		Spinner thresholdSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_expthreshold_spinner);
-		Spinner scoreSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_score_spinner);
-		EditText sequenceEditorView = (EditText)activity.findViewById(R.id.embl_sequence_editor);
-		Spinner matchMismatchScoreSpinner = (Spinner)activity.findViewById(R.id.ebi_match_mismatch_score_spinner);
-		assertEquals(blastQuery.getBLASTProgram(), programSpinner.getSelectedItem());
-		assertEquals(blastQuery.getSearchParameter("database").getValue(), databaseSpinner.getSelectedItem());
-		assertEquals(blastQuery.getSearchParameter("exp_threshold").getValue(), thresholdSpinner.getSelectedItem());
-		assertEquals(blastQuery.getSearchParameter("score").getValue(), scoreSpinner.getSelectedItem());
-		assertEquals(blastQuery.getSearchParameter("match_mismatch_score").getValue(), matchMismatchScoreSpinner.getSelectedItem());
-		assertEquals("Enter a sequence", sequenceEditorView.getHint().toString());
+		assertDefaultsDisplayed(activity);
 	}
 	
 	public void testSequenceEditorViewIsSetToValueInQuery(){
 		Intent intent = new Intent();
 		blastQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		intent.putExtra("query", blastQuery);
-		
 		setActivityIntent(intent);
 		
-		EMBLEBISetUpQueryActivity activity = getActivity();
-		
+		EMBLEBISetUpQueryActivity activity = getActivity();	
 		EditText sequenceEditor = (EditText)activity.findViewById(com.bioinformaticsapp.R.id.embl_sequence_editor);
-		assertEquals("Sequence in Edit text", blastQuery.getSequence(), sequenceEditor.getEditableText().toString());
-		
+		assertThat("Sequence in Edit text", sequenceEditor.getEditableText().toString(), is(blastQuery.getSequence()));
 	}
 	
 	public void testEmailEditorViewIsSetToValueInQuery(){
 		Intent intent = new Intent();
 		blastQuery.setSearchParameter("email", "h.n.varambhia@gmail.com");
 		intent.putExtra("query", blastQuery);
-		
 		setActivityIntent(intent);
 		
 		EMBLEBISetUpQueryActivity activity = getActivity();
-		
 		EditText emailEditor = (EditText)activity.findViewById(com.bioinformaticsapp.R.id.embl_send_to_email);
-		assertEquals("Sequence in Edit text", blastQuery.getSearchParameter("email").getValue(), emailEditor.getEditableText().toString());
-		
+		assertThat("Sequence in Edit text", emailEditor.getEditableText().toString(), is(blastQuery.getSearchParameter("email").getValue()));
 	}
 	
 	public void testWeCanSaveANewlyCreatedDraftQuery(){
 		Intent intent = new Intent();
 		intent.putExtra("query", blastQuery);
 		setActivityIntent(intent);
-		
 		EMBLEBISetUpQueryActivity setupActivity = getActivity();
 		
         solo = new Solo(getInstrumentation(), getActivity());
@@ -120,33 +91,14 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
         getInstrumentation().waitForIdleSync();
         
         BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
-		
-        assertTrue("Query primary key expected to be more than 0 but got "+q.getPrimaryKey(), q.getPrimaryKey() > 0l);
-        
-        for(SearchParameter parameter: q.getAllParameters()){
-        	assertTrue("parameters primary key expected to be more than 0, but got "+parameter.getPrimaryKey(), parameter.getPrimaryKey() > 0l);
-        	assertEquals(q.getPrimaryKey().longValue(), parameter.getBlastQueryId().longValue());
-        }
-        
+        assertSaved(q);
 	}
- 
+	
 	public void testWeCanLoadAndSaveDraftCreatedEarlier(){
 		
 		Intent intent = new Intent();
-		BLASTQueryController controller = new BLASTQueryController(getInstrumentation().getTargetContext());
-		SearchParameterController parametersController = new SearchParameterController(getInstrumentation().getTargetContext());
-		long id = controller.save(blastQuery);
-		blastQuery.setPrimaryKeyId(id);
-		controller.close();
-		List<SearchParameter> theParameters = new ArrayList<SearchParameter>();
-		List<SearchParameter> parameters = blastQuery.getAllParameters();
-		for(SearchParameter parameter: parameters){
-			long parameterId = parametersController.save(parameter);
-			parameter.setPrimaryKey(parameterId);
-			theParameters.add(parameter);
-		}
-		blastQuery.updateAllParameters(theParameters);
-		parametersController.close();
+		BLASTQueryLabBook labBook = new BLASTQueryLabBook(getInstrumentation().getTargetContext());
+		blastQuery = labBook.save(blastQuery);
 		intent.putExtra("query", blastQuery);
 		setActivityIntent(intent);
 		EMBLEBISetUpQueryActivity setupActivity = getActivity();
@@ -156,8 +108,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		getInstrumentation().waitForIdleSync();
 		
         BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
-		
-        assertTrue(q.getPrimaryKey() > 0l);
+        assertThat("The query should be updated", q.getPrimaryKey(), is(blastQuery.getPrimaryKey()));
         
 	}
 	
@@ -360,4 +311,41 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		solo.assertCurrentActivity("Should be able to go to the settings screen", AppPreferences.class);
 	}
 	
+	private void assertDefaultsDisplayed(EMBLEBISetUpQueryActivity activity){
+		Spinner programSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_program_spinner);
+		assertThat("Should have an appropriate default for program", 
+				programSpinner.getSelectedItem().toString(), 
+				is(blastQuery.getBLASTProgram()));
+		
+		Spinner databaseSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_database_spinner);
+		assertThat("Should have an appropriate default for the database", 
+				databaseSpinner.getSelectedItem().toString(), 
+				is(blastQuery.getSearchParameter("database").getValue()));
+		
+		Spinner thresholdSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_expthreshold_spinner);
+		assertThat("Should have an appropriate default for the threshold",
+				 thresholdSpinner.getSelectedItem().toString(),
+				 is(blastQuery.getSearchParameter("exp_threshold").getValue()));
+		
+		Spinner scoreSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_score_spinner);
+		assertThat("Should have an appropriate default value for the score",
+				scoreSpinner.getSelectedItem().toString(),
+				is(blastQuery.getSearchParameter("score").getValue()));
+		
+		Spinner matchMismatchScoreSpinner = (Spinner)activity.findViewById(R.id.ebi_match_mismatch_score_spinner);
+		assertThat("Should have an appropriate default value for the mis-match score",
+				matchMismatchScoreSpinner.getSelectedItem().toString(),
+				is(blastQuery.getSearchParameter("match_mismatch_score").getValue().toString()));
+		
+		EditText sequenceEditorView = (EditText)activity.findViewById(R.id.embl_sequence_editor);
+		assertThat("Should hint to the user to enter a sequence", 
+				sequenceEditorView.getHint().toString(), is("Enter a sequence"));
+	}
+
+	private void assertSaved(BLASTQuery q){
+		assertThat("Should have saved the query", q.getPrimaryKey(), is(notNullValue()));
+        for(SearchParameter parameter: q.getAllParameters()){
+        	assertThat("Should have saved the search parameter", parameter.getBlastQueryId().longValue(), is(q.getPrimaryKey()));
+        }
+	}
 }
