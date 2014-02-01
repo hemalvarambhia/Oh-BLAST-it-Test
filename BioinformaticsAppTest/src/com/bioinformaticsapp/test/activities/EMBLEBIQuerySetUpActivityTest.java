@@ -21,11 +21,9 @@ import com.jayway.android.robotium.solo.Solo;
 public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2<EMBLEBISetUpQueryActivity> {
 
 	private BLASTQuery blastQuery;
-	private static final String TAG = "SetUpBLASTQueryActivityTest";
 	
 	private Solo solo;
 	private static final int SENDING_DIALOG_TIMEOUT = 35000;
-	
 	
 	public EMBLEBIQuerySetUpActivityTest() {
 		super("com.bioinformaticsapp", EMBLEBISetUpQueryActivity.class);
@@ -84,13 +82,12 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		Intent intent = new Intent();
 		intent.putExtra("query", blastQuery);
 		setActivityIntent(intent);
-		EMBLEBISetUpQueryActivity setupActivity = getActivity();
 		
         solo = new Solo(getInstrumentation(), getActivity());
         solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.save_query);
-        getInstrumentation().waitForIdleSync();
+        solo.waitForActivity(getActivity().getLocalClassName(), 5000);
         
-        BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
+        BLASTQuery q = (BLASTQuery)getActivity().getIntent().getSerializableExtra("query");
         assertSaved(q);
 	}
 	
@@ -105,8 +102,8 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		solo = new Solo(getInstrumentation(), setupActivity);
 		
 		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.save_query);
-		getInstrumentation().waitForIdleSync();
-		
+		solo.waitForActivity(getActivity().getLocalClassName(), 5000);
+        
         BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
         assertThat("The query should be updated", q.getPrimaryKey(), is(blastQuery.getPrimaryKey()));
         
@@ -121,10 +118,10 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		solo = new Solo(getInstrumentation(), setupActivity);
 		solo.pressSpinnerItem(0, 1);
 		Spinner programSpinner = (Spinner)solo.getView(R.id.blastqueryentry_program_spinner);
-		getInstrumentation().waitForIdleSync();
+		solo.waitForActivity(getActivity().getLocalClassName(), 5000);
+        
 		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
 		assertEquals(programSpinner.getSelectedItem().toString(), q.getBLASTProgram());
-		
 	}
 	
 	public void testWeCanEditSequenceOfADraftQuery(){
@@ -136,10 +133,10 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		solo = new Solo(getInstrumentation(), setupActivity);
 		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_sequence_editor);
 		solo.typeText(sequenceEditor, "CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-		getInstrumentation().waitForIdleSync();
+		solo.waitForActivity(getActivity().getLocalClassName(), 5000);
+        
 		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
 		assertEquals(sequenceEditor.getText().toString(), q.getSequence());
-		
 	}
 	
 	public void testWeCanOnlyInputDNASymbolsIntoTheSequenceTextfield(){
@@ -151,7 +148,8 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		solo = new Solo(getInstrumentation(), setupActivity);
 		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_sequence_editor);
 		solo.typeText(sequenceEditor, "INVALIDSEQUENCE");
-		getInstrumentation().waitForIdleSync();
+		solo.waitForActivity(getActivity().getLocalClassName(), 5000);
+        
 		//'A', 'C', 'G', 'T', 'U', 'W', 'S', 'M', 'K', 'R', 'Y', 'B', 'D', 'H', 'V'
 		assertEquals("VADSUC", sequenceEditor.getEditableText().toString());
 	}
@@ -164,7 +162,8 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		EMBLEBISetUpQueryActivity setupActivity = getActivity();
 		solo = new Solo(getInstrumentation(), setupActivity);
 		solo.pressSpinnerItem(1, -2);
-		getInstrumentation().waitForIdleSync();
+		solo.waitForActivity(getActivity().getLocalClassName(), 5000);
+        
 		Spinner databaseSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_database_spinner);
 		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
 		assertEquals(databaseSpinner.getSelectedItem().toString(), q.getSearchParameter("database").getValue());
@@ -179,7 +178,8 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		EMBLEBISetUpQueryActivity setupActivity = getActivity();
 		solo = new Solo(getInstrumentation(), setupActivity);
 		solo.pressSpinnerItem(2, 3);
-		getInstrumentation().waitForIdleSync();
+		solo.waitForActivity(getActivity().getLocalClassName(), 5000);
+        
 		Spinner expThresholdSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_expthreshold_spinner);
 		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
 		assertEquals(expThresholdSpinner.getSelectedItem().toString(), q.getSearchParameter("exp_threshold").getValue());
@@ -194,7 +194,8 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		EMBLEBISetUpQueryActivity setupActivity = getActivity();
 		solo = new Solo(getInstrumentation(), setupActivity);
 		solo.pressSpinnerItem(3, 1);
-		getInstrumentation().waitForIdleSync();
+		solo.waitForActivity(getActivity().getLocalClassName(), 5000);
+        
 		Spinner databaseSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_score_spinner);
 		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
 		assertEquals(databaseSpinner.getSelectedItem().toString(), q.getSearchParameter("score").getValue());
@@ -209,7 +210,8 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		EMBLEBISetUpQueryActivity setupActivity = getActivity();
 		solo = new Solo(getInstrumentation(), setupActivity);
 		solo.pressSpinnerItem(4, -2);
-		getInstrumentation().waitForIdleSync();
+		solo.waitForActivity(getActivity().getLocalClassName(), 5000);
+        
 		Spinner matchMismatchScoreSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.ebi_match_mismatch_score_spinner);
 		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
 		assertEquals(matchMismatchScoreSpinner.getSelectedItem().toString(), q.getSearchParameter("match_mismatch_score").getValue());
