@@ -2,8 +2,8 @@ package com.bioinformaticsapp.test.activities;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
 import android.content.Intent;
+import android.database.Cursor;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -12,9 +12,9 @@ import com.bioinformaticsapp.AppPreferences;
 import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.data.BLASTQueryLabBook;
+import com.bioinformaticsapp.data.DatabaseHelper;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
-import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
@@ -82,12 +82,13 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		Intent intent = new Intent();
 		intent.putExtra("query", blastQuery);
 		setActivityIntent(intent);
-		
-        solo = new Solo(getInstrumentation(), getActivity());
-        solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.save_query);
-        solo.waitForActivity(getActivity().getLocalClassName(), 5000);
+		EMBLEBISetUpQueryActivity setUpEMBLQuery = getActivity();
         
-        BLASTQuery q = (BLASTQuery)getActivity().getIntent().getSerializableExtra("query");
+		solo = new Solo(getInstrumentation(), setUpEMBLQuery);
+        solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.save_query);
+        solo.waitForActivity(setUpEMBLQuery.getLocalClassName(), 5000);
+        
+        BLASTQuery q = (BLASTQuery)solo.getCurrentActivity().getIntent().getSerializableExtra("query");
         assertSaved(q);
 	}
 	
@@ -240,72 +241,41 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	}
 	
 	public void testWeCanSendAValidQuery(){
-
 		Intent intent = new Intent();
-		
 		intent.putExtra("query", blastQuery);
-		
 		setActivityIntent(intent);
-		
 		EMBLEBISetUpQueryActivity setupQueryActivity = (EMBLEBISetUpQueryActivity)getActivity();
-		
 		solo = new Solo(getInstrumentation(), setupQueryActivity);
 		
 		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_sequence_editor);
-		
 		solo.typeText(sequenceEditor, "CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-		
 		EditText emailEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_send_to_email);
-		
 		solo.typeText(emailEditor, "h.n.varambhia@gmail.com");
-		
 		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.send_query);
-		
 		solo.waitForDialogToClose(SENDING_DIALOG_TIMEOUT);
 		
 		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
-		
 		assertEquals( "Expected query to be ready for sending", Status.PENDING, q.getStatus());
-		        
 	}
 	
 	public void testWeCannotSendAnInvalidQuery(){
-		Intent intent = new Intent();
-		
-		intent.putExtra("query", blastQuery);
-		
-		setActivityIntent(intent);
-		
+		setupActivityWith(blastQuery);
 		EMBLEBISetUpQueryActivity setupQueryActivity = (EMBLEBISetUpQueryActivity)getActivity();
-		
 		solo = new Solo(getInstrumentation(), setupQueryActivity);
 		
 		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_sequence_editor);
-		
 		solo.typeText(sequenceEditor, "INVALIDSEQUENCE");
-		
 		EditText emailEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_send_to_email);
-		
 		solo.typeText(emailEditor, "h.n.varambhia@gmail.com");
-		
 		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.send_query);
-		
 		solo.waitForDialogToClose(SENDING_DIALOG_TIMEOUT);
 		
 		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
-		
 		assertEquals( "Expected query to be ready for sending", Status.DRAFT, q.getStatus());
-		        
 	}
 	
 	public void testWeCanGoToTheApplicationPreferencesScreen(){
-
-		Intent intent = new Intent();
-		
-		intent.putExtra("query", blastQuery);
-		
-		setActivityIntent(intent);
-		
+		setupActivityWith(blastQuery);
 		solo = new Solo(getInstrumentation(), getActivity());
 		
 		solo.clickOnMenuItem("Settings");
@@ -344,10 +314,20 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 				sequenceEditorView.getHint().toString(), is("Enter a sequence"));
 	}
 
+	private void setupActivityWith(BLASTQuery query){
+		Intent intent = new Intent();
+		intent.putExtra("query", blastQuery);
+		setActivityIntent(intent);
+	}
+	
 	private void assertSaved(BLASTQuery q){
-		assertThat("Should have saved the query", q.getPrimaryKey(), is(notNullValue()));
-        for(SearchParameter parameter: q.getAllParameters()){
-        	assertThat("Should have saved the search parameter", parameter.getBlastQueryId().longValue(), is(q.getPrimaryKey()));
-        }
+		DatabaseHelper helper = new DatabaseHelper(getActivity());
+		String countCommand = String.format("SELECT COUNT(*) FROM %s", BLASTQuery.BLAST_QUERY_TABLE);
+		Cursor countCursor = helper.getReadableDatabase().rawQuery(countCommand, null);
+		countCursor.moveToFirst();
+		int count = countCursor.getInt(0);
+		countCursor.close();
+		helper.close();
+		assertThat("Number of BLASTQueries in database", count > 0);
 	}
 }
