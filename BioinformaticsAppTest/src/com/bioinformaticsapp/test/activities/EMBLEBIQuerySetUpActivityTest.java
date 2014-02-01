@@ -56,8 +56,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		blastQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		setupActivityWith(blastQuery);
 		
-		EMBLEBISetUpQueryActivity activity = getActivity();	
-		EditText sequenceEditor = (EditText)activity.findViewById(com.bioinformaticsapp.R.id.embl_sequence_editor);
+		EditText sequenceEditor = (EditText)getActivity().findViewById(com.bioinformaticsapp.R.id.embl_sequence_editor);
 		assertThat("Sequence in Edit text", sequenceEditor.getEditableText().toString(), is(blastQuery.getSequence()));
 	}
 	
@@ -65,20 +64,18 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		blastQuery.setSearchParameter("email", "h.n.varambhia@gmail.com");
 		setupActivityWith(blastQuery);
 		
-		EMBLEBISetUpQueryActivity activity = getActivity();
-		EditText emailEditor = (EditText)activity.findViewById(com.bioinformaticsapp.R.id.embl_send_to_email);
+		EditText emailEditor = (EditText)getActivity().findViewById(com.bioinformaticsapp.R.id.embl_send_to_email);
 		assertThat("Sequence in Edit text", emailEditor.getEditableText().toString(), is(blastQuery.getSearchParameter("email").getValue()));
 	}
 	
 	public void testWeCanSaveANewlyCreatedDraftQuery(){
 		setupActivityWith(blastQuery);
-		EMBLEBISetUpQueryActivity setUpEMBLQuery = getActivity();
-        
-		solo = new Solo(getInstrumentation(), setUpEMBLQuery);
+		
+		solo = new Solo(getInstrumentation(), getActivity());
         solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.save_query);
         waitFor(5000);
         
-        BLASTQuery q = (BLASTQuery)solo.getCurrentActivity().getIntent().getSerializableExtra("query");
+        BLASTQuery q = (BLASTQuery)getActivity().getIntent().getSerializableExtra("query");
         assertSaved(q);
 	}
 	
@@ -86,46 +83,42 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		BLASTQueryLabBook labBook = new BLASTQueryLabBook(getInstrumentation().getTargetContext());
 		blastQuery = labBook.save(blastQuery);
 		setupActivityWith(blastQuery);
-		EMBLEBISetUpQueryActivity setupActivity = getActivity();
-		solo = new Solo(getInstrumentation(), setupActivity);
+		solo = new Solo(getInstrumentation(), getActivity());
 		
 		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.save_query);
 		waitFor(5000);
         
-        BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
+        BLASTQuery q = (BLASTQuery)getActivity().getIntent().getSerializableExtra("query");
         assertThat("The query should be updated", q.getPrimaryKey(), is(blastQuery.getPrimaryKey()));   
 	}
 	
 	public void testWeCanEditTheProgramOfADraftQuery(){
 		setupActivityWith(blastQuery);
+		solo = new Solo(getInstrumentation(), getActivity());
 		
-		EMBLEBISetUpQueryActivity setupActivity = getActivity();
-		solo = new Solo(getInstrumentation(), setupActivity);
 		solo.pressSpinnerItem(0, 1);
-		Spinner programSpinner = (Spinner)solo.getView(R.id.blastqueryentry_program_spinner);
 		waitFor(5000);
         
-		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
+		Spinner programSpinner = (Spinner)solo.getView(R.id.blastqueryentry_program_spinner);
+		BLASTQuery q = (BLASTQuery)getActivity().getIntent().getSerializableExtra("query");
 		assertEquals(programSpinner.getSelectedItem().toString(), q.getBLASTProgram());
 	}
 	
 	public void testWeCanEditSequenceOfADraftQuery(){
 		setupActivityWith(blastQuery);
+		solo = new Solo(getInstrumentation(), getActivity());
 		
-		EMBLEBISetUpQueryActivity setupActivity = getActivity();
-		solo = new Solo(getInstrumentation(), setupActivity);
 		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_sequence_editor);
 		solo.typeText(sequenceEditor, "CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		waitFor(5000);
         
-		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
+		BLASTQuery q = (BLASTQuery)getActivity().getIntent().getSerializableExtra("query");
 		assertEquals(sequenceEditor.getText().toString(), q.getSequence());
 	}
 	
 	public void testWeCanOnlyInputDNASymbolsIntoTheSequenceTextfield(){
 		setupActivityWith(blastQuery);
-		EMBLEBISetUpQueryActivity setupActivity = getActivity();
-		solo = new Solo(getInstrumentation(), setupActivity);
+		solo = new Solo(getInstrumentation(), getActivity());
 		
 		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_sequence_editor);
 		solo.typeText(sequenceEditor, "INVALIDSEQUENCE");
@@ -138,26 +131,24 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	public void testWeCanEditTheDatabaseOfADraftQuery(){
 		setupActivityWith(blastQuery);
 		
-		EMBLEBISetUpQueryActivity setupActivity = getActivity();
-		solo = new Solo(getInstrumentation(), setupActivity);
+		solo = new Solo(getInstrumentation(), getActivity());
 		solo.pressSpinnerItem(1, -2);
 		waitFor(5000);
         
 		Spinner databaseSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_database_spinner);
-		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
+		BLASTQuery q = (BLASTQuery)getActivity().getIntent().getSerializableExtra("query");
 		assertEquals(databaseSpinner.getSelectedItem().toString(), q.getSearchParameter("database").getValue());
 	}
 
 	public void testWeCanEditTheExpThresholdOfADraftQuery(){
 		setupActivityWith(blastQuery);
-		EMBLEBISetUpQueryActivity setupActivity = getActivity();
-		solo = new Solo(getInstrumentation(), setupActivity);
+		solo = new Solo(getInstrumentation(), getActivity());
 		
 		solo.pressSpinnerItem(2, 3);
 		waitFor(5000);
         
 		Spinner expThresholdSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_expthreshold_spinner);
-		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
+		BLASTQuery q = (BLASTQuery)getActivity().getIntent().getSerializableExtra("query");
 		assertEquals(expThresholdSpinner.getSelectedItem().toString(), q.getSearchParameter("exp_threshold").getValue());
 	}
 	
@@ -190,16 +181,14 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	
 	public void testWeCanEditTheEmailAddressParameter(){
 		setupActivityWith(blastQuery);
+		solo = new Solo(getInstrumentation(), getActivity());
 		
-		EMBLEBISetUpQueryActivity setupActivity = getActivity();
-		solo = new Solo(getInstrumentation(), setupActivity);
 		EditText emailEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_send_to_email);
 		String validEmailAddress = "h.n.varambhia@gmail.com";
 		solo.typeText(emailEditor, validEmailAddress);
-		getInstrumentation().waitForIdleSync();
+		waitFor(5000);
 		
-		BLASTQuery query = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
-		
+		BLASTQuery query = (BLASTQuery)getActivity().getIntent().getSerializableExtra("query");
 		assertEquals("Expected e-mail address where results would be sent to to be "+validEmailAddress+" " +
 				"but got "+query.getSearchParameter("email"), validEmailAddress, 
 				query.getSearchParameter("email").getValue());
@@ -207,8 +196,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	
 	public void testWeCanSendAValidQuery(){
 		setupActivityWith(blastQuery);
-		EMBLEBISetUpQueryActivity setupQueryActivity = (EMBLEBISetUpQueryActivity)getActivity();
-		solo = new Solo(getInstrumentation(), setupQueryActivity);
+		solo = new Solo(getInstrumentation(), getActivity());
 		
 		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_sequence_editor);
 		solo.typeText(sequenceEditor, "CCTTTATCTAATCTTTGGAGCATGAGCTGG");
@@ -217,7 +205,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.send_query);
 		solo.waitForDialogToClose(SENDING_DIALOG_TIMEOUT);
 		
-		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
+		BLASTQuery q = (BLASTQuery)getActivity().getIntent().getSerializableExtra("query");
 		assertEquals( "Expected query to be ready for sending", Status.PENDING, q.getStatus());
 	}
 	
