@@ -86,7 +86,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 	}
 	
 	public void testWeCanViewAllDraftQueries(){
-		//This could be any query
+		//FIXME - test is fragile. It failed and passed
 		createSampleDraftQuery(BLASTVendor.EMBL_EBI);
 		
 		solo = new Solo(getInstrumentation(), getActivity());
