@@ -74,10 +74,6 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 			queries[i].setSearchParameter("email", "h.n.varambhia@gmail.com");
 			queries[i].setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 			queries[i].setStatus(BLASTQuery.Status.PENDING);
-			
-			save(queries[i]);
-			
-			
 		}
 		
 		waitUntilSent(queries);
