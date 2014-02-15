@@ -65,11 +65,8 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	
 	public void testWeCanRetrieveABLASTQueryByStatus(){
 		//Default status is DRAFT
-		BLASTQuery draft = BLASTQuery.emblBLASTQuery("blastn");
-		controller.save(draft);
-		BLASTQuery submitted = BLASTQuery.ncbiBLASTQuery("blastn");
-		submitted.setStatus(Status.SUBMITTED);
-		controller.save(submitted);
+		insertBLASTQueryWithStatus(Status.DRAFT);
+		insertBLASTQueryWithStatus(Status.SUBMITTED);
 		
 		List<BLASTQuery> submittedQueries = controller.findBLASTQueriesByStatus(Status.SUBMITTED);
 		
@@ -81,7 +78,6 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	private void insertBLASTQueryWithStatus(BLASTQuery.Status status){
 		BLASTQuery sampleQuery = BLASTQuery.emblBLASTQuery("blastn");
 		sampleQuery.setStatus(status);
-		
 		controller.save(sampleQuery);
 	}
 	

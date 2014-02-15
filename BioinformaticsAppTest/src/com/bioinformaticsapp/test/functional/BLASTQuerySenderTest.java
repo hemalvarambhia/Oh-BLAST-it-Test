@@ -1,19 +1,15 @@
 package com.bioinformaticsapp.test.functional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
 
-import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.SearchParameterController;
+import com.bioinformaticsapp.data.BLASTQueryLabBook;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.bioinformaticsapp.web.BLASTQuerySender;
 
@@ -61,22 +57,8 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 	}
 
 	private void save(BLASTQuery query){
-		BLASTQueryController queryController = new BLASTQueryController(context);
-		SearchParameterController parameterController = new SearchParameterController(context);
-		long queryPrimaryKey = queryController.save(query);
-		query.setPrimaryKeyId(queryPrimaryKey);
-		List<SearchParameter> parameters = new ArrayList<SearchParameter>();
-		for(SearchParameter parameter: query.getAllParameters()){
-			parameter.setBlastQueryId(queryPrimaryKey);
-			long parameterPrimaryKey = parameterController.save(parameter);
-			parameter.setPrimaryKey(parameterPrimaryKey);
-			parameters.add(parameter);
-		}
-		
-		query.updateAllParameters(parameters);
-		
-		parameterController.close();
-		queryController.close();
+		BLASTQueryLabBook labBook = new BLASTQueryLabBook(context);
+		labBook.save(query);
 	}
 	
 	public void testWeCanSendAValidBLASTQuery(){

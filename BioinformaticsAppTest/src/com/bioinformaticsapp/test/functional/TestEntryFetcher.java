@@ -40,20 +40,17 @@ public class TestEntryFetcher extends TestCase {
 		Map<String, String> entry = fetcher.getOrganism();
 		
 		String expectedScientificName = "Carpodacus mexicanus";
-		
 		String obtainedScientificName = entry.get("scientificName");
-		
 		assertEquals(expectedScientificName, obtainedScientificName);
 	}
 	
 	public void testWeCanFetchAnnotationsForAccessionNumberFromNCBIResults(){
 		//HQ998156 was yielded from an NCBI webservice run:
-		
 		EntryFetcher entryFetcher = new EntryFetcher("HQ998156");
-		String expectedScientificName = "Ardeola ralloides";
 		Map<String, String> entry = entryFetcher.getOrganism();
-		String obtainedScientificName = entry.get("scientificName");
 		
+		String expectedScientificName = "Ardeola ralloides";
+		String obtainedScientificName = entry.get("scientificName");
 		assertEquals(expectedScientificName, obtainedScientificName);
 	}
 	

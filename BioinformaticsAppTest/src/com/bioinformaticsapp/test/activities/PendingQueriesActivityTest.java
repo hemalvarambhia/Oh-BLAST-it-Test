@@ -12,6 +12,7 @@ import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
 import com.bioinformaticsapp.PendingQueriesActivity;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.data.BLASTQueryController;
+import com.bioinformaticsapp.data.BLASTQueryLabBook;
 import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
@@ -187,23 +188,9 @@ public class PendingQueriesActivityTest extends
 	}
 
 	private long saveQuery(BLASTQuery query){
-		BLASTQueryController queryController = new BLASTQueryController(getInstrumentation().getTargetContext());
-		long primaryKey = queryController.save(query);
-		query.setPrimaryKeyId(primaryKey);
-		List<SearchParameter> parameters = query.getAllParameters();
-		List<SearchParameter> newSetOfParameters = new ArrayList<SearchParameter>();
-		SearchParameterController parametersControllers = new SearchParameterController(getInstrumentation().getTargetContext());
-		for(SearchParameter parameter: parameters){
-			parameter.setBlastQueryId(query.getPrimaryKey());
-			long parameterPrimaryKey = parametersControllers.save(parameter);
-			parameter.setPrimaryKey(parameterPrimaryKey);
-			newSetOfParameters.add(parameter);
-		}
-		
-		query.updateAllParameters(newSetOfParameters);
-		parametersControllers.close();
-		queryController.close();
-		return primaryKey;
+		BLASTQueryLabBook labBook = new BLASTQueryLabBook(getInstrumentation().getTargetContext());
+		BLASTQuery saved = labBook.save(query);
+		return saved.getPrimaryKey();
 	}
 	
 }

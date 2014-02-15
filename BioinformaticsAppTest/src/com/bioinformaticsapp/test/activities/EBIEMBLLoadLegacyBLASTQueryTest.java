@@ -233,7 +233,6 @@ public class EBIEMBLLoadLegacyBLASTQueryTest extends
 		BLASTQuery legacyQuery = (BLASTQuery)activityIntent.getSerializableExtra("query");
 		
 		SearchParameter matchMismatchScore = legacyQuery.getSearchParameter("match_mismatch_score");
-		assertNotNull(matchMismatchScore.getPrimaryKey());
 		assertNotNull(matchMismatchScore.getBlastQueryId());
 		
 	}

@@ -1,18 +1,14 @@
 package com.bioinformaticsapp.test.functional;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
 import android.test.InstrumentationTestCase;
 
-import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.SearchParameterController;
+import com.bioinformaticsapp.data.BLASTQueryLabBook;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.bioinformaticsapp.web.BLASTQueryPoller;
 import com.bioinformaticsapp.web.BLASTQuerySender;
@@ -22,71 +18,28 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	private BLASTQuery emblQuery;
 	private BLASTQuery ncbiQuery;
 	private Context context;
-	private BLASTQuerySender sender;
 	private BLASTQueryPoller poller;
-	private final static String TAG = "BLASTQueryPollerTest";
 	
 	protected void setUp() throws Exception {
 		context = getInstrumentation().getTargetContext();
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(context);
 		helper.cleanDatabase();
-		
-		emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		emblQuery.setSearchParameter("email", "h.n.varambhia@gmail.com");
-		emblQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-		emblQuery.setStatus(BLASTQuery.Status.PENDING);
-		
-		save(emblQuery);
-		
-		ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
-		ncbiQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-		ncbiQuery.setStatus(BLASTQuery.Status.PENDING);
-		
-		save(ncbiQuery);
-		
-		sender = new BLASTQuerySender(context);
 		poller = new BLASTQueryPoller(context);
-		
 	}
 	
-	protected void tearDown() throws Exception {
-		sender = null;
-		poller = null;
-		ncbiQuery = null;
-		emblQuery = null;
-		context = null;
-		super.tearDown();
-	}
-
 	private void save(BLASTQuery query){
-		BLASTQueryController queryController = new BLASTQueryController(context);
-		SearchParameterController parameterController = new SearchParameterController(context);
-		long queryPrimaryKey = queryController.save(query);
-		query.setPrimaryKeyId(queryPrimaryKey);
-		List<SearchParameter> parameters = new ArrayList<SearchParameter>();
-		for(SearchParameter parameter: query.getAllParameters()){
-			parameter.setBlastQueryId(queryPrimaryKey);
-			long parameterPrimaryKey = parameterController.save(parameter);
-			parameter.setPrimaryKey(parameterPrimaryKey);
-			parameters.add(parameter);
-		}
-		
-		query.updateAllParameters(parameters);
-		
-		parameterController.close();
-		queryController.close();
+		BLASTQueryLabBook labBook = new BLASTQueryLabBook(context);
+		labBook.save(query);
 	}
 	
 	private void waitUntilSent(BLASTQuery... queries) throws InterruptedException, ExecutionException{
+		BLASTQuerySender sender = new BLASTQuerySender(context);
 		sender.execute(queries);
-		
-		sender.get();
-		
-		
+		sender.get();	
 	}
 	
 	public void testWeCanPollASUBMITTEDEMBLQuery() throws InterruptedException, ExecutionException{
-		
+		createPendingEMBLBLASTQuery();
 		waitUntilSent(emblQuery);
 		
 		poller.execute(emblQuery);
@@ -105,7 +58,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanPollASUBMITTEDNCBIQuery() throws InterruptedException, ExecutionException{
-		
+		createPendingNCBIBLASTQuery();
 		waitUntilSent(ncbiQuery);
 		
 		poller.execute(ncbiQuery);
@@ -184,5 +137,20 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 		
 	}
 	
+	private void createPendingEMBLBLASTQuery(){
+		emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		emblQuery.setSearchParameter("email", "h.n.varambhia@gmail.com");
+		emblQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
+		emblQuery.setStatus(BLASTQuery.Status.PENDING);
+		save(emblQuery);
+	}
 	
+	private void createPendingNCBIBLASTQuery(){
+
+		ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
+		ncbiQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
+		ncbiQuery.setStatus(BLASTQuery.Status.PENDING);
+		save(ncbiQuery);
+		
+	}
 }

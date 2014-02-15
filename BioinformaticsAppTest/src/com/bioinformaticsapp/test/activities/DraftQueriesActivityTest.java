@@ -14,17 +14,14 @@ import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
 import com.bioinformaticsapp.NCBIQuerySetUpActivity;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.SearchParameterController;
+import com.bioinformaticsapp.data.BLASTQueryLabBook;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
 public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<DraftBLASTQueriesActivity> {
-
-	private static final String TAG = "SetUpBLASTQueryActivityTest";
 	private Solo solo;
 	private Context ctx;
  	
@@ -36,63 +33,43 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 	protected void setUp() throws Exception {
 		super.setUp();
 		ctx = getInstrumentation().getTargetContext();
-		
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(ctx);
 		helper.cleanDatabase();
-		
 	}
 	
 	protected void tearDown() throws Exception {
-		
 		if(solo!=null)
 			solo.finishOpenedActivities();
 
 		super.tearDown();
-
 	}
 	
 	private void createSampleDraftQuery(int blastVendor){
-		BLASTQuery sampleNCBIQuery = new BLASTQuery("blastn", blastVendor);
-		BLASTQueryController queryController = new BLASTQueryController(ctx);
-		SearchParameterController parametersController = new SearchParameterController(ctx);
-		long blastQueryId = queryController.save(sampleNCBIQuery);
-		for(SearchParameter parameter: sampleNCBIQuery.getAllParameters()){
-			parameter.setBlastQueryId(blastQueryId);
-			parametersController.save(parameter);
-		}
-
-		parametersController.close();
-		queryController.close();
+		BLASTQuery sample = new BLASTQuery("blastn", blastVendor);
+		BLASTQueryLabBook labbook = new BLASTQueryLabBook(ctx);
+		sample = labbook.save(sample);
+	}
+	
+	private void createSampleDraftQuery(){
+		BLASTQuery sample = BLASTQuery.emblBLASTQuery("blastn");
+		BLASTQueryLabBook labbook = new BLASTQueryLabBook(ctx);
+		sample = labbook.save(sample);
 	}
 	
 	private long saveQuery(BLASTQuery query){
-		BLASTQueryController queryController = new BLASTQueryController(getInstrumentation().getTargetContext());
-		long primaryKey = queryController.save(query);
-		query.setPrimaryKeyId(primaryKey);
-		List<SearchParameter> parameters = query.getAllParameters();
-		List<SearchParameter> newSetOfParameters = new ArrayList<SearchParameter>();
-		SearchParameterController parametersControllers = new SearchParameterController(getInstrumentation().getTargetContext());
-		for(SearchParameter parameter: parameters){
-			parameter.setBlastQueryId(query.getPrimaryKey());
-			long parameterPrimaryKey = parametersControllers.save(parameter);
-			parameter.setPrimaryKey(parameterPrimaryKey);
-			newSetOfParameters.add(parameter);
-		}
-		
-		query.updateAllParameters(newSetOfParameters);
-		parametersControllers.close();
-		queryController.close();
-		return primaryKey;
+		BLASTQueryLabBook labBook = new BLASTQueryLabBook(ctx);
+		BLASTQuery saved = labBook.save(query);
+		return saved.getPrimaryKey();
 	}
 	
 	public void testWeCanViewAllDraftQueries(){
 		//FIXME - test is fragile. It failed and passed
-		createSampleDraftQuery(BLASTVendor.EMBL_EBI);
-		
+		createSampleDraftQuery();
 		solo = new Solo(getInstrumentation(), getActivity());
 		
 		List<ListView> listViews = solo.getCurrentListViews();
 		solo.waitForView(TextView.class);
+		
 		BLASTQueryController queryController = new BLASTQueryController(ctx);
 		List<BLASTQuery> draftQueries = queryController.findBLASTQueriesByStatus(Status.DRAFT);
 		for(ListView v: listViews){
@@ -127,64 +104,44 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 		solo = new Solo(getInstrumentation(), getActivity());
 		
 		solo.clickOnActionBarItem(R.menu.create_query_menu);
-		
 		solo.clickOnActionBarItem(R.id.create_embl_query);
 		
 		solo.assertCurrentActivity("Expected the EMBL Query set up screen", EMBLEBISetUpQueryActivity.class);
-		
 	}
 	
 	public void testWeCanCreateAnNCBIQuery(){
 		solo = new Solo(getInstrumentation(), getActivity());
 		
 		solo.clickOnActionBarItem(R.menu.create_query_menu);
-		
 		solo.clickOnActionBarItem(R.id.create_ncbi_query);
 		
 		solo.assertCurrentActivity("Expected the NCBI Query set up screen", NCBIQuerySetUpActivity.class);
 	}
 	
 	public void testWeCanDeleteABLASTQuery(){
-		
-		createSampleDraftQuery(BLASTVendor.EMBL_EBI);
-		
+		createSampleDraftQuery();
 		solo = new Solo(getInstrumentation(), getActivity());
 		
 		solo.waitForView(TextView.class);
-		
 		solo.clickLongInList(1);
-		
-		String delete = "Delete";
-		
-		solo.clickOnText(delete);
-		
-		//Confirm deletion
+		solo.clickOnText("Delete");
 		solo.clickOnButton("OK");
 		solo.waitForView(ListView.class);
 		
 		ArrayList<ListView> listViews = solo.getCurrentListViews();
-		
 		for(ListView listView : listViews){
-			
 			assertEquals("Should be able to delete a query", 0, listView.getAdapter().getCount());
-			
-		}
-		
+		}	
 	}
 
 	public void testWeCanCancelADeleteQueryAction(){
-		createSampleDraftQuery(BLASTVendor.EMBL_EBI);
+		createSampleDraftQuery();
 		
 		solo = new Solo(getInstrumentation(), getActivity());
 		
 		solo.waitForView(TextView.class);
-		
 		solo.clickLongInList(1);
-		
-		String delete = "Delete";
-		
-		solo.clickOnText(delete);
-		
+		solo.clickOnText("Delete");
 		//Cancel deletion
 		solo.clickOnButton("Cancel");
 		

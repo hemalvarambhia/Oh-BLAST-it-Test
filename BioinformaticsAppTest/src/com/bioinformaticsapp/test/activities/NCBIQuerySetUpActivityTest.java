@@ -172,11 +172,6 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		
 		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
 		assertNull("Primary Key should be null. Instead got "+q.getPrimaryKey(), q.getPrimaryKey());
-		List<SearchParameter> parameters = q.getAllParameters();
-		for(int i = 0; i < q.getAllParameters().size(); i++){
-			assertNull(parameters.get(i).getPrimaryKey());
-			
-		}
 	}
 	
 	public void testWeCanUpdateAnExistingBLASTQuery(){

@@ -22,15 +22,20 @@ public class SubmitQueryServiceTest extends ServiceTestCase<SubmitQueryService> 
 		super.setUp();
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getContext());
 		helper.cleanDatabase();
-		BLASTQuery query = new BLASTQuery("blastn", BLASTVendor.NCBI);
-		query.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-		query.setStatus(BLASTQuery.Status.PENDING);	
+		BLASTQuery query = aPendingQuery();
 		helper.save(query);
 	}
 	
 	public void testWeCanStart(){
 		Intent intent = new Intent(getContext(), SubmitQueryService.class);
 		startService(intent);
+	}
+	
+	private BLASTQuery aPendingQuery(){
+		BLASTQuery aPendingQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
+		aPendingQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
+		aPendingQuery.setStatus(BLASTQuery.Status.PENDING);	
+		return aPendingQuery;
 	}
 	
 }
