@@ -1,4 +1,4 @@
-package com.bioinformaticsapp.test.unit;
+package com.bioinformaticsapp.test.models;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;

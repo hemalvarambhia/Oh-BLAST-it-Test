@@ -1,4 +1,4 @@
-package com.bioinformaticsapp.test.unit;
+package com.bioinformaticsapp.test.models;
 
 import junit.framework.TestCase;
 
