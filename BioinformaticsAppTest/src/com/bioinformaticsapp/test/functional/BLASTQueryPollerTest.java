@@ -27,17 +27,6 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 		poller = new BLASTQueryPoller(context);
 	}
 	
-	private void save(BLASTQuery query){
-		BLASTQueryLabBook labBook = new BLASTQueryLabBook(context);
-		labBook.save(query);
-	}
-	
-	private void waitUntilSent(BLASTQuery... queries) throws InterruptedException, ExecutionException{
-		BLASTQuerySender sender = new BLASTQuerySender(context);
-		sender.execute(queries);
-		sender.get();	
-	}
-	
 	public void testWeCanPollASUBMITTEDEMBLQuery() throws InterruptedException, ExecutionException{
 		createPendingEMBLBLASTQuery();
 		waitUntilSent(emblQuery);
@@ -113,7 +102,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeDoNotPollWhenThereIsNoWebConnection() throws InterruptedException, ExecutionException{
-		
+		createPendingEMBLBLASTQuery();
 		waitUntilSent(emblQuery);
 		
 		final BLASTQueryPoller poller = new BLASTQueryPoller(context){
@@ -146,11 +135,20 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	}
 	
 	private void createPendingNCBIBLASTQuery(){
-
 		ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
 		ncbiQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		ncbiQuery.setStatus(BLASTQuery.Status.PENDING);
 		save(ncbiQuery);
-		
+	}
+
+	private void save(BLASTQuery query){
+		BLASTQueryLabBook labBook = new BLASTQueryLabBook(context);
+		labBook.save(query);
+	}
+	
+	private void waitUntilSent(BLASTQuery... queries) throws InterruptedException, ExecutionException{
+		BLASTQuerySender sender = new BLASTQuerySender(context);
+		sender.execute(queries);
+		sender.get();	
 	}
 }
