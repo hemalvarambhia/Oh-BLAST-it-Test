@@ -4,7 +4,7 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import com.bioinformaticsapp.web.EntryFetcher;
+import com.bioinformaticsapp.blastservices.EntryFetcher;
 
 public class TestEntryFetcher extends TestCase {
 

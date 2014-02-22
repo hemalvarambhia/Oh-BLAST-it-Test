@@ -8,16 +8,16 @@ import android.content.Context;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
 
+import com.bioinformaticsapp.blastservices.BLASTHitsDownloadingTask;
+import com.bioinformaticsapp.blastservices.BLASTQuerySender;
+import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
+import com.bioinformaticsapp.blastservices.EMBLEBIBLASTService;
+import com.bioinformaticsapp.blastservices.NCBIBLASTService;
+import com.bioinformaticsapp.blastservices.SearchStatus;
 import com.bioinformaticsapp.helpers.StatusTranslator;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
-import com.bioinformaticsapp.web.BLASTHitsDownloadingTask;
-import com.bioinformaticsapp.web.BLASTQuerySender;
-import com.bioinformaticsapp.web.BLASTSearchEngine;
-import com.bioinformaticsapp.web.EMBLEBIBLASTService;
-import com.bioinformaticsapp.web.NCBIBLASTService;
-import com.bioinformaticsapp.web.SearchStatus;
 
 public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 

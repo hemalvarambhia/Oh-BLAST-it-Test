@@ -6,12 +6,12 @@ import android.content.Context;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
 
+import com.bioinformaticsapp.blastservices.BLASTQuerySender;
 import com.bioinformaticsapp.data.BLASTQueryLabBook;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
-import com.bioinformaticsapp.web.BLASTQuerySender;
 
 /**
  * Here we will set the status of the queries to <code>PENDING</code>

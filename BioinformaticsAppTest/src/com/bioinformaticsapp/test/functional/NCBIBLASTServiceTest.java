@@ -8,12 +8,12 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
+import com.bioinformaticsapp.blastservices.NCBIBLASTService;
+import com.bioinformaticsapp.blastservices.SearchStatus;
 import com.bioinformaticsapp.exception.IllegalBLASTQueryException;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.web.BLASTSearchEngine;
-import com.bioinformaticsapp.web.NCBIBLASTService;
-import com.bioinformaticsapp.web.SearchStatus;
 
 /**
  * @author Hemal N Varambhia
@@ -39,7 +39,7 @@ public class NCBIBLASTServiceTest extends TestCase {
 		query = null;
 	}
 	/**
-	 * Test method for {@link com.bioinformaticsapp.web.NCBIBLASTService#submit(com.bioinformaticsapp.models.BLASTQuery)}.
+	 * Test method for {@link com.bioinformaticsapp.blastservices.NCBIBLASTService#submit(com.bioinformaticsapp.models.BLASTQuery)}.
 	 */
 	public void testWeCanSubmitAValidBLASTQueryToNCBI() {
 		String jobIdentifier = null;
@@ -69,7 +69,7 @@ public class NCBIBLASTServiceTest extends TestCase {
 	}
 
 	/**
-	 * Test method for {@link com.bioinformaticsapp.web.NCBIBLASTService#pollQuery(java.lang.String)}.
+	 * Test method for {@link com.bioinformaticsapp.blastservices.NCBIBLASTService#pollQuery(java.lang.String)}.
 	 */
 	public void testWeCanPollAValidQuery() {
 		String jobIdentifier = null;
@@ -98,7 +98,7 @@ public class NCBIBLASTServiceTest extends TestCase {
 	}
 
 	/**
-	 * Test method for {@link com.bioinformaticsapp.web.NCBIBLASTService#retrieveBLASTResults(java.lang.String, java.lang.String)}.
+	 * Test method for {@link com.bioinformaticsapp.blastservices.NCBIBLASTService#retrieveBLASTResults(java.lang.String, java.lang.String)}.
 	 */
 	public void testWeCannotPollAQueryWhoseJobIDIsNull() {
 		String jobIdentifier = null;

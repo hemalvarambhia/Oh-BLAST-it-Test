@@ -6,11 +6,11 @@ import java.util.concurrent.ExecutionException;
 import android.content.Context;
 import android.test.InstrumentationTestCase;
 
+import com.bioinformaticsapp.blastservices.BLASTQueryPoller;
+import com.bioinformaticsapp.blastservices.BLASTQuerySender;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
-import com.bioinformaticsapp.web.BLASTQueryPoller;
-import com.bioinformaticsapp.web.BLASTQuerySender;
 
 public class BLASTQueryPollerTest extends InstrumentationTestCase {
 

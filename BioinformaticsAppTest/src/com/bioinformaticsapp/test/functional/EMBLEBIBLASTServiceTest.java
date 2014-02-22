@@ -5,12 +5,12 @@ import java.util.List;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
+import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
+import com.bioinformaticsapp.blastservices.EMBLEBIBLASTService;
+import com.bioinformaticsapp.blastservices.SearchStatus;
 import com.bioinformaticsapp.exception.IllegalBLASTQueryException;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.web.BLASTSearchEngine;
-import com.bioinformaticsapp.web.EMBLEBIBLASTService;
-import com.bioinformaticsapp.web.SearchStatus;
 
 
 public class EMBLEBIBLASTServiceTest extends TestCase {

@@ -2,9 +2,9 @@ package com.bioinformaticsapp.test.helpers;
 
 import junit.framework.TestCase;
 
+import com.bioinformaticsapp.blastservices.SearchStatus;
 import com.bioinformaticsapp.helpers.StatusTranslator;
 import static com.bioinformaticsapp.models.BLASTQuery.Status;
-import com.bioinformaticsapp.web.SearchStatus;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.*;

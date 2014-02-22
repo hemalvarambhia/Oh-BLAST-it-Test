@@ -1,9 +1,9 @@
 package com.bioinformaticsapp.test.testhelpers;
 
+import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
+import com.bioinformaticsapp.blastservices.SearchStatus;
 import com.bioinformaticsapp.exception.IllegalBLASTQueryException;
 import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.web.BLASTSearchEngine;
-import com.bioinformaticsapp.web.SearchStatus;
 
 public class BLASTQueryingServiceBuilder {
 
