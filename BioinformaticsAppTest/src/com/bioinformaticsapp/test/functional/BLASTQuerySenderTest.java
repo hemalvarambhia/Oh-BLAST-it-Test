@@ -208,7 +208,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		} catch (ExecutionException e) {
 			fail();
 		}
-		
+		Log.i(TAG, query.getJobIdentifier());
 		assertNotNull("Query was not assigned a job identifier by the service", query.getJobIdentifier());
 		assertFalse("Job identifier was found to be an empty string", query.getJobIdentifier().isEmpty());
 		assertEquals("Query status was not updated to SUBMITTED", Status.SUBMITTED, query.getStatus());
