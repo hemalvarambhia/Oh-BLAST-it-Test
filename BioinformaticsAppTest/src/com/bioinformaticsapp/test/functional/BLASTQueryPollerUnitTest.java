@@ -1,7 +1,16 @@
 package com.bioinformaticsapp.test.functional;
 
+import static org.hamcrest.core.IsNot.*;
+import static org.hamcrest.core.Is.*;
+import static org.hamcrest.MatcherAssert.*;
+
+
+import java.util.concurrent.ExecutionException;
+
 import com.bioinformaticsapp.blastservices.BLASTQueryPoller;
 import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
+import com.bioinformaticsapp.models.BLASTQuery;
+import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.test.testhelpers.StubbedEMBLService;
 import com.bioinformaticsapp.test.testhelpers.StubbedNCBIService;
 
@@ -18,7 +27,19 @@ public class BLASTQueryPollerUnitTest extends InstrumentationTestCase {
 		BLASTSearchEngine stubbedNCBIService = new StubbedNCBIService();
 		BLASTSearchEngine stubbedEMBLService = new StubbedEMBLService();
 		queryPoller = new BLASTQueryPoller(context, stubbedNCBIService, stubbedEMBLService);
+	}
+	
+	public void testPollerShouldUpdateTheStatusOfAQuery() throws InterruptedException, ExecutionException{
+		BLASTQuery query = aBLASTQuery();
 		
+		queryPoller.execute(query);
+		
+		queryPoller.get();
+		assertThat("The status of the query should be updated", query.getStatus(), is(not(Status.DRAFT)));
+	}
+
+	private BLASTQuery aBLASTQuery() {
+		return BLASTQuery.emblBLASTQuery("blastn");
 	}
 	
 }
