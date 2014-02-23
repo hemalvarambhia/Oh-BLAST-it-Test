@@ -8,6 +8,8 @@ import android.test.InstrumentationTestCase;
 
 import com.bioinformaticsapp.blastservices.BLASTQueryPoller;
 import com.bioinformaticsapp.blastservices.BLASTQuerySender;
+import com.bioinformaticsapp.blastservices.EMBLEBIBLASTService;
+import com.bioinformaticsapp.blastservices.NCBIBLASTService;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
@@ -23,7 +25,9 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 		context = getInstrumentation().getTargetContext();
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(context);
 		helper.cleanDatabase();
-		poller = new BLASTQueryPoller(context);
+		EMBLEBIBLASTService emblService = new EMBLEBIBLASTService();
+		NCBIBLASTService ncbiService = new NCBIBLASTService();
+		poller = new BLASTQueryPoller(context, ncbiService, emblService);
 	}
 	
 	public void testWeCanPollASUBMITTEDEMBLQuery() throws InterruptedException, ExecutionException{
@@ -71,8 +75,9 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	public void testWeDoNotPollWhenThereIsNoWebConnection() throws InterruptedException, ExecutionException{
 		emblQuery = createPendingEMBLBLASTQuery();
 		waitUntilSent(emblQuery);
-		
-		final BLASTQueryPoller poller = new BLASTQueryPoller(context){
+		NCBIBLASTService ncbiService = new NCBIBLASTService();
+		EMBLEBIBLASTService emblService = new EMBLEBIBLASTService();
+		final BLASTQueryPoller poller = new BLASTQueryPoller(context, ncbiService, emblService){
 			protected boolean connectedToWeb(){
 				return false;
 			}

@@ -38,6 +38,23 @@ public class BLASTQueryPollerUnitTest extends InstrumentationTestCase {
 		assertThat("The status of the query should be updated", query.getStatus(), is(not(Status.DRAFT)));
 	}
 
+	public void testPollerDoesNotUpdateStatusWhenThereIsNoWebConnection() throws InterruptedException, ExecutionException{
+		BLASTQuery query = aBLASTQuery();
+		BLASTSearchEngine ncbiService = new StubbedNCBIService();
+		BLASTSearchEngine emblService = new StubbedEMBLService();
+		Context context = getInstrumentation().getTargetContext();
+		queryPoller = new BLASTQueryPoller(context, ncbiService, emblService){
+			protected boolean connectedToWeb(){
+				return false;
+			}
+		};
+
+		queryPoller.execute(query);
+		
+		queryPoller.get();
+		assertThat("The status of the query shouldn't be updated", query.getStatus(), is(Status.DRAFT));
+	}
+	
 	private BLASTQuery aBLASTQuery() {
 		return BLASTQuery.emblBLASTQuery("blastn");
 	}
