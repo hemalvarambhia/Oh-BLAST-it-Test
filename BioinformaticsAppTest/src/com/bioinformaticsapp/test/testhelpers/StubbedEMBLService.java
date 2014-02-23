@@ -7,8 +7,10 @@ import com.bioinformaticsapp.models.BLASTQuery;
 
 public class StubbedEMBLService implements BLASTSearchEngine {
 
+	public final static String A_EMBL_JOB_IDENTIFIER = "ncbiblast-R20140222-155703-0120-63596495-oy"; 
+	
 	public String submit(BLASTQuery query) throws IllegalBLASTQueryException {
-		return "ncbiblast-R20140222-155703-0120-63596495-oy";
+		return A_EMBL_JOB_IDENTIFIER;
 	}
 
 	public SearchStatus pollQuery(String jobId) {
