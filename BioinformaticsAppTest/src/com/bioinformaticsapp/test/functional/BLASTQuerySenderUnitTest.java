@@ -2,6 +2,7 @@ package com.bioinformaticsapp.test.functional;
 
 import com.bioinformaticsapp.blastservices.BLASTQuerySender;
 import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
+import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.test.testhelpers.StubbedEMBLService;
 import com.bioinformaticsapp.test.testhelpers.StubbedNCBIService;
 
@@ -21,9 +22,16 @@ public class BLASTQuerySenderUnitTest extends InstrumentationTestCase {
 	}
 	
 	public void testSenderSetsTheQuerysServiceGeneratedIdentifier() {
+		BLASTQuery query = aBLASTQuery();
+		
+		sender.execute(query);
 		
 	}
 	
+	private BLASTQuery aBLASTQuery() {
+		return BLASTQuery.ncbiBLASTQuery("blastn");
+	}
+
 	public void testSenderUpdatesTheQueriesStatus() {
 		
 	}
