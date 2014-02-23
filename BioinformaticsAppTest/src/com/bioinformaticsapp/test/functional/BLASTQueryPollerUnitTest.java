@@ -29,6 +29,14 @@ public class BLASTQueryPollerUnitTest extends InstrumentationTestCase {
 		queryPoller = new BLASTQueryPoller(context, stubbedNCBIService, stubbedEMBLService);
 	}
 	
+	public void testPollerReturnsTheNumberOfQueriesThatFinishedSuccessfully() throws InterruptedException, ExecutionException{
+		BLASTQuery query = aBLASTQuery();
+		
+		queryPoller.execute(query);
+		
+		assertThat("The status of the query should be updated", queryPoller.get(), is(0));
+	}
+	
 	public void testPollerShouldUpdateTheStatusOfAQuery() throws InterruptedException, ExecutionException{
 		BLASTQuery query = aBLASTQuery();
 		
