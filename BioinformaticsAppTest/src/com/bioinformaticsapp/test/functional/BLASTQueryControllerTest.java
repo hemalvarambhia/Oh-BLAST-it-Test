@@ -13,7 +13,7 @@ import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 
-public class BLASTQueryCRUDTest extends InstrumentationTestCase {
+public class BLASTQueryControllerTest extends InstrumentationTestCase {
 
 	private BLASTQueryController controller;
 	
@@ -28,17 +28,9 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		controller.close();
 		super.tearDown();	
 	}
-		
-	private BLASTQuery queryAsInsertedInDatebase(){
-		BLASTQuery queryInDatabase = BLASTQuery.emblBLASTQuery("blastn");
-		long primaryKeyId = controller.save(queryInDatabase);
-		queryInDatabase.setPrimaryKeyId(primaryKeyId);
-
-		return queryInDatabase;				
-	}
 	
-	public void testWeCanSaveABLASTQueryToDatabase(){
-		BLASTQuery draftQuery = BLASTQuery.emblBLASTQuery("blastn");
+	public void testWeCanSaveABLASTQuery(){
+		BLASTQuery draftQuery = aBLASTQuery();
 		
 		long primaryKeyId = controller.save(draftQuery);
 		
@@ -46,7 +38,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanRetrieveABLASTQueryByPrimaryKey(){
-		BLASTQuery queryInDatabase = queryAsInsertedInDatebase();
+		BLASTQuery queryInDatabase = savedQuery();
 		
 		BLASTQuery retrievedFromDatabase = controller.findBLASTQueryById(queryInDatabase.getPrimaryKey());
 		
@@ -54,45 +46,35 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanRetrieveABLASTQueryWithDRAFTStatus(){
-		BLASTQuery draft = BLASTQuery.emblBLASTQuery("blastn");
-		controller.save(draft);
+		aBLASTQueryWithStatus(Status.DRAFT);
 		
 		List<BLASTQuery> draftQueries = controller.findBLASTQueriesByStatus(Status.DRAFT);
 		
-		BLASTQuery firstDraftQuery = draftQueries.get(0);
-		assertThat("Expected a draft status",  firstDraftQuery.getStatus(), is(Status.DRAFT));
+		assertContainsOnly(Status.DRAFT, draftQueries);
 	}
 	
 	public void testWeCanRetrieveABLASTQueryByStatus(){
-		//Default status is DRAFT
-		insertBLASTQueryWithStatus(Status.DRAFT);
-		insertBLASTQueryWithStatus(Status.SUBMITTED);
+		aBLASTQueryWithStatus(Status.DRAFT);
+		aBLASTQueryWithStatus(Status.SUBMITTED);
 		
 		List<BLASTQuery> submittedQueries = controller.findBLASTQueriesByStatus(Status.SUBMITTED);
 		
-		assertThat(submittedQueries.size(), is(1));
-		BLASTQuery submittedQuery = submittedQueries.get(0);
-		assertThat("Should be able to retrieve a query by its status", submittedQuery.getStatus(), is(BLASTQuery.Status.SUBMITTED));
-	}
-	
-	private void insertBLASTQueryWithStatus(BLASTQuery.Status status){
-		BLASTQuery sampleQuery = BLASTQuery.emblBLASTQuery("blastn");
-		sampleQuery.setStatus(status);
-		controller.save(sampleQuery);
+		assertContainsOnly(Status.SUBMITTED, submittedQueries);
 	}
 	
 	public void testWeCanRetrieveSubmittedBLASTQueries(){
-		insertBLASTQueryWithStatus(Status.DRAFT);
-		insertBLASTQueryWithStatus(Status.SUBMITTED);
+		aBLASTQueryWithStatus(Status.DRAFT);
+		aBLASTQueryWithStatus(Status.SUBMITTED);
 		
 		List<BLASTQuery> runningAndSubmittedQueries = controller.getSubmittedBLASTQueries();
 		
-		assertThat(runningAndSubmittedQueries.size(), is(1));	
+		assertContainsOnly(Status.SUBMITTED, runningAndSubmittedQueries);
 	}
 	
 	public void testWeCanUpdateAQuery(){
-		BLASTQuery draftQuery = queryAsInsertedInDatebase();
+		BLASTQuery draftQuery = savedQuery();
 		draftQuery.setSequence("CTAGTTTT");
+		
 		int noUpdated = controller.update(draftQuery);
 		
 		assertThat("Should be able to update a BLASTQuery", noUpdated, is(1));
@@ -101,7 +83,7 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanDeleteAQuery(){
-		BLASTQuery query = BLASTQuery.ncbiBLASTQuery("blastn");
+		BLASTQuery query = aBLASTQuery();
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
 		long id = helper.save(query);
 		
@@ -110,4 +92,29 @@ public class BLASTQueryCRUDTest extends InstrumentationTestCase {
 		assertThat("Deleting a query", controller.findBLASTQueryById(id), is(nullValue()));
 	}
 	
+	private void assertContainsOnly(Status expectedStatus, List<BLASTQuery> queries){
+		for(BLASTQuery query: queries)
+			assertThat("Should be able to retrieve a query by its status", query.getStatus(), is(expectedStatus));
+	}
+	
+	private BLASTQuery aBLASTQuery(){
+		BLASTQuery aQuery = BLASTQuery.emblBLASTQuery("blastn");
+		return aQuery;
+	}
+	
+	private BLASTQuery savedQuery(){
+		BLASTQuery queryInDatabase = aBLASTQuery();
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
+		long primaryKeyId = helper.save(queryInDatabase);
+		queryInDatabase.setPrimaryKeyId(primaryKeyId);
+		
+		return queryInDatabase;				
+	}
+	
+	private void aBLASTQueryWithStatus(BLASTQuery.Status status){
+		BLASTQuery blastQuery = aBLASTQuery();
+		blastQuery.setStatus(status);
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
+		helper.save(blastQuery);
+	}
 }
