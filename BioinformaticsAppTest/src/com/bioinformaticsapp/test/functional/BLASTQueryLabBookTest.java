@@ -17,7 +17,6 @@ import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 
 public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 
-	private BLASTQuery aQuery;
 	private BLASTQueryLabBook labBook;
 	
 	public void setUp() throws Exception {
@@ -28,16 +27,14 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanSaveTheBLASTQueryToTheLabBook(){
-		aQuery = aBLASTQuery();
-		BLASTQuery query = labBook.save(aQuery);
+		BLASTQuery query = labBook.save(aBLASTQuery());
 		
 		assertThat("Saved BLAST query must have a primary key",
 				query.getPrimaryKey(), is(notNullValue()));
 	}
 	
 	public void testWeCanRetrieveAQueryByIdentifier(){
-		aQuery = aBLASTQuery();
-		BLASTQuery query = labBook.save(aQuery);
+		BLASTQuery query = labBook.save(aBLASTQuery());
 		
 		BLASTQuery fromStorage= labBook.findQueryById(query.getPrimaryKey());
 		
@@ -45,8 +42,7 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanEditAnExistingQuery(){
-		aQuery = aBLASTQuery();
-		BLASTQuery query = labBook.save(aQuery);
+		BLASTQuery query = labBook.save(aBLASTQuery());
 		query.setSearchParameter("email", "h.n.varambhia@gmail.com");
 		long primaryKey = query.getPrimaryKey();
 		
@@ -57,10 +53,8 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanRetrieveBLASTQueriesWithAStatus(){
-		aQuery = aBLASTQueryWithStatus(Status.DRAFT);
-		aQuery = labBook.save(aQuery);
-		BLASTQuery queryWithDifferentStatus = aBLASTQueryWithStatus(Status.FINISHED);
-		labBook.save(queryWithDifferentStatus);
+		BLASTQuery aQuery = labBook.save(aBLASTQueryWithStatus(Status.DRAFT));
+		BLASTQuery queryWithDifferentStatus = labBook.save(aBLASTQueryWithStatus(Status.FINISHED));
 		
 		List<BLASTQuery> drafts = labBook.findBLASTQueriesByStatus(BLASTQuery.Status.DRAFT);
 		
@@ -75,8 +69,7 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanRetrievesPendingBLASTQueriesToBeSentToSupplier(){
-		BLASTQuery pending = aBLASTQueryWithStatus(Status.PENDING, BLASTVendor.NCBI);
-		pending = labBook.save(pending);
+		BLASTQuery pending = labBook.save(aBLASTQueryWithStatus(Status.PENDING, BLASTVendor.NCBI));
 		
 		List<BLASTQuery> pendingQueries = labBook.findPendingBLASTQueriesFor(BLASTVendor.NCBI);
 		
