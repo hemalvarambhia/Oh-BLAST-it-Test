@@ -2,12 +2,11 @@ package com.bioinformaticsapp.test.testhelpers;
 
 import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
 import com.bioinformaticsapp.blastservices.SearchStatus;
-import com.bioinformaticsapp.exception.IllegalBLASTQueryException;
 import com.bioinformaticsapp.models.BLASTQuery;
 
 public class StubbedNCBIService implements BLASTSearchEngine {
 
-	public String submit(BLASTQuery query) throws IllegalBLASTQueryException {
+	public String submit(BLASTQuery query) {
 		return "GHJBCNKR014";
 	}
 

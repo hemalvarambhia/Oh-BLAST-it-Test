@@ -8,7 +8,6 @@ import junit.framework.TestCase;
 import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
 import com.bioinformaticsapp.blastservices.EMBLEBIBLASTService;
 import com.bioinformaticsapp.blastservices.SearchStatus;
-import com.bioinformaticsapp.exception.IllegalBLASTQueryException;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 
@@ -35,13 +34,8 @@ public class EMBLEBIBLASTServiceTest extends TestCase {
 		query.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		
 		boolean validId = false;
-		String st = "";
 		String jobIdRegex = "ncbiblast\\-[A-Z][0-9]{8}\\-[0-9]{6}\\-[0-9]{4}\\-[0-9]{7,8}\\-[a-z]{2}";
-		try {
-			st = service.submit(query);
-		} catch (IllegalBLASTQueryException e) {			
-			e.printStackTrace();
-		}
+		String st = service.submit(query);
 		
 		assertNotNull("The BLAST Job identifier was not generated", st);
 		validId = st.matches(jobIdRegex);	
@@ -55,13 +49,7 @@ public class EMBLEBIBLASTServiceTest extends TestCase {
 		query.setSearchParameter("email", "h.n.varambhia@gmail.com");
 		query.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		
-		String jobIdentifier = "";
-		try {
-			jobIdentifier = service.submit(query);
-			
-		} catch (IllegalBLASTQueryException e) {
-			fail(Arrays.toString(e.getStackTrace()));
-		}
+		String jobIdentifier = service.submit(query);
 		
 		assertNotNull("Job identifier was not generated for the query", jobIdentifier);
 		SearchStatus status = service.pollQuery(jobIdentifier);
@@ -89,14 +77,5 @@ public class EMBLEBIBLASTServiceTest extends TestCase {
 		assertEquals(SearchStatus.NOT_FOUND, status);
 	}
 	
-	public void testWeCannotSendAQueryWhichDoesNotHaveASequence(){
-		BLASTQuery queryWithoutSequence = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		try {
-			service.submit(queryWithoutSequence);
-			fail("Should not be able to send a query which does not have a sequence");
-		} catch (IllegalBLASTQueryException e) {
-			
-		}
-	}
 	
 }

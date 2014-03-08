@@ -11,6 +11,7 @@ import com.bioinformaticsapp.data.BLASTQueryLabBook;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
+import com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 
 /**
@@ -34,10 +35,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(context);
 		helper.cleanDatabase();
 		
-		query = new BLASTQuery("blastn", BLASTVendor.NCBI);
-		query.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-		query.setStatus(BLASTQuery.Status.PENDING);
-		
+		query = BLASTQueryBuilder.aValidPendingBLASTQuery();
 		save(query);
 		
 		emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
@@ -49,45 +47,9 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		
 	}
 	
-	protected void tearDown() throws Exception {
-		query = null;
-		emblQuery = null;
-		
-		super.tearDown();
-	}
-
 	private void save(BLASTQuery query){
 		BLASTQueryLabBook labBook = new BLASTQueryLabBook(context);
 		labBook.save(query);
-	}
-	
-	public void testWeCanSendAValidBLASTQuery(){
-		
-		final BLASTQuerySender sender = new BLASTQuerySender(context);
-		
-		try {
-			runTestOnUiThread(new Runnable() {
-				
-				public void run() {
-					sender.execute(new BLASTQuery[]{query});
-					
-				}
-			});
-		} catch (Throwable e) {
-			fail();
-		}
-		Integer numberOfQueriesSent = null;
-		try {
-			numberOfQueriesSent = sender.get();
-		} catch (InterruptedException e) {
-			fail();
-		} catch (ExecutionException e) {
-			fail();
-		}
-		
-		assertEquals("Query should have been sent", Status.SUBMITTED, query.getStatus());
-		assertEquals("Queries should be sent", 1, numberOfQueriesSent.intValue());
-		
 	}
 	
 	public void testBLASTQueryHasAJobIdentifierWhenSentSuccessfully(){
@@ -115,8 +77,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		}
 		
 		assertNotNull("was expecting a job identifier", query.getJobIdentifier());
-		assertTrue( !query.getJobIdentifier().isEmpty() );
-		
+		assertTrue( !query.getJobIdentifier().isEmpty() );		
 	}
 	
 	public void testQueriesNotSentWhenThereIsNoWebConnection(){
@@ -125,7 +86,6 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 			protected boolean connectedToWeb(){
 				return false;
 			}
-		
 		};
 		
 		try {
@@ -150,39 +110,8 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		
 		assertEquals("Query should be pending", BLASTQuery.Status.PENDING, query.getStatus());
 		assertEquals("Query should not be sent", 0, numberOfQueries.intValue());
-	}
-	
-	public void testQueryJobIdentifierIsNotSetWhenThereIsNoWebConnection(){
-		
-		final BLASTQuerySender sender = new BLASTQuerySender(context){
-			protected boolean connectedToWeb(){
-				return false;
-			}
-		
-		};
-		
-		try {
-			runTestOnUiThread(new Runnable() {
-				
-				public void run() {
-					sender.execute(new BLASTQuery[]{query});					
-				}
-			});
-		} catch (Throwable e) {
-			fail();
-		}
-		
-		try {
-			sender.get();
-		} catch (InterruptedException e) {
-			fail("Execution of the thread was interrupted");
-		} catch (ExecutionException e) {
-			fail();
-		}
-		
 		assertNull("Query status should be PENDING when it is valid but there is no web connection", query.getJobIdentifier());
 
-		
 	}
 	
 	public void testWeCanSendAnNCBIQuery(){
@@ -247,15 +176,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 	
 	public void testWeCanSendMoreThanOneQuery(){
 		
-		final BLASTQuery[] pendingBlastQueries = new BLASTQuery[2];
-		
-		for(int i = 0; i < pendingBlastQueries.length; i++){
-			pendingBlastQueries[i] = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-			pendingBlastQueries[i].setSearchParameter("email", "h.n.varambhia@gmail.com");
-			pendingBlastQueries[i].setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-			pendingBlastQueries[i].setStatus(BLASTQuery.Status.PENDING);
-			save(pendingBlastQueries[i]);
-		}
+		final BLASTQuery[] pendingBlastQueries = manyValidPendingBLASTQueries();
 		
 		
 		final BLASTQuerySender sender = new BLASTQuerySender(context);
@@ -287,41 +208,17 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 			assertFalse("Job identifier was found to be an empty string", query.getJobIdentifier().isEmpty());
 			Log.i(TAG, query.getJobIdentifier());
 			assertEquals("Query status was not updated to SUBMITTED", Status.SUBMITTED, query.getStatus());
-			
-		}
-		
+		}		
 	}
 	
-	public void testInvalidQueriesAreNotSent(){
-		final BLASTQuery invalidQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		invalidQuery.setStatus(BLASTQuery.Status.PENDING);
-		save(invalidQuery);
-		final BLASTQuerySender sender = new BLASTQuerySender(context);
+	private BLASTQuery[] manyValidPendingBLASTQueries(){
+		BLASTQuery[] pendingBlastQueries = new BLASTQuery[2];
 		
-		try {
-			runTestOnUiThread(new Runnable() {
-				
-				public void run() {
-					sender.execute(new BLASTQuery[]{invalidQuery});					
-				}
-			});
-		} catch (Throwable e) {
-			fail();
+		for(int i = 0; i < pendingBlastQueries.length; i++){
+			pendingBlastQueries[i] = BLASTQueryBuilder.aValidPendingBLASTQuery();
+			save(pendingBlastQueries[i]);
 		}
 		
-		Integer numberOfQueriesSent = null;
-		try {
-			numberOfQueriesSent = sender.get();
-		} catch (InterruptedException e) {
-			fail("Execution of the thread was interrupted");
-		} catch (ExecutionException e) {
-			fail(e.getMessage());
-		}
-		
-		assertEquals("Invalid queries should never be sent", BLASTQuery.Status.DRAFT, invalidQuery.getStatus());
-		assertEquals("Invalid queries should never be sent", 0, numberOfQueriesSent.intValue());
-		
+		return pendingBlastQueries;
 	}
-	
-	
 }

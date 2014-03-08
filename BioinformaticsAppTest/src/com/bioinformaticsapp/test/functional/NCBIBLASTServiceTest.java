@@ -3,15 +3,11 @@
  */
 package com.bioinformaticsapp.test.functional;
 
-import java.util.Arrays;
-import java.util.List;
-
 import junit.framework.TestCase;
 
 import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
 import com.bioinformaticsapp.blastservices.NCBIBLASTService;
 import com.bioinformaticsapp.blastservices.SearchStatus;
-import com.bioinformaticsapp.exception.IllegalBLASTQueryException;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 
@@ -42,12 +38,7 @@ public class NCBIBLASTServiceTest extends TestCase {
 	 * Test method for {@link com.bioinformaticsapp.blastservices.NCBIBLASTService#submit(com.bioinformaticsapp.models.BLASTQuery)}.
 	 */
 	public void testWeCanSubmitAValidBLASTQueryToNCBI() {
-		String jobIdentifier = null;
-		try {
-			jobIdentifier = ncbiBLASTService.submit(query);
-		} catch (IllegalBLASTQueryException e) {
-			fail("Unable to send a valid query");
-		}
+		String jobIdentifier = ncbiBLASTService.submit(query);
 		
 		String requestIdRegexPattern = "[A-Z0-9]{11}";
 		boolean validRequestId = jobIdentifier.matches(requestIdRegexPattern);
@@ -56,39 +47,14 @@ public class NCBIBLASTServiceTest extends TestCase {
 	
 	public void testWeCanSendAQueryWithNoExponentialThreshold(){
 		query.setSearchParameter("exp_threshold", "");
-		String jobIdentifier = null;
-		try {
-			jobIdentifier = ncbiBLASTService.submit(query);
-		} catch (IllegalBLASTQueryException e) {
-			fail("Unable to send a query with a blank exponential threshold");
-		}
+		String jobIdentifier = ncbiBLASTService.submit(query);
+		
 		
 		String requestIdRegexPattern = "[A-Z0-9]{11}";
 		boolean validRequestId = jobIdentifier.matches(requestIdRegexPattern);
 		assertTrue(validRequestId);
 	}
 
-	/**
-	 * Test method for {@link com.bioinformaticsapp.blastservices.NCBIBLASTService#pollQuery(java.lang.String)}.
-	 */
-	public void testWeCanPollAValidQuery() {
-		String jobIdentifier = null;
-		
-		try {
-			jobIdentifier = ncbiBLASTService.submit(query);
-		} catch (IllegalBLASTQueryException e) {
-			fail("Could not send a valid Query");
-		}
-		
-		SearchStatus statusOfQuery = ncbiBLASTService.pollQuery(jobIdentifier);
-		
-		SearchStatus[] allStatuses = new SearchStatus[]{SearchStatus.RUNNING, SearchStatus.FINISHED};
-		List<SearchStatus> listOfAllStatuses = Arrays.asList(allStatuses);
-		
-		boolean isAValidStatus = listOfAllStatuses.contains(statusOfQuery);
-		assertTrue(isAValidStatus);
-	}
-	
 	public void testWeGetNotFoundForNonExistentQuery(){
 		String nonExistentJobIdentifier = "NONEXISTENT123";
 		SearchStatus theStatus = SearchStatus.UNSURE;
@@ -111,30 +77,5 @@ public class NCBIBLASTServiceTest extends TestCase {
 			fail();
 		}
 		
-	}
-	
-	public void testWeCannotSendAQueryThatDoesNotHaveASequence(){
-		BLASTQuery blastQueryWithoutSequence = new BLASTQuery("blastn", BLASTVendor.NCBI);
-		
-		try{
-			ncbiBLASTService.submit(blastQueryWithoutSequence);
-			fail("Should not be able to send a query that does not have a sequence");
-		}catch(IllegalBLASTQueryException e){
-			
-		}
-	}
-	
-	public void testWeCannotSendAQueryThatDoesNotHaveAValidSequence(){
-		BLASTQuery blastQueryWithInvalidSequence = new BLASTQuery("blastn", BLASTVendor.NCBI);
-		blastQueryWithInvalidSequence.setSequence("VADSUC");
-		
-		try{
-			ncbiBLASTService.submit(blastQueryWithInvalidSequence);
-			
-			fail("Should not be able to send a query that does not have a sequence");
-		}catch(IllegalBLASTQueryException e){
-			
-		}
-	}
-		
+	}	
 }

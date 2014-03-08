@@ -4,6 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 
+import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.*;
+
 import java.util.List;
 
 import android.test.InstrumentationTestCase;
@@ -95,11 +97,6 @@ public class BLASTQueryControllerTest extends InstrumentationTestCase {
 	private void assertContainsOnly(Status expectedStatus, List<BLASTQuery> queries){
 		for(BLASTQuery query: queries)
 			assertThat("Should be able to retrieve a query by its status", query.getStatus(), is(expectedStatus));
-	}
-	
-	private BLASTQuery aBLASTQuery(){
-		BLASTQuery aQuery = BLASTQuery.emblBLASTQuery("blastn");
-		return aQuery;
 	}
 	
 	private BLASTQuery savedQuery(){

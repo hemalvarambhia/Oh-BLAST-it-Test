@@ -5,13 +5,15 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 
+import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.*;
+import static com.bioinformaticsapp.models.BLASTQuery.Status;
+
 import java.util.List;
 
 import android.test.InstrumentationTestCase;
 
 import com.bioinformaticsapp.data.BLASTQueryLabBook;
 import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 
@@ -56,7 +58,7 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 		BLASTQuery aQuery = labBook.save(aBLASTQueryWithStatus(Status.DRAFT));
 		BLASTQuery queryWithDifferentStatus = labBook.save(aBLASTQueryWithStatus(Status.FINISHED));
 		
-		List<BLASTQuery> drafts = labBook.findBLASTQueriesByStatus(BLASTQuery.Status.DRAFT);
+		List<BLASTQuery> drafts = labBook.findBLASTQueriesByStatus(Status.DRAFT);
 		
 		assertThat("Should be able to find BLAST queries by their status", drafts.contains(aQuery));
 		assertThat("Should not contain queries with a status different to the one required", !drafts.contains(queryWithDifferentStatus));
@@ -69,20 +71,14 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanRetrievesPendingBLASTQueriesToBeSentToSupplier(){
-		BLASTQuery pending = labBook.save(aBLASTQueryWithStatus(Status.PENDING, BLASTVendor.NCBI));
+		BLASTQuery pending = labBook.save(aBLASTQueryWithStatusAndVendor(Status.PENDING, BLASTVendor.NCBI));
 		
 		List<BLASTQuery> pendingQueries = labBook.findPendingBLASTQueriesFor(BLASTVendor.NCBI);
 		
 		assertThat("list should contain pending blast queries for a supplier", pendingQueries.contains(pending));
 	}
 	
-	private BLASTQuery aBLASTQueryWithStatus(Status status){
-		BLASTQuery blastQuery = aBLASTQuery();
-		blastQuery.setStatus(status);
-		return blastQuery;
-	}
-	
-	private BLASTQuery aBLASTQueryWithStatus(Status status, int vendor){
+	private BLASTQuery aBLASTQueryWithStatusAndVendor(Status status, int vendor){
 		BLASTQuery blastQuery = aBLASTQuery();
 		switch(vendor){
 		case BLASTVendor.EMBL_EBI:
@@ -91,13 +87,12 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 		case BLASTVendor.NCBI:
 			blastQuery = BLASTQuery.ncbiBLASTQuery("blastn");
 			break;
+		default:
+			blastQuery = aBLASTQuery();
+			break;
 		}
 		blastQuery.setStatus(status);
 		return blastQuery;
 	}
 
-	private BLASTQuery aBLASTQuery(){
-		return BLASTQuery.emblBLASTQuery("blastn");
-	}
-	
 }
