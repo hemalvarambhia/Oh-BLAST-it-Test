@@ -7,6 +7,9 @@ import android.test.InstrumentationTestCase;
 import android.util.Log;
 
 import com.bioinformaticsapp.blastservices.BLASTQuerySender;
+import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
+import com.bioinformaticsapp.blastservices.EMBLEBIBLASTService;
+import com.bioinformaticsapp.blastservices.NCBIBLASTService;
 import com.bioinformaticsapp.data.BLASTQueryLabBook;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
@@ -52,15 +55,8 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		labBook.save(query);
 	}
 	
-	public void testBLASTQueryHasAJobIdentifierWhenSentSuccessfully(){
-		send(new BLASTQuery[]{query});
-		
-		assertNotNull("was expecting a job identifier", query.getJobIdentifier());
-		assertTrue( !query.getJobIdentifier().isEmpty() );		
-	}
-	
 	public void testWeCanSendAnNCBIQuery(){
-		send(new BLASTQuery[]{query});					
+		send(new BLASTQuery[]{query}, new NCBIBLASTService());					
 		
 		assertNotNull("Query was not assigned a job identifier by the service", query.getJobIdentifier());
 		assertFalse("Job identifier was found to be an empty string", query.getJobIdentifier().isEmpty());
@@ -68,7 +64,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanSendAnEBI_EMBLQuery(){
-		send(new BLASTQuery[]{emblQuery});					
+		send(new BLASTQuery[]{emblQuery}, new EMBLEBIBLASTService());					
 		
 		assertNotNull("Query was not assigned a job identifier by the service", emblQuery.getJobIdentifier());
 		assertFalse("Job identifier was found to be an empty string", emblQuery.getJobIdentifier().isEmpty());
@@ -77,22 +73,8 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		
 	}
 	
-	public void testWeCanSendMoreThanOneQuery(){
-		
-		final BLASTQuery[] pendingBlastQueries = manyValidPendingBLASTQueries();
-		
-		send(pendingBlastQueries);					
-		
-		for(BLASTQuery query : pendingBlastQueries){
-			assertNotNull("Query was not assigned a job identifier by the service", query.getJobIdentifier());
-			assertFalse("Job identifier was found to be an empty string", query.getJobIdentifier().isEmpty());
-			Log.i(TAG, query.getJobIdentifier());
-			assertEquals("Query status was not updated to SUBMITTED", Status.SUBMITTED, query.getStatus());
-		}		
-	}
-	
-	private void send(final BLASTQuery[] queries){
-		final BLASTQuerySender sender = new BLASTQuerySender(context);
+	private void send(final BLASTQuery[] queries, BLASTSearchEngine engine){
+		final BLASTQuerySender sender = new BLASTQuerySender(context, engine);
 		
 		try {
 			runTestOnUiThread(new Runnable() {
@@ -113,16 +95,5 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		} catch (ExecutionException e) {
 			fail();
 		}
-	}
-	
-	private BLASTQuery[] manyValidPendingBLASTQueries(){
-		BLASTQuery[] pendingBlastQueries = new BLASTQuery[2];
-		
-		for(int i = 0; i < pendingBlastQueries.length; i++){
-			pendingBlastQueries[i] = BLASTQueryBuilder.aValidPendingBLASTQuery();
-			save(pendingBlastQueries[i]);
-		}
-		
-		return pendingBlastQueries;
 	}
 }

@@ -7,12 +7,12 @@ import android.content.Context;
 import android.test.InstrumentationTestCase;
 
 import com.bioinformaticsapp.blastservices.BLASTQueryPoller;
-import com.bioinformaticsapp.blastservices.BLASTQuerySender;
 import com.bioinformaticsapp.blastservices.EMBLEBIBLASTService;
 import com.bioinformaticsapp.blastservices.NCBIBLASTService;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
+import com.bioinformaticsapp.test.testhelpers.SendBLASTQuery;
 
 public class BLASTQueryPollerTest extends InstrumentationTestCase {
 
@@ -32,7 +32,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	
 	public void testWeCanPollASUBMITTEDEMBLQuery() throws InterruptedException, ExecutionException{
 		emblQuery = createPendingEMBLBLASTQuery();
-		waitUntilSent(emblQuery);
+		SendBLASTQuery.sendToEBIEMBL(context, emblQuery);
 		
 		poller.execute(emblQuery);
 		
@@ -45,7 +45,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	
 	public void testWeCanPollASUBMITTEDNCBIQuery() throws InterruptedException, ExecutionException{
 		ncbiQuery = createPendingNCBIBLASTQuery();
-		waitUntilSent(ncbiQuery);
+		SendBLASTQuery.sendToNCBI(context, ncbiQuery);
 		
 		poller.execute(ncbiQuery);
 		
@@ -60,7 +60,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 		for(int i = 0; i < 2; i++){
 			queries[i] = createPendingEMBLBLASTQuery();
 		}	
-		waitUntilSent(queries);
+		SendBLASTQuery.sendToEBIEMBL(context, queries);
 	
 		poller.execute(queries);
 		
@@ -74,7 +74,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	
 	public void testWeDoNotPollWhenThereIsNoWebConnection() throws InterruptedException, ExecutionException{
 		emblQuery = createPendingEMBLBLASTQuery();
-		waitUntilSent(emblQuery);
+		SendBLASTQuery.sendToEBIEMBL(context, emblQuery);
 		NCBIBLASTService ncbiService = new NCBIBLASTService();
 		EMBLEBIBLASTService emblService = new EMBLEBIBLASTService();
 		final BLASTQueryPoller poller = new BLASTQueryPoller(context, ncbiService, emblService){
@@ -87,12 +87,6 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 		
 		waitFor(poller);
 		assertEquals("Expected query's status to be unchanged from when it was submitted", BLASTQuery.Status.SUBMITTED, emblQuery.getStatus());
-	}
-	
-	private void waitUntilSent(BLASTQuery... queries) throws InterruptedException, ExecutionException{
-		BLASTQuerySender sender = new BLASTQuerySender(context);
-		sender.execute(queries);
-		sender.get();
 	}
 	
 	private void waitFor(BLASTQueryPoller poller){

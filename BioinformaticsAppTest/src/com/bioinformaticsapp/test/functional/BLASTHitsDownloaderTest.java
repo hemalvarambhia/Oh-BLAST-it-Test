@@ -18,6 +18,7 @@ import com.bioinformaticsapp.helpers.StatusTranslator;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
+import com.bioinformaticsapp.test.testhelpers.SendBLASTQuery;
 
 public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 
@@ -63,7 +64,7 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanDownloadResultsOfAFINISHEDNCBIBLASTQuery() throws InterruptedException, ExecutionException{
-		waitUntilSent(query);
+		SendBLASTQuery.sendToNCBI(context, query);
 		waitUntilFinished(query);
 		
 		downloader.execute(query);
@@ -79,7 +80,7 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 		emblQuery.setSearchParameter("email", "h.n.varambhia@gmail.com");
 		emblQuery.setStatus(BLASTQuery.Status.PENDING);
 		save(emblQuery);
-		waitUntilSent(emblQuery);
+		SendBLASTQuery.sendToEBIEMBL(context, emblQuery);
 		waitUntilFinished(emblQuery);
 		
 		downloader.execute(emblQuery);
@@ -106,13 +107,6 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 	private void save(BLASTQuery query){
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(context);
 		helper.save(query);
-	}
-	
-	
-	private void waitUntilSent(BLASTQuery query) throws InterruptedException, ExecutionException{
-		BLASTQuerySender sender = new BLASTQuerySender(context);
-		sender.execute(query);
-		sender.get();
 	}
 	
 	private void waitUntilFinished(BLASTQuery query) throws InterruptedException, ExecutionException{

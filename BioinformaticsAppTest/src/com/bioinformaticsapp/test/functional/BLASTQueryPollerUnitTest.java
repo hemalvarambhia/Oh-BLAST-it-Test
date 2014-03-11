@@ -12,7 +12,7 @@ import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.test.testhelpers.StubbedEMBLService;
-import com.bioinformaticsapp.test.testhelpers.StubbedNCBIService;
+import com.bioinformaticsapp.test.testhelpers.StubbedBLASTSearchEngine;
 
 import android.content.Context;
 import android.test.InstrumentationTestCase;
@@ -24,7 +24,7 @@ public class BLASTQueryPollerUnitTest extends InstrumentationTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		Context context = getInstrumentation().getTargetContext();
-		BLASTSearchEngine stubbedNCBIService = new StubbedNCBIService();
+		BLASTSearchEngine stubbedNCBIService = new StubbedBLASTSearchEngine();
 		BLASTSearchEngine stubbedEMBLService = new StubbedEMBLService();
 		queryPoller = new BLASTQueryPoller(context, stubbedNCBIService, stubbedEMBLService);
 	}
@@ -48,7 +48,7 @@ public class BLASTQueryPollerUnitTest extends InstrumentationTestCase {
 
 	public void testPollerDoesNotUpdateStatusWhenThereIsNoWebConnection() throws InterruptedException, ExecutionException{
 		BLASTQuery query = aBLASTQuery();
-		BLASTSearchEngine ncbiService = new StubbedNCBIService();
+		BLASTSearchEngine ncbiService = new StubbedBLASTSearchEngine();
 		BLASTSearchEngine emblService = new StubbedEMBLService();
 		Context context = getInstrumentation().getTargetContext();
 		queryPoller = new BLASTQueryPoller(context, ncbiService, emblService){

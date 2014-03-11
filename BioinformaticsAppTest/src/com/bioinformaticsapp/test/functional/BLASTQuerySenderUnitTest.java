@@ -1,24 +1,23 @@
 package com.bioinformaticsapp.test.functional;
 
-import static org.hamcrest.core.IsNot.*;
-import static org.hamcrest.core.Is.*;
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.core.IsNull.*;
-
-import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.*;
+import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.aBLASTQueryWithStatus;
+import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.aValidPendingBLASTQuery;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.IsNull.nullValue;
 
 import java.util.concurrent.ExecutionException;
+
+import android.content.Context;
+import android.test.InstrumentationTestCase;
 
 import com.bioinformaticsapp.blastservices.BLASTQuerySender;
 import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
 import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
-import com.bioinformaticsapp.test.testhelpers.StubbedEMBLService;
-import com.bioinformaticsapp.test.testhelpers.StubbedNCBIService;
-
-import android.content.Context;
-import android.test.InstrumentationTestCase;
+import com.bioinformaticsapp.models.BLASTVendor;
+import com.bioinformaticsapp.test.testhelpers.StubbedBLASTSearchEngine;
 
 public class BLASTQuerySenderUnitTest extends InstrumentationTestCase {
 
@@ -26,10 +25,9 @@ public class BLASTQuerySenderUnitTest extends InstrumentationTestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
-		BLASTSearchEngine ncbiBLASTService = new StubbedNCBIService();
-		BLASTSearchEngine emblBLASTService = new StubbedEMBLService();
+		BLASTSearchEngine ncbiBLASTService = new StubbedBLASTSearchEngine();
 		Context context = getInstrumentation().getTargetContext();
-		sender = new BLASTQuerySender(context, ncbiBLASTService, emblBLASTService);
+		sender = new BLASTQuerySender(context, ncbiBLASTService);
 	}
 	
 	public void testSenderDoesNotSendInvalidQuery() throws InterruptedException, ExecutionException{

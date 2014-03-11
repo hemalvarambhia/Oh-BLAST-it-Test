@@ -4,7 +4,7 @@ import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
 import com.bioinformaticsapp.blastservices.SearchStatus;
 import com.bioinformaticsapp.models.BLASTQuery;
 
-public class StubbedNCBIService implements BLASTSearchEngine {
+public class StubbedBLASTSearchEngine implements BLASTSearchEngine {
 
 	public String submit(BLASTQuery query) {
 		return "GHJBCNKR014";
