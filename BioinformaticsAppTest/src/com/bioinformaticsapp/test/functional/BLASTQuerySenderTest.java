@@ -1,6 +1,7 @@
 package com.bioinformaticsapp.test.functional;
 
 import static com.bioinformaticsapp.test.testhelpers.SendBLASTQuery.*;
+import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.*;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -42,7 +43,7 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanSendAnEBI_EMBLQuery() throws InterruptedException, ExecutionException{
-		BLASTQuery ebiemblQuery = validPendingEMBLEBIBLASTQuery();
+		BLASTQuery ebiemblQuery = validPendingEMBLBLASTQuery();
 		
 		sendToEBIEMBL(context, new BLASTQuery[]{ebiemblQuery});					
 		
@@ -53,20 +54,5 @@ public class BLASTQuerySenderTest extends InstrumentationTestCase {
 		assertThat("Query was not assigned a job identifier", query.getJobIdentifier(), is(notNullValue()));
 		assertThat("Job identifier was found to be blank", !(query.getJobIdentifier().isEmpty()));
 		assertThat("Query wasn't submitted", query.getStatus(), is(Status.SUBMITTED));
-	}
-	
-	private BLASTQuery validPendingEMBLEBIBLASTQuery(){
-		BLASTQuery emblQuery = BLASTQuery.emblBLASTQuery("blastn");
-		emblQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-		emblQuery.setSearchParameter("email", "h.n.varambhia@gmail.com");
-		emblQuery.setStatus(Status.PENDING);
-		return emblQuery;
-	}
-	
-	private BLASTQuery validPendingNCBIBLASTQuery(){
-		BLASTQuery ncbiQuery = BLASTQuery.ncbiBLASTQuery("blastn");
-		ncbiQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-		ncbiQuery.setStatus(Status.PENDING);
-		return ncbiQuery;
 	}
 }

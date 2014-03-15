@@ -1,5 +1,8 @@
 package com.bioinformaticsapp.test.functional;
 
+import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.validPendingEMBLBLASTQuery;
+import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.validPendingNCBIBLASTQuery;
+
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
@@ -10,7 +13,6 @@ import com.bioinformaticsapp.blastservices.BLASTQueryPoller;
 import com.bioinformaticsapp.blastservices.EMBLEBIBLASTService;
 import com.bioinformaticsapp.blastservices.NCBIBLASTService;
 import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.bioinformaticsapp.test.testhelpers.SendBLASTQuery;
 
@@ -31,7 +33,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanPollASUBMITTEDEMBLQuery() throws InterruptedException, ExecutionException{
-		emblQuery = createPendingEMBLBLASTQuery();
+		emblQuery = validPendingEMBLBLASTQuery();
 		SendBLASTQuery.sendToEBIEMBL(context, emblQuery);
 		
 		poller.execute(emblQuery);
@@ -44,7 +46,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanPollASUBMITTEDNCBIQuery() throws InterruptedException, ExecutionException{
-		ncbiQuery = createPendingNCBIBLASTQuery();
+		ncbiQuery = validPendingNCBIBLASTQuery();
 		SendBLASTQuery.sendToNCBI(context, ncbiQuery);
 		
 		poller.execute(ncbiQuery);
@@ -58,7 +60,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	public void testWeCanPollMoreThanOneBLASTQuery() throws InterruptedException, ExecutionException{
 		BLASTQuery[] queries = new BLASTQuery[2];
 		for(int i = 0; i < 2; i++){
-			queries[i] = createPendingEMBLBLASTQuery();
+			queries[i] = validPendingEMBLBLASTQuery();
 		}	
 		SendBLASTQuery.sendToEBIEMBL(context, queries);
 	
@@ -73,7 +75,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeDoNotPollWhenThereIsNoWebConnection() throws InterruptedException, ExecutionException{
-		emblQuery = createPendingEMBLBLASTQuery();
+		emblQuery = validPendingEMBLBLASTQuery();
 		SendBLASTQuery.sendToEBIEMBL(context, emblQuery);
 		NCBIBLASTService ncbiService = new NCBIBLASTService();
 		EMBLEBIBLASTService emblService = new EMBLEBIBLASTService();
@@ -97,20 +99,5 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 		} catch (ExecutionException e) {
 			fail("Task errored out unexpectedly");
 		}
-	}
-	
-	private BLASTQuery createPendingEMBLBLASTQuery(){
-		BLASTQuery emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		emblQuery.setSearchParameter("email", "h.n.varambhia@gmail.com");
-		emblQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-		emblQuery.setStatus(BLASTQuery.Status.PENDING);
-		return emblQuery;
-	}
-	
-	private BLASTQuery createPendingNCBIBLASTQuery(){
-		BLASTQuery ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
-		ncbiQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-		ncbiQuery.setStatus(BLASTQuery.Status.PENDING);
-		return ncbiQuery;
 	}
 }

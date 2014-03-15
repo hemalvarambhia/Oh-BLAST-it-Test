@@ -27,4 +27,19 @@ public class BLASTQueryBuilder {
 		
 		return aBLASTQuery;
 	}
+	
+	public static BLASTQuery validPendingEMBLBLASTQuery(){
+		BLASTQuery emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		emblQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
+		emblQuery.setSearchParameter("email", "h.n.varambhia@gmail.com");
+		emblQuery.setStatus(Status.PENDING);
+		return emblQuery;
+	}
+	
+	public static BLASTQuery validPendingNCBIBLASTQuery(){
+		BLASTQuery ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
+		ncbiQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
+		ncbiQuery.setStatus(Status.PENDING);
+		return ncbiQuery;
+	}
 }
