@@ -29,7 +29,7 @@ public class BLASTQueryBuilder {
 	}
 	
 	public static BLASTQuery validPendingEMBLBLASTQuery(){
-		BLASTQuery emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		BLASTQuery emblQuery = BLASTQuery.emblBLASTQuery("blastn");
 		emblQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		emblQuery.setSearchParameter("email", "h.n.varambhia@gmail.com");
 		emblQuery.setStatus(Status.PENDING);
@@ -37,7 +37,7 @@ public class BLASTQueryBuilder {
 	}
 	
 	public static BLASTQuery validPendingNCBIBLASTQuery(){
-		BLASTQuery ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
+		BLASTQuery ncbiQuery = BLASTQuery.ncbiBLASTQuery("blastn");
 		ncbiQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		ncbiQuery.setStatus(Status.PENDING);
 		return ncbiQuery;
