@@ -17,6 +17,7 @@ import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
+import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.bioinformaticsapp.test.testhelpers.StubbedBLASTSearchEngine;
 
 public class BLASTQuerySenderUnitTest extends InstrumentationTestCase {
@@ -27,6 +28,8 @@ public class BLASTQuerySenderUnitTest extends InstrumentationTestCase {
 		super.setUp();
 		BLASTSearchEngine ncbiBLASTService = new StubbedBLASTSearchEngine();
 		Context context = getInstrumentation().getTargetContext();
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(context);
+		helper.cleanDatabase();
 		sender = new BLASTQuerySender(context, ncbiBLASTService);
 	}
 	
