@@ -1,20 +1,17 @@
 package com.bioinformaticsapp.test.functional;
 
+import static com.bioinformaticsapp.test.testhelpers.SendBLASTQuery.*;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+
 import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
 import android.test.InstrumentationTestCase;
-import android.util.Log;
 
-import com.bioinformaticsapp.blastservices.BLASTQuerySender;
-import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
-import com.bioinformaticsapp.blastservices.EMBLEBIBLASTService;
-import com.bioinformaticsapp.blastservices.NCBIBLASTService;
-import com.bioinformaticsapp.data.BLASTQueryLabBook;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
-import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 
 /**
@@ -27,73 +24,49 @@ import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 
 public class BLASTQuerySenderTest extends InstrumentationTestCase {
 
-	private BLASTQuery query; //We use this for some GENERAL testing before going into specifics
-	private BLASTQuery emblQuery;
-	
 	private Context context;
-	private final static String TAG = "BLASTQuerySenderTest";
 	
 	protected void setUp() throws Exception {
 		context = getInstrumentation().getTargetContext();
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(context);
-		helper.cleanDatabase();
+		helper.cleanDatabase();	
+	}
+	
+	
+	public void testWeCanSendAnNCBIQuery() throws InterruptedException, ExecutionException{
+		BLASTQuery ncbiQuery = validPendingNCBIBLASTQuery();
 		
-		query = BLASTQueryBuilder.aValidPendingBLASTQuery();
-		save(query);
+		sendToNCBI(context, new BLASTQuery[]{ncbiQuery});					
 		
-		emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		emblQuery.setSearchParameter("email", "h.n.varambhia@gmail.com");
+		assertSent(ncbiQuery);
+	}
+	
+	public void testWeCanSendAnEBI_EMBLQuery() throws InterruptedException, ExecutionException{
+		BLASTQuery ebiemblQuery = validPendingEMBLEBIBLASTQuery();
+		
+		sendToEBIEMBL(context, new BLASTQuery[]{ebiemblQuery});					
+		
+		assertSent(ebiemblQuery);
+	}
+	
+	private void assertSent(BLASTQuery query){
+		assertThat("Query was not assigned a job identifier", query.getJobIdentifier(), is(notNullValue()));
+		assertThat("Job identifier was found to be blank", !(query.getJobIdentifier().isEmpty()));
+		assertThat("Query wasn't submitted", query.getStatus(), is(Status.SUBMITTED));
+	}
+	
+	private BLASTQuery validPendingEMBLEBIBLASTQuery(){
+		BLASTQuery emblQuery = BLASTQuery.emblBLASTQuery("blastn");
 		emblQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-		emblQuery.setStatus(BLASTQuery.Status.PENDING);
-		
-		save(emblQuery);
-		
+		emblQuery.setSearchParameter("email", "h.n.varambhia@gmail.com");
+		emblQuery.setStatus(Status.PENDING);
+		return emblQuery;
 	}
 	
-	private void save(BLASTQuery query){
-		BLASTQueryLabBook labBook = new BLASTQueryLabBook(context);
-		labBook.save(query);
-	}
-	
-	public void testWeCanSendAnNCBIQuery(){
-		send(new BLASTQuery[]{query}, new NCBIBLASTService());					
-		
-		assertNotNull("Query was not assigned a job identifier by the service", query.getJobIdentifier());
-		assertFalse("Job identifier was found to be an empty string", query.getJobIdentifier().isEmpty());
-		assertEquals("Query status was not updated to SUBMITTED", Status.SUBMITTED, query.getStatus());
-	}
-	
-	public void testWeCanSendAnEBI_EMBLQuery(){
-		send(new BLASTQuery[]{emblQuery}, new EMBLEBIBLASTService());					
-		
-		assertNotNull("Query was not assigned a job identifier by the service", emblQuery.getJobIdentifier());
-		assertFalse("Job identifier was found to be an empty string", emblQuery.getJobIdentifier().isEmpty());
-		Log.i(TAG, emblQuery.getJobIdentifier());
-		assertEquals("Query status was not updated to SUBMITTED", Status.SUBMITTED, emblQuery.getStatus());
-		
-	}
-	
-	private void send(final BLASTQuery[] queries, BLASTSearchEngine engine){
-		final BLASTQuerySender sender = new BLASTQuerySender(context, engine);
-		
-		try {
-			runTestOnUiThread(new Runnable() {
-				
-				public void run() {
-					sender.execute(queries);
-					
-				}
-			});
-		} catch (Throwable e) {
-			fail();
-		}
-		
-		try {
-			sender.get();
-		} catch (InterruptedException e) {
-			fail();
-		} catch (ExecutionException e) {
-			fail();
-		}
+	private BLASTQuery validPendingNCBIBLASTQuery(){
+		BLASTQuery ncbiQuery = BLASTQuery.ncbiBLASTQuery("blastn");
+		ncbiQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
+		ncbiQuery.setStatus(Status.PENDING);
+		return ncbiQuery;
 	}
 }
