@@ -81,7 +81,7 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 	public void testWeCanRetrieveSubmittedBLASTQueriesToBeSentToSupplier(){
 		BLASTQuery submitted = labBook.save(aBLASTQueryWithStatusAndVendor(Status.SUBMITTED, BLASTVendor.NCBI));
 		
-		List<BLASTQuery> submittedQueries = labBook.submittedBLASTQueriesForVentor(BLASTVendor.NCBI);
+		List<BLASTQuery> submittedQueries = labBook.submittedBLASTQueriesForVendor(BLASTVendor.NCBI);
 		
 		assertThat("list should contain submitted blast queries for supplier", submittedQueries.contains(submitted));
 	}
