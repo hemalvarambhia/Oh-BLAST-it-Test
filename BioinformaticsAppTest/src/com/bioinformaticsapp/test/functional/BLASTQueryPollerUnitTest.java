@@ -35,7 +35,8 @@ public class BLASTQueryPollerUnitTest extends InstrumentationTestCase {
 		
 		queryPoller.execute(query);
 		
-		assertThat("The status of the query should be updated", queryPoller.get(), is(0));
+		queryPoller.get();
+		assertThat("The poller should state the number of queries that finished successfully", queryPoller.get(), is(0));
 	}
 	
 	public void testPollerShouldUpdateTheStatusOfAQuery() throws InterruptedException, ExecutionException{
