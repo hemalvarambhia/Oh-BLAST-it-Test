@@ -34,6 +34,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 		BLASTQuery emblQuery = validPendingEMBLBLASTQuery();
 		SendBLASTQuery.sendToEBIEMBL(context, emblQuery);
 		poller = new BLASTQueryPoller(context, new EMBLEBIBLASTService());
+		
 		poller.execute(emblQuery);
 		
 		waitFor(poller);
