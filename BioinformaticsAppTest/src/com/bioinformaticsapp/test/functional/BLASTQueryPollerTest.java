@@ -1,6 +1,7 @@
 package com.bioinformaticsapp.test.functional;
 
-import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.*;
+import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.validPendingEMBLBLASTQuery;
+import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.validPendingNCBIBLASTQuery;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.AnyOf.anyOf;
 import static org.hamcrest.core.Is.is;
