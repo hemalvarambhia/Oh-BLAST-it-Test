@@ -4,6 +4,7 @@ import static org.hamcrest.core.IsNot.*;
 import static org.hamcrest.core.Is.*;
 import static org.hamcrest.MatcherAssert.*;
 
+import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.*;
 
 import java.util.concurrent.ExecutionException;
 
@@ -62,9 +63,4 @@ public class BLASTQueryPollerUnitTest extends InstrumentationTestCase {
 		queryPoller.get();
 		assertThat("The status of the query shouldn't be updated", query.getStatus(), is(Status.DRAFT));
 	}
-	
-	private BLASTQuery aBLASTQuery() {
-		return BLASTQuery.emblBLASTQuery("blastn");
-	}
-	
 }
