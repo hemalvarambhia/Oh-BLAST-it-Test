@@ -55,12 +55,12 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanRetrieveBLASTQueriesWithAStatus(){
-		BLASTQuery aQuery = labBook.save(aBLASTQueryWithStatus(Status.DRAFT));
+		BLASTQuery queryWithRequiredStatus = labBook.save(aBLASTQueryWithStatus(Status.DRAFT));
 		BLASTQuery queryWithDifferentStatus = labBook.save(aBLASTQueryWithStatus(Status.FINISHED));
 		
 		List<BLASTQuery> drafts = labBook.findBLASTQueriesByStatus(Status.DRAFT);
 		
-		assertThat("Should be able to find BLAST queries by their status", drafts.contains(aQuery));
+		assertThat("Should be able to find BLAST queries by their status", drafts.contains(queryWithRequiredStatus));
 		assertThat("Should not contain queries with a status different to the one required", !drafts.contains(queryWithDifferentStatus));
 	}
 	
