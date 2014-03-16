@@ -1,9 +1,10 @@
 package com.bioinformaticsapp.test.functional;
 
-import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.validPendingEMBLBLASTQuery;
-import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.validPendingNCBIBLASTQuery;
+import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.AnyOf.anyOf;
+import static org.hamcrest.core.Is.is;
 
-import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
@@ -13,6 +14,7 @@ import com.bioinformaticsapp.blastservices.BLASTQueryPoller;
 import com.bioinformaticsapp.blastservices.EMBLEBIBLASTService;
 import com.bioinformaticsapp.blastservices.NCBIBLASTService;
 import com.bioinformaticsapp.models.BLASTQuery;
+import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.bioinformaticsapp.test.testhelpers.SendBLASTQuery;
 
@@ -32,29 +34,24 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 		poller = new BLASTQueryPoller(context, ncbiService, emblService);
 	}
 	
-	public void testWeCanPollASUBMITTEDEMBLQuery() throws InterruptedException, ExecutionException{
+	public void testWeCanPollForTheCurrentStatusOfAnEMBLQuery() throws InterruptedException, ExecutionException{
 		emblQuery = validPendingEMBLBLASTQuery();
 		SendBLASTQuery.sendToEBIEMBL(context, emblQuery);
 		
 		poller.execute(emblQuery);
 		
 		waitFor(poller);
-		
-		BLASTQuery.Status[] possibilities = new BLASTQuery.Status[] { BLASTQuery.Status.SUBMITTED, BLASTQuery.Status.FINISHED };
-		boolean pollingYieldsValidStatus = Arrays.binarySearch(possibilities, emblQuery.getStatus()) > -1;
-		assertTrue(pollingYieldsValidStatus);
+		assertStatusUpdated(emblQuery);
 	}
 	
-	public void testWeCanPollASUBMITTEDNCBIQuery() throws InterruptedException, ExecutionException{
+	public void testWeCanPollForTheCurrentStatusOfAnNCBIQuery() throws InterruptedException, ExecutionException{
 		ncbiQuery = validPendingNCBIBLASTQuery();
 		SendBLASTQuery.sendToNCBI(context, ncbiQuery);
 		
 		poller.execute(ncbiQuery);
 		
 		waitFor(poller);
-		BLASTQuery.Status[] possibilities = new BLASTQuery.Status[] { BLASTQuery.Status.SUBMITTED, BLASTQuery.Status.FINISHED };
-		boolean pollingYieldsValidStatus = Arrays.binarySearch(possibilities, ncbiQuery.getStatus()) > -1;
-		assertTrue(pollingYieldsValidStatus);
+		assertStatusUpdated(ncbiQuery);
 	}
 	
 	public void testWeCanPollMoreThanOneBLASTQuery() throws InterruptedException, ExecutionException{
@@ -67,10 +64,8 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 		poller.execute(queries);
 		
 		waitFor(poller);
-		BLASTQuery.Status[] possibilities = new BLASTQuery.Status[] { BLASTQuery.Status.SUBMITTED, BLASTQuery.Status.FINISHED };
 		for(BLASTQuery query: queries){
-			boolean pollingYieldsValidStatus = Arrays.binarySearch(possibilities, query.getStatus()) > -1;
-			assertTrue("query does not have a status of SUBMITTED or FINISHED; it has a status of "+query.getStatus(), pollingYieldsValidStatus);
+			assertStatusUpdated(query);
 		} 
 	}
 	
@@ -89,6 +84,10 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 		
 		waitFor(poller);
 		assertEquals("Expected query's status to be unchanged from when it was submitted", BLASTQuery.Status.SUBMITTED, emblQuery.getStatus());
+	}
+	
+	private void assertStatusUpdated(BLASTQuery query){
+		assertThat(query.getStatus(), anyOf(is(Status.FINISHED), is(Status.SUBMITTED)));
 	}
 	
 	private void waitFor(BLASTQueryPoller poller){
