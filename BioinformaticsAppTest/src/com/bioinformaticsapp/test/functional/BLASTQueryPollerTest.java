@@ -21,8 +21,6 @@ import com.bioinformaticsapp.test.testhelpers.SendBLASTQuery;
 
 public class BLASTQueryPollerTest extends InstrumentationTestCase {
 
-	private BLASTQuery emblQuery;
-	private BLASTQuery ncbiQuery;
 	private Context context;
 	private BLASTQueryPoller poller;
 	
@@ -33,7 +31,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanPollForTheCurrentStatusOfAnEMBLQuery() throws InterruptedException, ExecutionException{
-		emblQuery = validPendingEMBLBLASTQuery();
+		BLASTQuery emblQuery = validPendingEMBLBLASTQuery();
 		SendBLASTQuery.sendToEBIEMBL(context, emblQuery);
 		poller = new BLASTQueryPoller(context, new EMBLEBIBLASTService());
 		poller.execute(emblQuery);
@@ -43,7 +41,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanPollForTheCurrentStatusOfAnNCBIQuery() throws InterruptedException, ExecutionException{
-		ncbiQuery = validPendingNCBIBLASTQuery();
+		BLASTQuery ncbiQuery = validPendingNCBIBLASTQuery();
 		SendBLASTQuery.sendToNCBI(context, ncbiQuery);
 		poller = new BLASTQueryPoller(context, new NCBIBLASTService());
 		
