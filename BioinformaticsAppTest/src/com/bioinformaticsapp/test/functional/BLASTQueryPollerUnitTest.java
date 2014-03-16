@@ -1,22 +1,20 @@
 package com.bioinformaticsapp.test.functional;
 
-import static org.hamcrest.core.IsNot.*;
-import static org.hamcrest.core.Is.*;
-import static org.hamcrest.MatcherAssert.*;
-
-import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.*;
+import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.aBLASTQuery;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
 
 import java.util.concurrent.ExecutionException;
+
+import android.content.Context;
+import android.test.InstrumentationTestCase;
 
 import com.bioinformaticsapp.blastservices.BLASTQueryPoller;
 import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
-import com.bioinformaticsapp.test.testhelpers.StubbedEMBLService;
 import com.bioinformaticsapp.test.testhelpers.StubbedBLASTSearchEngine;
-
-import android.content.Context;
-import android.test.InstrumentationTestCase;
 
 public class BLASTQueryPollerUnitTest extends InstrumentationTestCase {
 
@@ -25,9 +23,8 @@ public class BLASTQueryPollerUnitTest extends InstrumentationTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		Context context = getInstrumentation().getTargetContext();
-		BLASTSearchEngine stubbedNCBIService = new StubbedBLASTSearchEngine();
-		BLASTSearchEngine stubbedEMBLService = new StubbedEMBLService();
-		queryPoller = new BLASTQueryPoller(context, stubbedNCBIService, stubbedEMBLService);
+		BLASTSearchEngine stubbedSearchEngine = new StubbedBLASTSearchEngine();
+		queryPoller = new BLASTQueryPoller(context, stubbedSearchEngine);
 	}
 	
 	public void testPollerReturnsTheNumberOfQueriesThatFinishedSuccessfully() throws InterruptedException, ExecutionException{
@@ -50,10 +47,9 @@ public class BLASTQueryPollerUnitTest extends InstrumentationTestCase {
 
 	public void testPollerDoesNotUpdateStatusWhenThereIsNoWebConnection() throws InterruptedException, ExecutionException{
 		BLASTQuery query = aBLASTQuery();
-		BLASTSearchEngine ncbiService = new StubbedBLASTSearchEngine();
-		BLASTSearchEngine emblService = new StubbedEMBLService();
+		BLASTSearchEngine stubbedSearchEngine = new StubbedBLASTSearchEngine();
 		Context context = getInstrumentation().getTargetContext();
-		queryPoller = new BLASTQueryPoller(context, ncbiService, emblService){
+		queryPoller = new BLASTQueryPoller(context, stubbedSearchEngine){
 			protected boolean connectedToWeb(){
 				return false;
 			}

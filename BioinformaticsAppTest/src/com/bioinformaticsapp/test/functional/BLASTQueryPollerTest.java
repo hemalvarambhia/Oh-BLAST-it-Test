@@ -30,15 +30,12 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 		context = getInstrumentation().getTargetContext();
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(context);
 		helper.cleanDatabase();
-		EMBLEBIBLASTService emblService = new EMBLEBIBLASTService();
-		NCBIBLASTService ncbiService = new NCBIBLASTService();
-		poller = new BLASTQueryPoller(context, ncbiService, emblService);
 	}
 	
 	public void testWeCanPollForTheCurrentStatusOfAnEMBLQuery() throws InterruptedException, ExecutionException{
 		emblQuery = validPendingEMBLBLASTQuery();
 		SendBLASTQuery.sendToEBIEMBL(context, emblQuery);
-		
+		poller = new BLASTQueryPoller(context, new EMBLEBIBLASTService());
 		poller.execute(emblQuery);
 		
 		waitFor(poller);
@@ -48,6 +45,7 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 	public void testWeCanPollForTheCurrentStatusOfAnNCBIQuery() throws InterruptedException, ExecutionException{
 		ncbiQuery = validPendingNCBIBLASTQuery();
 		SendBLASTQuery.sendToNCBI(context, ncbiQuery);
+		poller = new BLASTQueryPoller(context, new NCBIBLASTService());
 		
 		poller.execute(ncbiQuery);
 		
@@ -61,7 +59,8 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 			queries[i] = validPendingEMBLBLASTQuery();
 		}	
 		SendBLASTQuery.sendToEBIEMBL(context, queries);
-	
+		poller = new BLASTQueryPoller(context, new EMBLEBIBLASTService());
+		
 		poller.execute(queries);
 		
 		waitFor(poller);
@@ -70,22 +69,6 @@ public class BLASTQueryPollerTest extends InstrumentationTestCase {
 		} 
 	}
 	
-	public void testWeDoNotPollWhenThereIsNoWebConnection() throws InterruptedException, ExecutionException{
-		emblQuery = validPendingEMBLBLASTQuery();
-		SendBLASTQuery.sendToEBIEMBL(context, emblQuery);
-		NCBIBLASTService ncbiService = new NCBIBLASTService();
-		EMBLEBIBLASTService emblService = new EMBLEBIBLASTService();
-		final BLASTQueryPoller poller = new BLASTQueryPoller(context, ncbiService, emblService){
-			protected boolean connectedToWeb(){
-				return false;
-			}
-		};
-		
-		poller.execute(emblQuery);
-		
-		waitFor(poller);
-		assertEquals("Expected query's status to be unchanged from when it was submitted", BLASTQuery.Status.SUBMITTED, emblQuery.getStatus());
-	}
 	
 	private void assertStatusUpdated(BLASTQuery query){
 		assertThat(query.getStatus(), anyOf(is(Status.FINISHED), is(Status.SUBMITTED)));
