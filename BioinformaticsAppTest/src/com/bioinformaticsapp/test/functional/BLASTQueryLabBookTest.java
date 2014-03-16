@@ -70,12 +70,20 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 		assertThat("list should not contain any pending blast queries for a supplier if there are none", pendingQueries.isEmpty());
 	}
 	
-	public void testWeCanRetrievesPendingBLASTQueriesToBeSentToSupplier(){
+	public void testWeCanRetrievePendingBLASTQueriesToBeSentToSupplier(){
 		BLASTQuery pending = labBook.save(aBLASTQueryWithStatusAndVendor(Status.PENDING, BLASTVendor.NCBI));
 		
 		List<BLASTQuery> pendingQueries = labBook.findPendingBLASTQueriesFor(BLASTVendor.NCBI);
 		
 		assertThat("list should contain pending blast queries for a supplier", pendingQueries.contains(pending));
+	}
+	
+	public void testWeCanRetrieveSubmittedBLASTQueriesToBeSentToSupplier(){
+		BLASTQuery submitted = labBook.save(aBLASTQueryWithStatusAndVendor(Status.SUBMITTED, BLASTVendor.NCBI));
+		
+		List<BLASTQuery> submittedQueries = labBook.submittedBLASTQueriesForVentor(BLASTVendor.NCBI);
+		
+		assertThat("list should contain submitted blast queries for supplier", submittedQueries.contains(submitted));
 	}
 	
 	private BLASTQuery aBLASTQueryWithStatusAndVendor(Status status, int vendor){
