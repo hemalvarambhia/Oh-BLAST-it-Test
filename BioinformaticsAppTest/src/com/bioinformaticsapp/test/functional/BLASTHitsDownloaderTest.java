@@ -1,6 +1,5 @@
 package com.bioinformaticsapp.test.functional;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.concurrent.ExecutionException;
 
@@ -9,7 +8,6 @@ import android.test.InstrumentationTestCase;
 import android.util.Log;
 
 import com.bioinformaticsapp.blastservices.BLASTHitsDownloadingTask;
-import com.bioinformaticsapp.blastservices.BLASTQuerySender;
 import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
 import com.bioinformaticsapp.blastservices.EMBLEBIBLASTService;
 import com.bioinformaticsapp.blastservices.NCBIBLASTService;
@@ -17,6 +15,7 @@ import com.bioinformaticsapp.blastservices.SearchStatus;
 import com.bioinformaticsapp.helpers.StatusTranslator;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
+import com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.bioinformaticsapp.test.testhelpers.SendBLASTQuery;
 
@@ -25,33 +24,18 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 	private static final String TAG = "BLASTHitsDownloaderTest";
 	private BLASTHitsDownloadingTask downloader;
 	private Context context;
-	private BLASTQuery query;
 	
 	public void setUp() throws Exception {
 		context = getInstrumentation().getTargetContext();
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(context);
 		helper.cleanDatabase();
 		
-		downloader = new BLASTHitsDownloadingTask(context);
-		query = BLASTQuery.ncbiBLASTQuery("blastn");
-		query.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-		query.setStatus(BLASTQuery.Status.PENDING);
-		
-		save(query);
-		
+		downloader = new BLASTHitsDownloadingTask(context);	
 	}
 	
-	protected void tearDown() throws Exception {
-		if(query.getJobIdentifier() != null){
-			if(context.deleteFile(query.getJobIdentifier()+".xml")){
-				Log.i(TAG, "BLAST hits file deleted");
-			}
-		}
-		query = null;
-		super.tearDown();
-	}
 	
 	public void testWeCannotDownloadResultsIfThereIsNoWebConnection() throws InterruptedException, ExecutionException{
+		BLASTQuery query = BLASTQueryBuilder.aValidPendingBLASTQuery();
 		downloader = new BLASTHitsDownloadingTask(context){
 			protected boolean connectedToWeb(){
 				return false;
@@ -64,21 +48,21 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanDownloadResultsOfAFINISHEDNCBIBLASTQuery() throws InterruptedException, ExecutionException{
-		SendBLASTQuery.sendToNCBI(context, query);
-		waitUntilFinished(query);
+		BLASTQuery ncbiQuery = BLASTQueryBuilder.validPendingNCBIBLASTQuery();
+		save(ncbiQuery);
+		SendBLASTQuery.sendToNCBI(context, ncbiQuery);
+		waitUntilFinished(ncbiQuery);
 		
-		downloader.execute(query);
+		downloader.execute(ncbiQuery);
 		String nameOfFile = downloader.get();
 		
 		assertNotNull("Name of file with BLAST hits being non-nulled: "+nameOfFile, nameOfFile);
-		assertFileOnDisk(String.format("%s.xml", query.getJobIdentifier()));
+		assertFileOnDisk(String.format("%s.xml", ncbiQuery.getJobIdentifier()));
+		removeFileFromDisk(ncbiQuery);
 	}
 	
 	public void testWeCanDownloadResultsOfAFINISHEDEMBLQuery() throws InterruptedException, ExecutionException{
-		BLASTQuery emblQuery = BLASTQuery.emblBLASTQuery("blastn");
-		emblQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-		emblQuery.setSearchParameter("email", "h.n.varambhia@gmail.com");
-		emblQuery.setStatus(BLASTQuery.Status.PENDING);
+		BLASTQuery emblQuery = BLASTQueryBuilder.validPendingEMBLBLASTQuery();
 		save(emblQuery);
 		SendBLASTQuery.sendToEBIEMBL(context, emblQuery);
 		waitUntilFinished(emblQuery);
@@ -88,19 +72,22 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 		String nameOfFile = downloader.get();
 		assertNotNull("Name of file with BLAST hits being non-nulled: "+nameOfFile, nameOfFile);
 		assertFileOnDisk(String.format("%s.xml", emblQuery.getJobIdentifier()));
-		if(context.deleteFile(emblQuery.getJobIdentifier()+".xml")){
-			Log.i(TAG, "BLAST hits file deleted");
-		}
+		removeFileFromDisk(emblQuery);
 	}
 	
 	private void assertFileOnDisk(String nameOfFile){
 		try {
 			//Check the file physically exists in the data directory of the app
-			FileInputStream in = context.openFileInput(nameOfFile);
-			
+			context.openFileInput(nameOfFile);
 		} catch (FileNotFoundException e) {
 			String failureMessage = String.format("Could not find file %s", nameOfFile);
 			fail(failureMessage);
+		}
+	}
+	
+	private void removeFileFromDisk(BLASTQuery query){
+		if(context.deleteFile(query.getJobIdentifier()+".xml")){
+			Log.i(TAG, "BLAST hits file deleted");
 		}
 	}
 	
@@ -132,5 +119,4 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 			return null;
 		}
 	}
-	
 }
