@@ -6,8 +6,10 @@ import com.bioinformaticsapp.models.BLASTQuery;
 
 public class StubbedBLASTSearchEngine implements BLASTSearchEngine {
 
+	public static final String QUERY_ID = "GHJBCNKR014";
+	
 	public String submit(BLASTQuery query) {
-		return "GHJBCNKR014";
+		return QUERY_ID;
 	}
 
 	public SearchStatus pollQuery(String jobId) {
@@ -15,10 +17,9 @@ public class StubbedBLASTSearchEngine implements BLASTSearchEngine {
 	}
 
 	public String retrieveBLASTResults(String jobId, String format) {
-		return "";
+		return "<blasthits></blasthits>";
 	}
 
 	public void close() {
 	}
-
 }
