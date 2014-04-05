@@ -16,11 +16,17 @@ public class SearchParameterControllerTest extends InstrumentationTestCase {
 
 	private SearchParameterController searchParameterController;
 	
+	private SearchParameter parameter;
+	
+	private final long blastQueryId = 1l;
+	
 	protected void setUp() throws Exception {
 		super.setUp();
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
 		helper.cleanDatabase();
 		searchParameterController = new SearchParameterController(getInstrumentation().getTargetContext());
+		parameter = aSearchParameter();
+		saveFor(blastQueryId, parameter);
 	}
 	
 	protected void tearDown() throws Exception {
@@ -29,20 +35,12 @@ public class SearchParameterControllerTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanSaveTheSearchParametersOfAQuery(){
-		long blastQueryId = 1l;
-		SearchParameter parameter = new SearchParameter("email", "h.n.varambhia@gmail.com");
-		
-		searchParameterController.saveFor(blastQueryId, parameter);
-		
 		SearchParameter parameterFromDatastore = searchParameterController.getParametersForQuery(blastQueryId).get(0);
+		
 		assertThat("Should be able store a SearchParameter in datastore", parameterFromDatastore, is(parameter));
 	}
 
 	public void testWeCanRetrieveTheSearchParametersOfAQuery(){
-		long blastQueryId = 1l;
-		SearchParameter parameter = new SearchParameter("email", "h.n.varambhia@gmail.com");
-		searchParameterController.saveFor(blastQueryId, parameter);
-		
 		List<SearchParameter> parameters = searchParameterController.getParametersForQuery(blastQueryId);
 		
 		List<SearchParameter> expected = new ArrayList<SearchParameter>();
@@ -51,14 +49,20 @@ public class SearchParameterControllerTest extends InstrumentationTestCase {
 	}
 	
 	public void testWeCanDeleteTheSearchParametersOfAQuery(){
-		long blastQueryId = 1l;
-		SearchParameter parameter = new SearchParameter("email", "h.n.varambhia@gmail.com");
-		searchParameterController.saveFor(blastQueryId, parameter);
-		
 		searchParameterController.deleteParametersFor(blastQueryId);
 		
 		List<SearchParameter> parameters = searchParameterController.getParametersForQuery(blastQueryId);
 		assertThat("Should be able to delete all search parameters of a query", parameters.isEmpty());
+	}
+
+	private SearchParameter saveFor(long blastQueryId, SearchParameter parameter){
+		searchParameterController.saveFor(blastQueryId, parameter);
+		return parameter;
+	}
+	
+	private SearchParameter aSearchParameter(){
+		SearchParameter parameter = new SearchParameter("email", "h.n.varambhia@gmail.com");
+		return parameter;
 	}
 	
 }
