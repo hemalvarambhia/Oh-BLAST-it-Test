@@ -52,6 +52,7 @@ public class SearchParameterControllerTest extends InstrumentationTestCase {
 		searchParameterController.deleteParametersFor(blastQueryId);
 		
 		List<SearchParameter> parameters = searchParameterController.getParametersForQuery(blastQueryId);
+		
 		assertThat("Should be able to delete all search parameters of a query", parameters.isEmpty());
 	}
 
