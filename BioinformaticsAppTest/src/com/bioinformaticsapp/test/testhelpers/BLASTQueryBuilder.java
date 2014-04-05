@@ -10,6 +10,12 @@ public class BLASTQueryBuilder {
 		return BLASTQuery.emblBLASTQuery("blastn");
 	}
 	
+	public static BLASTQuery aBLASTQueryWithQueryID(){
+		BLASTQuery aBLASTQuery = aBLASTQuery();
+		aBLASTQuery.setJobIdentifier("GHJBCNKR014");
+		return aBLASTQuery;
+	}
+	
 	public static BLASTQuery aBLASTQueryWithStatus(Status status){
 		BLASTQuery blastQuery = aBLASTQuery();
 		blastQuery.setStatus(status);
