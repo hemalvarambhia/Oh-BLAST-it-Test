@@ -22,21 +22,17 @@ import com.bioinformaticsapp.test.testhelpers.SendBLASTQuery;
 public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 
 	private static final String TAG = "BLASTHitsDownloaderTest";
-	private BLASTHitsDownloadingTask downloader;
 	private Context context;
 	
 	public void setUp() throws Exception {
 		context = getInstrumentation().getTargetContext();
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(context);
-		helper.cleanDatabase();
-		
-		downloader = new BLASTHitsDownloadingTask(context, new EMBLEBIBLASTService());	
+		helper.cleanDatabase();	
 	}
-	
 	
 	public void testWeCannotDownloadResultsIfThereIsNoWebConnection() throws InterruptedException, ExecutionException{
 		BLASTQuery query = BLASTQueryBuilder.aValidPendingBLASTQuery();
-		downloader = new BLASTHitsDownloadingTask(context, new NCBIBLASTService()){
+		BLASTHitsDownloadingTask downloader = new BLASTHitsDownloadingTask(context, getServiceFor(query.getVendorID())){
 			protected boolean connectedToWeb(){
 				return false;
 			}
@@ -52,6 +48,7 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 		save(ncbiQuery);
 		SendBLASTQuery.sendToNCBI(context, ncbiQuery);
 		waitUntilFinished(ncbiQuery);
+		BLASTHitsDownloadingTask downloader = new BLASTHitsDownloadingTask(context, getServiceFor(ncbiQuery.getVendorID()));	
 		
 		downloader.execute(ncbiQuery);
 		String nameOfFile = downloader.get();
@@ -66,7 +63,7 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 		save(emblQuery);
 		SendBLASTQuery.sendToEBIEMBL(context, emblQuery);
 		waitUntilFinished(emblQuery);
-		
+		BLASTHitsDownloadingTask downloader = new BLASTHitsDownloadingTask(context, getServiceFor(emblQuery.getVendorID()));	
 		downloader.execute(emblQuery);
 		
 		String nameOfFile = downloader.get();
