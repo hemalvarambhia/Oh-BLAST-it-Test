@@ -16,43 +16,38 @@ public class EMBLEBIBLASTServiceTest extends TestCase {
 
 	private BLASTSearchEngine service;
 	
-	protected void setUp() throws Exception {
+	public void setUp() throws Exception {
 		super.setUp();
 		service = new EMBLEBIBLASTService();
 	}
 
-	protected void tearDown() throws Exception {
+	public void tearDown() throws Exception {
 		super.tearDown();
 		service.close();
 		service = null;
 	}
 
 	public void testSubmitWeCanSubmitQueryToEMBL() {
+		BLASTQuery query = aValidEMBLEBIBLASTQuery();
 		
-		BLASTQuery query = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		query.setSearchParameter("email", "h.n.varambhia@gmail.com");
-		query.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
+		String st = service.submit(query);
 		
 		boolean validId = false;
 		String jobIdRegex = "ncbiblast\\-[A-Z][0-9]{8}\\-[0-9]{6}\\-[0-9]{4}\\-[0-9]{7,8}\\-[a-z]{2}";
-		String st = service.submit(query);
-		
 		assertNotNull("The BLAST Job identifier was not generated", st);
 		validId = st.matches(jobIdRegex);	
 		Assert.assertTrue(st+" does not match regex", validId);
 	}
 	
 	public void testWeCanPollStatusOfAQuery(){
+		BLASTQuery query = aValidEMBLEBIBLASTQuery();
+		String jobIdentifier = service.submit(query);
+		assertNotNull("Job identifier was not generated for the query", jobIdentifier);
+		
+		SearchStatus status = service.pollQuery(jobIdentifier);
 		SearchStatus[] validOutcomes = SearchStatus.values();
 		List<SearchStatus> outcomes=  Arrays.asList(validOutcomes);
-		BLASTQuery query = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		query.setSearchParameter("email", "h.n.varambhia@gmail.com");
-		query.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		
-		String jobIdentifier = service.submit(query);
-		
-		assertNotNull("Job identifier was not generated for the query", jobIdentifier);
-		SearchStatus status = service.pollQuery(jobIdentifier);
 		boolean isValidStatus = outcomes.contains(status);
 		Assert.assertTrue(isValidStatus);
 	}
@@ -77,5 +72,12 @@ public class EMBLEBIBLASTServiceTest extends TestCase {
 		assertEquals(SearchStatus.NOT_FOUND, status);
 	}
 	
+	private BLASTQuery aValidEMBLEBIBLASTQuery(){
+		BLASTQuery query = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+		query.setSearchParameter("email", "h.n.varambhia@gmail.com");
+		query.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
+		
+		return query;
+	}
 	
 }
