@@ -30,13 +30,13 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(context);
 		helper.cleanDatabase();
 		
-		downloader = new BLASTHitsDownloadingTask(context);	
+		downloader = new BLASTHitsDownloadingTask(context, new EMBLEBIBLASTService());	
 	}
 	
 	
 	public void testWeCannotDownloadResultsIfThereIsNoWebConnection() throws InterruptedException, ExecutionException{
 		BLASTQuery query = BLASTQueryBuilder.aValidPendingBLASTQuery();
-		downloader = new BLASTHitsDownloadingTask(context){
+		downloader = new BLASTHitsDownloadingTask(context, new NCBIBLASTService()){
 			protected boolean connectedToWeb(){
 				return false;
 			}
