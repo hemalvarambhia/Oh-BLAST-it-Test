@@ -11,13 +11,13 @@ import android.widget.TextView;
 import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
 import com.bioinformaticsapp.PendingQueriesActivity;
 import com.bioinformaticsapp.R;
-import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.BLASTQueryLabBook;
-import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.SearchParameter;
+import com.bioinformaticsapp.persistence.BLASTQueryController;
+import com.bioinformaticsapp.persistence.BLASTQueryLabBook;
+import com.bioinformaticsapp.persistence.SearchParameterController;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 

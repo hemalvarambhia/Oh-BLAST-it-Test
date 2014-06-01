@@ -6,11 +6,11 @@ import java.util.List;
 import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
 import com.bioinformaticsapp.DraftBLASTQueriesActivity;
 import com.bioinformaticsapp.R;
-import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.SearchParameter;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
+import com.bioinformaticsapp.persistence.BLASTQueryController;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 

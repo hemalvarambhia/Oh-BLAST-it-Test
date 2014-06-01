@@ -19,17 +19,16 @@ import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
 import com.bioinformaticsapp.FinishedQueriesActivity;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.ViewBLASTHitsActivity;
-import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
+import com.bioinformaticsapp.persistence.BLASTQueryController;
+import com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
 public class FinishedQueriesActivityTest extends
 		ActivityInstrumentationTestCase2<FinishedQueriesActivity> {
-
-	private static final String TAG = "FinishedQueriesActivityTest";
 
 	private OhBLASTItTestHelper helper;
 	private Solo solo;
@@ -215,16 +214,13 @@ public class FinishedQueriesActivityTest extends
 	}
 	
 	public void testWeCanViewTheBLASTHitsOfAQuery() throws IOException{
-		emblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		emblQuery.setStatus(BLASTQuery.Status.FINISHED);
-		emblQuery.setJobIdentifier(exampleEMBLJobId);		
-		emblQuery.setSearchParameter("email", "example@email.com");
+		emblQuery = BLASTQueryBuilder.aBLASTQueryWithStatus(Status.FINISHED);
+		emblQuery.setJobIdentifier(exampleEMBLJobId);
+		copyBLASTHitsFileToAppDataDir(String.format("%s.xml", exampleEMBLJobId));
 		helper.save(emblQuery);
 		
-		copyBLASTHitsFileToAppDataDir(exampleEMBLJobId+".xml");
-		
 		solo = new Solo(getInstrumentation(), getActivity());
-		int firstLine = 0;
+		int firstLine = 1;
 		solo.clickInList(firstLine);
 		solo.waitForActivity(ViewBLASTHitsActivity.class.getName());
 		

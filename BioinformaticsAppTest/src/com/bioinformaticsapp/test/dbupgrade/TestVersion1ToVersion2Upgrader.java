@@ -9,15 +9,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.InstrumentationTestCase;
 
-import com.bioinformaticsapp.data.BLASTQueryController;
-import com.bioinformaticsapp.data.DatabaseHelper;
-import com.bioinformaticsapp.data.SearchParameterController;
-import com.bioinformaticsapp.data.Version1ToVersion2Upgrader;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.BLASTJob;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.models.SearchParameter;
+import com.bioinformaticsapp.persistence.BLASTQueryController;
+import com.bioinformaticsapp.persistence.DatabaseHelper;
+import com.bioinformaticsapp.persistence.SearchParameterController;
+import com.bioinformaticsapp.persistence.Version1ToVersion2Upgrader;
 
 public class TestVersion1ToVersion2Upgrader extends InstrumentationTestCase {
 

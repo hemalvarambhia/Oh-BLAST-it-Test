@@ -12,9 +12,9 @@ import java.util.List;
 
 import android.test.InstrumentationTestCase;
 
-import com.bioinformaticsapp.data.BLASTQueryLabBook;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
+import com.bioinformaticsapp.persistence.BLASTQueryLabBook;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 
 public class BLASTQueryLabBookTest extends InstrumentationTestCase {

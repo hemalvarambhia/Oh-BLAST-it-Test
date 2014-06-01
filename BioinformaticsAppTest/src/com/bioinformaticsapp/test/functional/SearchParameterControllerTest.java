@@ -8,8 +8,8 @@ import java.util.List;
 
 import android.test.InstrumentationTestCase;
 
-import com.bioinformaticsapp.data.SearchParameterController;
 import com.bioinformaticsapp.models.SearchParameter;
+import com.bioinformaticsapp.persistence.SearchParameterController;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 
 public class SearchParameterControllerTest extends InstrumentationTestCase {

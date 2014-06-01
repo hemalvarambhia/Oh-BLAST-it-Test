@@ -13,11 +13,11 @@ import android.widget.Spinner;
 
 import com.bioinformaticsapp.AppPreferences;
 import com.bioinformaticsapp.NCBIQuerySetUpActivity;
-import com.bioinformaticsapp.data.BLASTQueryLabBook;
-import com.bioinformaticsapp.data.DatabaseHelper;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
 import com.bioinformaticsapp.models.SearchParameter;
+import com.bioinformaticsapp.persistence.BLASTQueryLabBook;
+import com.bioinformaticsapp.persistence.DatabaseHelper;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 

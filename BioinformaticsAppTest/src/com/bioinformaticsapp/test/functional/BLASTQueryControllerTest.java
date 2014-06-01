@@ -10,9 +10,9 @@ import java.util.List;
 
 import android.test.InstrumentationTestCase;
 
-import com.bioinformaticsapp.data.BLASTQueryController;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTQuery.Status;
+import com.bioinformaticsapp.persistence.BLASTQueryController;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 
 public class BLASTQueryControllerTest extends InstrumentationTestCase {
