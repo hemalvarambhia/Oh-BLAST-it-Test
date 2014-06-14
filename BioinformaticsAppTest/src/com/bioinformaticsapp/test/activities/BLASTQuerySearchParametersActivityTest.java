@@ -1,13 +1,15 @@
 package com.bioinformaticsapp.test.activities;
 
-import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
-import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTVendor;
-import com.jayway.android.robotium.solo.Solo;
-
+import static org.hamcrest.MatcherAssert.assertThat;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
+
+import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
+import com.bioinformaticsapp.models.BLASTQuery;
+import com.bioinformaticsapp.models.SearchParameter;
+import com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder;
+import com.jayway.android.robotium.solo.Solo;
 
 public class BLASTQuerySearchParametersActivityTest extends
 		ActivityInstrumentationTestCase2<BLASTQuerySearchParametersActivity> {
@@ -23,108 +25,88 @@ public class BLASTQuerySearchParametersActivityTest extends
 		super.tearDown();
 	}
 	
-	public void testWeCanSeeTheDatabaseParameterDetails(){
-		BLASTQuery anyQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
+	private void setupWith(BLASTQuery query){
 		Intent intent = new Intent();
-		intent.putExtra("query", anyQuery);
+		intent.putExtra("query", query);
 		setActivityIntent(intent);
-		
+	}
+	
+	public void testWeCanSeeTheDatabaseParameterDetails(){
+		BLASTQuery anyQuery = BLASTQueryBuilder.aBLASTQuery();
+		setupWith(anyQuery);
 		solo = new Solo(getInstrumentation(), getActivity());
+		
 		solo.waitForView(ListView.class);
 		
-		boolean hasDatabaseLabel = solo.searchText("Database");
-		assertTrue("should display the 'Database' label", hasDatabaseLabel);
-		
-		boolean displaysDatabaseParameter = solo.searchText(anyQuery.getSearchParameter("database").getValue());
-		assertTrue("should display the value of the database parameter", displaysDatabaseParameter);
-		
+		assertDisplays("Database");
+		assertDisplays(anyQuery.getSearchParameter("database"));
 	}
 	
 	public void testWeCanSeeTheExpThresholdDetails(){
-		BLASTQuery anyQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		Intent intent = new Intent();
-		intent.putExtra("query", anyQuery);
-		setActivityIntent(intent);
-		
+		BLASTQuery anyQuery = BLASTQueryBuilder.aBLASTQuery();
+		setupWith(anyQuery);
 		solo = new Solo(getInstrumentation(), getActivity());
+		
 		solo.waitForView(ListView.class);
 		
-		boolean hasExpThresholdLabel = solo.searchText("Exponential Threshold");
-		assertTrue("should display the 'Exponential Threshold' label", hasExpThresholdLabel);
-		
-		boolean displaysExpThresholdParameter = solo.searchText(anyQuery.getSearchParameter("exp_threshold").getValue());
-		assertTrue("should display the value of the database parameter", displaysExpThresholdParameter);
-		
+		assertDisplays("Exponential Threshold");
+		assertDisplays(anyQuery.getSearchParameter("exp_threshold"));
 	}
 	
 	public void testWeCanSeeTheMatchMismatchScoreDetails(){
-		BLASTQuery anyQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		Intent intent = new Intent();
-		intent.putExtra("query", anyQuery);
-		setActivityIntent(intent);
-		
+		BLASTQuery anyQuery = BLASTQueryBuilder.aBLASTQuery();
+		setupWith(anyQuery);
 		solo = new Solo(getInstrumentation(), getActivity());
+		
 		solo.waitForView(ListView.class);
 		
-		boolean hasMatchMismatchScoreLabel = solo.searchText("Match/Mismatch Score");
-		assertTrue("should display the 'Match/Mismatch Score' label", hasMatchMismatchScoreLabel);
-		
-		boolean displaysMatchMismatchScoreParameter = solo.searchText(anyQuery.getSearchParameter("match_mismatch_score").getValue());
-		assertTrue("should display the value of the match/mismatch score parameter", displaysMatchMismatchScoreParameter);
-		
+		assertDisplays("Match/Mismatch Score");
+		assertDisplays(anyQuery.getSearchParameter("match_mismatch_score"));
 	}
 	
 	public void testWeCanSeeTheEmailParameterOfAnEBIQuery(){
-		BLASTQuery ebiemblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		String email = "test.user@ohblastit.com";
-		ebiemblQuery.setSearchParameter("email", email);
-		Intent intent = new Intent();
-		intent.putExtra("query", ebiemblQuery);
-		setActivityIntent(intent);
-		
+		BLASTQuery ebiemblQuery = BLASTQuery.emblBLASTQuery("blastn");
+		ebiemblQuery.setSearchParameter("email",  "test.user@ohblastit.com");
+		setupWith(ebiemblQuery);
 		solo = new Solo(getInstrumentation(), getActivity());
+		
 		solo.waitForView(ListView.class);
 		
-		boolean hasEmailLabel = solo.searchText("E-mail");
-		assertTrue("should display the 'E-mail' label", hasEmailLabel);
-		
-		boolean displaysEmailParameter = solo.searchText(ebiemblQuery.getSearchParameter("email").getValue());
-		assertTrue("should display the email address parameter", displaysEmailParameter);
-		
+		assertDisplays("E-mail");
+		assertDisplays(ebiemblQuery.getSearchParameter("email"));
 	}
 	
 	public void testWeCanSeeTheScoreParameterOfAnEBIQuery(){
-		BLASTQuery ebiemblQuery = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
-		Intent intent = new Intent();
-		intent.putExtra("query", ebiemblQuery);
-		setActivityIntent(intent);
-		
+		BLASTQuery ebiemblQuery = BLASTQuery.emblBLASTQuery("blastn");
+		setupWith(ebiemblQuery);
 		solo = new Solo(getInstrumentation(), getActivity());
+		
 		solo.waitForView(ListView.class);
 		
-		boolean hasScoreLabel = solo.searchText("Maximum number of scores");
-		assertTrue("should display the 'Maximum number of scores' label", hasScoreLabel);
-		
-		boolean displaysScoreParameter = solo.searchText(ebiemblQuery.getSearchParameter("score").getValue());
-		assertTrue("should display the score parameter", displaysScoreParameter);
-		
+		assertDisplays("Maximum number of scores");
+		assertDisplays(ebiemblQuery.getSearchParameter("score"));	
 	}
 	
 	public void testWeCanSeeTheWordSizeParameterOfAnNCBIQuery(){
-		BLASTQuery ncbiQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
-		Intent intent = new Intent();
-		intent.putExtra("query", ncbiQuery);
-		setActivityIntent(intent);
-		
+		BLASTQuery ncbiQuery = BLASTQuery.ncbiBLASTQuery("blastn");
+		setupWith(ncbiQuery);
 		solo = new Solo(getInstrumentation(), getActivity());
+		
 		solo.waitForView(ListView.class);
 		
-		boolean hasWordSizeLabel = solo.searchText("Word size");
-		assertTrue("should display the 'Word size' label", hasWordSizeLabel);
-		
-		boolean displaysWordSizeParameter = solo.searchText(ncbiQuery.getSearchParameter("word_size").getValue());
-		assertTrue("should display the word size parameter", displaysWordSizeParameter);
-		
+		assertDisplays("Word size");
+		assertDisplays(ncbiQuery.getSearchParameter("word_size"));
 	}
 	
+	private void assertDisplays(String label){
+		boolean displaysLabel = solo.searchText(label);
+		String failureMessage = String.format("Should display %s", label);
+		assertThat(failureMessage, displaysLabel);
+	}
+	
+	private void assertDisplays(SearchParameter parameter){
+		boolean displaysParameterValue = solo.searchText(parameter.getValue());
+		String failureMessage = String.format("Should display the value of %s", parameter.getName());
+		assertThat(failureMessage, displaysParameterValue);
+	}
 }
