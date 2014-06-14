@@ -19,12 +19,6 @@ public class BLASTQuerySearchParametersActivityTest extends
 		super(BLASTQuerySearchParametersActivity.class);
 	}
 	
-	public void tearDown() throws Exception {
-		if(solo != null)	
-			solo.finishOpenedActivities();
-		super.tearDown();
-	}
-	
 	private void setupWith(BLASTQuery query){
 		Intent intent = new Intent();
 		intent.putExtra("query", query);
@@ -108,5 +102,11 @@ public class BLASTQuerySearchParametersActivityTest extends
 		boolean displaysParameterValue = solo.searchText(parameter.getValue());
 		String failureMessage = String.format("Should display the value of %s", parameter.getName());
 		assertThat(failureMessage, displaysParameterValue);
+	}
+
+	public void tearDown() throws Exception {
+		if(solo != null)	
+			solo.finishOpenedActivities();
+		super.tearDown();
 	}
 }
