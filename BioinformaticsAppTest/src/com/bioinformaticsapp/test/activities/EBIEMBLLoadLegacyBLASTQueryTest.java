@@ -50,7 +50,6 @@ public class EBIEMBLLoadLegacyBLASTQueryTest extends
 	
 	public void testWeCanLoadLegacyDraftQueries(){
 		setupActivityWith(legacy);
-		
 		solo = new Solo(getInstrumentation(), getActivity());
 		
 		solo.assertCurrentActivity("Should be able to load a legacy query", EMBLEBISetUpQueryActivity.class);
@@ -91,7 +90,6 @@ public class EBIEMBLLoadLegacyBLASTQueryTest extends
 		getInstrumentation().waitForIdleSync();
 		
 		BLASTQuery query = blastQuery();
-		
 		assertEquals("Expected e-mail address where results would be sent to to be "+validEmailAddress+" " +
 				"but got "+query.getSearchParameter("email"), validEmailAddress, 
 				query.getSearchParameter("email").getValue());
@@ -104,8 +102,8 @@ public class EBIEMBLLoadLegacyBLASTQueryTest extends
 		solo.pressSpinnerItem(0, 1);
 		Spinner programSpinner = (Spinner)solo.getView(R.id.blastqueryentry_program_spinner);
 		getInstrumentation().waitForIdleSync();
-		BLASTQuery legacyQuery = blastQuery();
 		
+		BLASTQuery legacyQuery = blastQuery();
 		assertEquals(programSpinner.getSelectedItem().toString(), legacyQuery.getBLASTProgram());
 	}
 	
