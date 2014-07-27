@@ -23,7 +23,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	private BLASTQuery blastQuery;
 	
 	private Solo solo;
-	private static final int SENDING_DIALOG_TIMEOUT = 35000;
+	private static final int SENDING_DIALOG_TIMEOUT = 95000;
 	
 	public EMBLEBIQuerySetUpActivityTest() {
 		super("com.bioinformaticsapp", EMBLEBISetUpQueryActivity.class);

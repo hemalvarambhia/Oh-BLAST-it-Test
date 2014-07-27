@@ -25,7 +25,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 
 	private BLASTQuery exampleNCBIQuery;
 	private Solo solo;
-	private static final int SENDING_DIALOG_TIMEOUT = 40000;
+	private static final int SENDING_DIALOG_TIMEOUT = 95000;
 	
 	public NCBIQuerySetUpActivityTest() {
 		super("com.bioinformaticsapp", NCBIQuerySetUpActivity.class);
