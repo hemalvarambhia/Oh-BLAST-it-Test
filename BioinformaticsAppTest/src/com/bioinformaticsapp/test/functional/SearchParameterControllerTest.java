@@ -8,7 +8,7 @@ import java.util.List;
 
 import android.test.InstrumentationTestCase;
 
-import com.bioinformaticsapp.models.SearchParameter;
+import com.bioinformaticsapp.domain.SearchParameter;
 import com.bioinformaticsapp.persistence.SearchParameterController;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 

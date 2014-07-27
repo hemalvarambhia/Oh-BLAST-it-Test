@@ -12,8 +12,8 @@ import android.test.InstrumentationTestCase;
 
 import com.bioinformaticsapp.blastservices.BLASTQueryPoller;
 import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
-import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTQuery.Status;
+import com.bioinformaticsapp.domain.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTQuery.Status;
 import com.bioinformaticsapp.test.testhelpers.StubbedBLASTSearchEngine;
 
 public class BLASTQueryPollerUnitTest extends InstrumentationTestCase {

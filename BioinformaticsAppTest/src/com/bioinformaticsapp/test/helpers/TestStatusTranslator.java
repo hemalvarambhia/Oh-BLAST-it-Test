@@ -4,7 +4,8 @@ import junit.framework.TestCase;
 
 import com.bioinformaticsapp.blastservices.SearchStatus;
 import com.bioinformaticsapp.helpers.StatusTranslator;
-import static com.bioinformaticsapp.models.BLASTQuery.Status;
+
+import static com.bioinformaticsapp.domain.BLASTQuery.Status;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.*;

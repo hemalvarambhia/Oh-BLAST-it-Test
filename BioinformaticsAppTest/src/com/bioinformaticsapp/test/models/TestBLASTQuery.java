@@ -7,10 +7,10 @@ import static org.hamcrest.core.Is.*;
 import static org.hamcrest.core.IsEqual.*;
 import static org.hamcrest.core.IsNot.*;
 
-import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTQuery.Status;
-import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.SearchParameter;
+import com.bioinformaticsapp.domain.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTVendor;
+import com.bioinformaticsapp.domain.SearchParameter;
+import com.bioinformaticsapp.domain.BLASTQuery.Status;
 
 
 public class TestBLASTQuery extends TestCase {

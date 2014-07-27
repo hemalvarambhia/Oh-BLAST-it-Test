@@ -5,11 +5,12 @@ import java.util.List;
 import android.test.InstrumentationTestCase;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.core.Is.*;
-import com.bioinformaticsapp.models.BLASTQuery;
+
+import com.bioinformaticsapp.domain.BLASTQuery;
 import com.bioinformaticsapp.persistence.BLASTQueryController;
 import com.bioinformaticsapp.persistence.BLASTQueryLabBook;
 
-import static com.bioinformaticsapp.models.BLASTQuery.Status.*;
+import static com.bioinformaticsapp.domain.BLASTQuery.Status.*;
 import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.*;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 

@@ -14,7 +14,7 @@ import android.test.InstrumentationTestCase;
 import android.util.Log;
 
 import com.bioinformaticsapp.blastservices.BLASTHitsDownloadingTask;
-import com.bioinformaticsapp.models.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTQuery;
 import com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder;
 import com.bioinformaticsapp.test.testhelpers.StubbedBLASTSearchEngine;
 

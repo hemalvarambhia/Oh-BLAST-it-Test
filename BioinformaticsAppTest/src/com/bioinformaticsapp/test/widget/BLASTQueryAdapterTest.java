@@ -5,8 +5,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bioinformaticsapp.R;
-import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTVendor;
+import com.bioinformaticsapp.domain.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTVendor;
 import com.bioinformaticsapp.widget.BLASTQueryAdapter;
 
 import static org.hamcrest.MatcherAssert.assertThat;

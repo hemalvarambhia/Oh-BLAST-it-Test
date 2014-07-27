@@ -16,8 +16,8 @@ import android.widget.TextView;
 
 import com.bioinformaticsapp.ViewBLASTHitsActivity;
 import com.bioinformaticsapp.ViewTaxonomyActivity;
-import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTVendor;
+import com.bioinformaticsapp.domain.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTVendor;
 import com.jayway.android.robotium.solo.Solo;
 
 public class ViewBLASTHitsActivityTest extends

@@ -7,8 +7,8 @@ import java.util.List;
 import android.content.res.AssetManager;
 import android.test.InstrumentationTestCase;
 
+import com.bioinformaticsapp.domain.BLASTHit;
 import com.bioinformaticsapp.io.EMBLEBIBLASTHitsParser;
-import com.bioinformaticsapp.models.BLASTHit;
 
 public class TestEMBLEBIBLASTHitsParser extends InstrumentationTestCase {
 

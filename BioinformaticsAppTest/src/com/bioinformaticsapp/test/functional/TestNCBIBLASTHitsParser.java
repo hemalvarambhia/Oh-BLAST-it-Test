@@ -8,8 +8,8 @@ import java.util.List;
 import android.content.res.AssetManager;
 import android.test.InstrumentationTestCase;
 
+import com.bioinformaticsapp.domain.BLASTHit;
 import com.bioinformaticsapp.io.NCBIBLASTHitsParser;
-import com.bioinformaticsapp.models.BLASTHit;
 
 public class TestNCBIBLASTHitsParser extends InstrumentationTestCase {
 

@@ -10,9 +10,9 @@ import java.util.concurrent.ExecutionException;
 import android.content.res.AssetManager;
 import android.test.InstrumentationTestCase;
 
+import com.bioinformaticsapp.domain.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTVendor;
 import com.bioinformaticsapp.io.BLASTHitsLoadingTask;
-import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTVendor;
 
 public class TestBLASTHitsLoadingTask extends InstrumentationTestCase {
 

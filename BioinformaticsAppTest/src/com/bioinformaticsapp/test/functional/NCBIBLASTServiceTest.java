@@ -8,8 +8,8 @@ import junit.framework.TestCase;
 import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
 import com.bioinformaticsapp.blastservices.NCBIBLASTService;
 import com.bioinformaticsapp.blastservices.SearchStatus;
-import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTVendor;
+import com.bioinformaticsapp.domain.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTVendor;
 
 /**
  * @author Hemal N Varambhia
@@ -35,7 +35,7 @@ public class NCBIBLASTServiceTest extends TestCase {
 		query = null;
 	}
 	/**
-	 * Test method for {@link com.bioinformaticsapp.blastservices.NCBIBLASTService#submit(com.bioinformaticsapp.models.BLASTQuery)}.
+	 * Test method for {@link com.bioinformaticsapp.blastservices.NCBIBLASTService#submit(com.bioinformaticsapp.domain.BLASTQuery)}.
 	 */
 	public void testWeCanSubmitAValidBLASTQueryToNCBI() {
 		String jobIdentifier = ncbiBLASTService.submit(query);

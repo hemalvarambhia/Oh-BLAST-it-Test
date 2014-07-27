@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.test.ServiceTestCase;
 
 import com.bioinformaticsapp.blastservices.SubmitQueryService;
-import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTVendor;
+import com.bioinformaticsapp.domain.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTVendor;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 
 public class SubmitQueryServiceTest extends ServiceTestCase<SubmitQueryService> {

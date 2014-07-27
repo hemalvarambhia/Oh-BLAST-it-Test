@@ -7,7 +7,7 @@ import android.content.Context;
 import com.bioinformaticsapp.blastservices.BLASTQuerySender;
 import com.bioinformaticsapp.blastservices.EMBLEBIBLASTService;
 import com.bioinformaticsapp.blastservices.NCBIBLASTService;
-import com.bioinformaticsapp.models.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTQuery;
 
 public class SendBLASTQuery {
 

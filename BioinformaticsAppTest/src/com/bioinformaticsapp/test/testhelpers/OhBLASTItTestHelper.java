@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.bioinformaticsapp.models.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTQuery;
 import com.bioinformaticsapp.persistence.BLASTQueryLabBook;
 import com.bioinformaticsapp.persistence.DatabaseHelper;
 

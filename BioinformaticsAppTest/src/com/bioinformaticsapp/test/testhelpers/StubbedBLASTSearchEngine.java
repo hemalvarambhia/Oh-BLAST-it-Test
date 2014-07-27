@@ -2,7 +2,7 @@ package com.bioinformaticsapp.test.testhelpers;
 
 import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
 import com.bioinformaticsapp.blastservices.SearchStatus;
-import com.bioinformaticsapp.models.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTQuery;
 
 public class StubbedBLASTSearchEngine implements BLASTSearchEngine {
 

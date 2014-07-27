@@ -11,8 +11,8 @@ import java.util.concurrent.ExecutionException;
 import android.content.Context;
 import android.test.InstrumentationTestCase;
 
-import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTQuery.Status;
+import com.bioinformaticsapp.domain.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTQuery.Status;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 
 /**

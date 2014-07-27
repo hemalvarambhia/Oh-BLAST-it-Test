@@ -10,8 +10,8 @@ import java.util.List;
 
 import android.test.InstrumentationTestCase;
 
-import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTQuery.Status;
+import com.bioinformaticsapp.domain.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTQuery.Status;
 import com.bioinformaticsapp.persistence.BLASTQueryController;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 

@@ -6,8 +6,8 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 
 import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
-import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.SearchParameter;
+import com.bioinformaticsapp.domain.BLASTQuery;
+import com.bioinformaticsapp.domain.SearchParameter;
 import com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder;
 import com.jayway.android.robotium.solo.Solo;
 

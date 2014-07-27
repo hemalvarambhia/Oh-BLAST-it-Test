@@ -8,8 +8,8 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.SearchParameter;
+import com.bioinformaticsapp.domain.BLASTVendor;
+import com.bioinformaticsapp.domain.SearchParameter;
 
 public class TestSearchParameters extends TestCase {
 

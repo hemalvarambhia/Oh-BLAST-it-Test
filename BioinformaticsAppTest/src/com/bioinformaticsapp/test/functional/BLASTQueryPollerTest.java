@@ -14,8 +14,8 @@ import android.test.InstrumentationTestCase;
 import com.bioinformaticsapp.blastservices.BLASTQueryPoller;
 import com.bioinformaticsapp.blastservices.EMBLEBIBLASTService;
 import com.bioinformaticsapp.blastservices.NCBIBLASTService;
-import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTQuery.Status;
+import com.bioinformaticsapp.domain.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTQuery.Status;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.bioinformaticsapp.test.testhelpers.SendBLASTQuery;
 

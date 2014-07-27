@@ -9,11 +9,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.InstrumentationTestCase;
 
-import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTQuery.BLASTJob;
-import com.bioinformaticsapp.models.BLASTQuery.Status;
-import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.SearchParameter;
+import com.bioinformaticsapp.domain.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTVendor;
+import com.bioinformaticsapp.domain.SearchParameter;
+import com.bioinformaticsapp.domain.BLASTQuery.BLASTJob;
+import com.bioinformaticsapp.domain.BLASTQuery.Status;
 import com.bioinformaticsapp.persistence.BLASTQueryController;
 import com.bioinformaticsapp.persistence.DatabaseHelper;
 import com.bioinformaticsapp.persistence.SearchParameterController;

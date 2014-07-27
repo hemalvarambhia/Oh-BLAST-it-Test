@@ -3,9 +3,9 @@ package com.bioinformaticsapp.test.content;
 import android.test.LoaderTestCase;
 
 import com.bioinformaticsapp.content.BLASTQueryLoader;
-import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTQuery.Status;
-import com.bioinformaticsapp.models.BLASTVendor;
+import com.bioinformaticsapp.domain.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTVendor;
+import com.bioinformaticsapp.domain.BLASTQuery.Status;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 
 public class BLASTQueryLoaderTest extends LoaderTestCase {

@@ -1,8 +1,8 @@
 package com.bioinformaticsapp.test.testhelpers;
 
-import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.BLASTVendor;
-import com.bioinformaticsapp.models.BLASTQuery.Status;
+import com.bioinformaticsapp.domain.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTVendor;
+import com.bioinformaticsapp.domain.BLASTQuery.Status;
 
 public class BLASTQueryBuilder {
 

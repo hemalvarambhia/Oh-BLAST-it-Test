@@ -15,8 +15,8 @@ import android.widget.Spinner;
 
 import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
 import com.bioinformaticsapp.R;
-import com.bioinformaticsapp.models.BLASTQuery;
-import com.bioinformaticsapp.models.SearchParameter;
+import com.bioinformaticsapp.domain.BLASTQuery;
+import com.bioinformaticsapp.domain.SearchParameter;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
