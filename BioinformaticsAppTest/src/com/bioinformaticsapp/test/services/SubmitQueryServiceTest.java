@@ -3,7 +3,7 @@ package com.bioinformaticsapp.test.services;
 import android.content.Intent;
 import android.test.ServiceTestCase;
 
-import com.bioinformaticsapp.SubmitQueryService;
+import com.bioinformaticsapp.blastservices.SubmitQueryService;
 import com.bioinformaticsapp.models.BLASTQuery;
 import com.bioinformaticsapp.models.BLASTVendor;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
