@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.bioinformaticsapp.AppPreferences;
-import com.bioinformaticsapp.NCBIQuerySetUpActivity;
+import com.bioinformaticsapp.SetUpNCBIBLASTQuery;
 import com.bioinformaticsapp.domain.BLASTQuery;
 import com.bioinformaticsapp.domain.SearchParameter;
 import com.bioinformaticsapp.domain.BLASTQuery.Status;
@@ -21,14 +21,14 @@ import com.bioinformaticsapp.persistence.DatabaseHelper;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
-public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2<NCBIQuerySetUpActivity> {
+public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2<SetUpNCBIBLASTQuery> {
 
 	private BLASTQuery exampleNCBIQuery;
 	private Solo solo;
 	private static final int SENDING_DIALOG_TIMEOUT = 95000;
 	
 	public NCBIQuerySetUpActivityTest() {
-		super("com.bioinformaticsapp", NCBIQuerySetUpActivity.class);
+		super("com.bioinformaticsapp", SetUpNCBIBLASTQuery.class);
 	}
 	
 	protected void setUp() throws Exception {
@@ -60,7 +60,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 	
 	public void testUIComponentsSetToQueryDefaults(){
 		setUpActivityWith(exampleNCBIQuery);
-		NCBIQuerySetUpActivity activity = getActivity();
+		SetUpNCBIBLASTQuery activity = getActivity();
 		
 		assertCorrectDefaultsDisplayedIn(activity);
 	}
@@ -69,7 +69,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		exampleNCBIQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		setUpActivityWith(exampleNCBIQuery);
 		
-		NCBIQuerySetUpActivity activity = getActivity();
+		SetUpNCBIBLASTQuery activity = getActivity();
 		EditText sequenceEditor = (EditText)activity.findViewById(com.bioinformaticsapp.R.id.ncbi_sequence_edittext);
 		assertEquals("Sequence in Edit text", exampleNCBIQuery.getSequence(), sequenceEditor.getEditableText().toString());
 	}
@@ -82,7 +82,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		solo.typeText(sequenceEditor, "CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		getInstrumentation().waitForIdleSync();
 		
-		NCBIQuerySetUpActivity setupQueryActivity = (NCBIQuerySetUpActivity)getActivity();
+		SetUpNCBIBLASTQuery setupQueryActivity = (SetUpNCBIBLASTQuery)getActivity();
 		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
 		assertEquals(sequenceEditor.getText().toString(), q.getSequence());
 	}
@@ -95,7 +95,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		solo.pressSpinnerItem(0, 1);
 		getInstrumentation().waitForIdleSync();
 		
-		NCBIQuerySetUpActivity setupQueryActivity = (NCBIQuerySetUpActivity)getActivity();
+		SetUpNCBIBLASTQuery setupQueryActivity = (SetUpNCBIBLASTQuery)getActivity();
 		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
 		assertEquals(programSpinner.getSelectedItem().toString(), q.getBLASTProgram());
 	}
@@ -108,7 +108,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		solo.pressSpinnerItem(1, 1);
 		getInstrumentation().waitForIdleSync();
 		
-		NCBIQuerySetUpActivity setupQueryActivity = (NCBIQuerySetUpActivity)getActivity();
+		SetUpNCBIBLASTQuery setupQueryActivity = (SetUpNCBIBLASTQuery)getActivity();
 		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
 		assertEquals(databaseSpinner.getSelectedItem().toString(), q.getSearchParameter("database").getValue());
 	}
@@ -121,7 +121,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		solo.pressSpinnerItem(2, 3);
 		getInstrumentation().waitForIdleSync();
 		
-		NCBIQuerySetUpActivity setupQueryActivity = (NCBIQuerySetUpActivity)getActivity();
+		SetUpNCBIBLASTQuery setupQueryActivity = (SetUpNCBIBLASTQuery)getActivity();
 		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
 		assertEquals(wordsizeSpinner.getSelectedItem().toString(), q.getSearchParameter("word_size").getValue());
 	}
@@ -135,14 +135,14 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		solo.typeText(expThresholdEditor, "100.0");
 		getInstrumentation().waitForIdleSync();
 		
-		NCBIQuerySetUpActivity setupQueryActivity = (NCBIQuerySetUpActivity)getActivity();
+		SetUpNCBIBLASTQuery setupQueryActivity = (SetUpNCBIBLASTQuery)getActivity();
 		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
 		assertEquals(expThresholdEditor.getText().toString(), q.getSearchParameter("exp_threshold").getValue());
 	}
 	
 	public void testWeCanChangeTheMatchMisMatchScore(){
 		setUpActivityWith(exampleNCBIQuery);
-		NCBIQuerySetUpActivity setupQueryActivity = (NCBIQuerySetUpActivity)getActivity();
+		SetUpNCBIBLASTQuery setupQueryActivity = (SetUpNCBIBLASTQuery)getActivity();
 		solo = new Solo(getInstrumentation(), setupQueryActivity);
 		
 		Spinner mismatchSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.ncbi_match_mismatch_spinner);
@@ -166,7 +166,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 	public void testOnPauseDoesNotSaveSubmittedQuery(){
 		exampleNCBIQuery.setStatus(Status.SUBMITTED);
 		setUpActivityWith(exampleNCBIQuery);
-		Activity setupQueryActivity = (NCBIQuerySetUpActivity)getActivity();
+		Activity setupQueryActivity = (SetUpNCBIBLASTQuery)getActivity();
 		
 		getInstrumentation().callActivityOnPause(setupQueryActivity);
 		
@@ -202,7 +202,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.send_query);
 		solo.waitForDialogToClose(SENDING_DIALOG_TIMEOUT);
 		
-		NCBIQuerySetUpActivity setupQueryActivity = (NCBIQuerySetUpActivity)getActivity();
+		SetUpNCBIBLASTQuery setupQueryActivity = (SetUpNCBIBLASTQuery)getActivity();
 		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
 		assertEquals( "Expected query to be ready for sending", Status.PENDING, q.getStatus());   
 	}
@@ -216,7 +216,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.send_query);
 		solo.waitForDialogToClose(SENDING_DIALOG_TIMEOUT);
 		
-		NCBIQuerySetUpActivity setupQueryActivity = (NCBIQuerySetUpActivity)getActivity();
+		SetUpNCBIBLASTQuery setupQueryActivity = (SetUpNCBIBLASTQuery)getActivity();
 		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
 		assertEquals( "Expected query to be ready for sending", Status.DRAFT, q.getStatus());
 	}
@@ -241,7 +241,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 		assertThat("Number of BLASTQueries in database", count > 0);
 	}
 	
-	private void assertCorrectDefaultsDisplayedIn(NCBIQuerySetUpActivity activity){
+	private void assertCorrectDefaultsDisplayedIn(SetUpNCBIBLASTQuery activity){
 		Spinner programSpinner = (Spinner)activity.findViewById(com.bioinformaticsapp.R.id.ncbi_program_spinner);
 		assertEquals("Currently selected item of program spinner", exampleNCBIQuery.getBLASTProgram(), programSpinner.getSelectedItem());
 		

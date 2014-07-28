@@ -13,7 +13,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
+import com.bioinformaticsapp.SetUpEMBLEBIBLASTQuery;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.domain.BLASTQuery;
 import com.bioinformaticsapp.domain.SearchParameter;
@@ -21,14 +21,14 @@ import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
 public class EBIEMBLLoadLegacyBLASTQueryTest extends
-		ActivityInstrumentationTestCase2<EMBLEBISetUpQueryActivity> {
+		ActivityInstrumentationTestCase2<SetUpEMBLEBIBLASTQuery> {
 
 	private BLASTQuery legacy;
 	
 	private Solo solo;
 	
 	public EBIEMBLLoadLegacyBLASTQueryTest() {
-		super(EMBLEBISetUpQueryActivity.class);
+		super(SetUpEMBLEBIBLASTQuery.class);
 	}
 	
 	public void setUp() throws Exception {
@@ -52,7 +52,7 @@ public class EBIEMBLLoadLegacyBLASTQueryTest extends
 		setupActivityWith(legacy);
 		solo = new Solo(getInstrumentation(), getActivity());
 		
-		solo.assertCurrentActivity("Should be able to load a legacy query", EMBLEBISetUpQueryActivity.class);
+		solo.assertCurrentActivity("Should be able to load a legacy query", SetUpEMBLEBIBLASTQuery.class);
 		legacy = blastQuery();
 		assertDefaultsDisplayed(getActivity());
 	}
@@ -178,7 +178,7 @@ public class EBIEMBLLoadLegacyBLASTQueryTest extends
 		setActivityIntent(intent);
 	}
 	
-	private void assertDefaultsDisplayed(EMBLEBISetUpQueryActivity activity){
+	private void assertDefaultsDisplayed(SetUpEMBLEBIBLASTQuery activity){
 		Spinner programSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_program_spinner);
 		assertThat("Should have an appropriate default for program", 
 				programSpinner.getSelectedItem().toString(), 

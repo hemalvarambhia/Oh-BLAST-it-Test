@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
 import com.bioinformaticsapp.DraftBLASTQueriesActivity;
-import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
-import com.bioinformaticsapp.NCBIQuerySetUpActivity;
+import com.bioinformaticsapp.SetUpEMBLEBIBLASTQuery;
+import com.bioinformaticsapp.SetUpNCBIBLASTQuery;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.domain.BLASTQuery;
 import com.bioinformaticsapp.domain.BLASTQuery.Status;
@@ -54,7 +54,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 		solo.waitForView(ListView.class);
 		solo.clickInList(1);
 		
-		solo.assertCurrentActivity("Expected the NCBI Query Setup screen", NCBIQuerySetUpActivity.class);
+		solo.assertCurrentActivity("Expected the NCBI Query Setup screen", SetUpNCBIBLASTQuery.class);
 	}
 	
 	public void testWeCanOpenAnEMBLQueryWhenTappingOnTheCorrespondingListItem(){
@@ -64,7 +64,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 		solo.waitForView(ListView.class);
 		solo.clickInList(1);
 		
-		solo.assertCurrentActivity("Expected the EMBL Query Setup screen", EMBLEBISetUpQueryActivity.class);
+		solo.assertCurrentActivity("Expected the EMBL Query Setup screen", SetUpEMBLEBIBLASTQuery.class);
 	}
 	
 	public void testWeCanCreateAnEMBLQuery(){
@@ -73,7 +73,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 		solo.clickOnActionBarItem(R.menu.create_query_menu);
 		solo.clickOnActionBarItem(R.id.create_embl_query);
 		
-		solo.assertCurrentActivity("Expected the EMBL Query set up screen", EMBLEBISetUpQueryActivity.class);
+		solo.assertCurrentActivity("Expected the EMBL Query set up screen", SetUpEMBLEBIBLASTQuery.class);
 	}
 	
 	public void testWeCanCreateAnNCBIQuery(){
@@ -82,7 +82,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 		solo.clickOnActionBarItem(R.menu.create_query_menu);
 		solo.clickOnActionBarItem(R.id.create_ncbi_query);
 		
-		solo.assertCurrentActivity("Expected the NCBI Query set up screen", NCBIQuerySetUpActivity.class);
+		solo.assertCurrentActivity("Expected the NCBI Query set up screen", SetUpNCBIBLASTQuery.class);
 	}
 	
 	public void testWeCanDeleteABLASTQuery(){

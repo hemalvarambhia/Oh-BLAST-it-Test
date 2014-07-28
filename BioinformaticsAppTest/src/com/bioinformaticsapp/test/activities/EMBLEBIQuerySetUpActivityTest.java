@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.bioinformaticsapp.AppPreferences;
-import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
+import com.bioinformaticsapp.SetUpEMBLEBIBLASTQuery;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.domain.BLASTQuery;
 import com.bioinformaticsapp.domain.BLASTQuery.Status;
@@ -18,7 +18,7 @@ import com.bioinformaticsapp.persistence.DatabaseHelper;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
-public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2<EMBLEBISetUpQueryActivity> {
+public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2<SetUpEMBLEBIBLASTQuery> {
 
 	private BLASTQuery blastQuery;
 	
@@ -26,7 +26,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	private static final int SENDING_DIALOG_TIMEOUT = 95000;
 	
 	public EMBLEBIQuerySetUpActivityTest() {
-		super("com.bioinformaticsapp", EMBLEBISetUpQueryActivity.class);
+		super("com.bioinformaticsapp", SetUpEMBLEBIBLASTQuery.class);
 	}
 	
 	@Override
@@ -154,7 +154,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	
 	public void testWeCanEditTheScoreOfADraftQuery(){
 		setupActivityWith(blastQuery);
-		EMBLEBISetUpQueryActivity setupActivity = getActivity();
+		SetUpEMBLEBIBLASTQuery setupActivity = getActivity();
 		solo = new Solo(getInstrumentation(), setupActivity);
 		
 		solo.pressSpinnerItem(3, 1);
@@ -167,7 +167,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	
 	public void testWeCanEditMatchMisMatchScore(){
 		setupActivityWith(blastQuery);
-		EMBLEBISetUpQueryActivity setupActivity = getActivity();
+		SetUpEMBLEBIBLASTQuery setupActivity = getActivity();
 		solo = new Solo(getInstrumentation(), setupActivity);
 		
 		solo.pressSpinnerItem(4, -2);
@@ -211,7 +211,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	
 	public void testWeCannotSendAnInvalidQuery(){
 		setupActivityWith(blastQuery);
-		EMBLEBISetUpQueryActivity setupQueryActivity = (EMBLEBISetUpQueryActivity)getActivity();
+		SetUpEMBLEBIBLASTQuery setupQueryActivity = (SetUpEMBLEBIBLASTQuery)getActivity();
 		solo = new Solo(getInstrumentation(), setupQueryActivity);
 		
 		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_sequence_editor);
@@ -234,7 +234,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		solo.assertCurrentActivity("Should be able to go to the settings screen", AppPreferences.class);
 	}
 	
-	private void assertDefaultsDisplayed(EMBLEBISetUpQueryActivity activity){
+	private void assertDefaultsDisplayed(SetUpEMBLEBIBLASTQuery activity){
 		Spinner programSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_program_spinner);
 		assertThat("Should have an appropriate default for program", 
 				programSpinner.getSelectedItem().toString(), 

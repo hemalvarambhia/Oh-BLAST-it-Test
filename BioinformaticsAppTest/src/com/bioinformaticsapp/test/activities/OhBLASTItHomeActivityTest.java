@@ -5,8 +5,8 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.bioinformaticsapp.AppPreferences;
 import com.bioinformaticsapp.OhBLASTItAppHomeActivity;
-import com.bioinformaticsapp.EMBLEBISetUpQueryActivity;
-import com.bioinformaticsapp.NCBIQuerySetUpActivity;
+import com.bioinformaticsapp.SetUpEMBLEBIBLASTQuery;
+import com.bioinformaticsapp.SetUpNCBIBLASTQuery;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
@@ -47,14 +47,14 @@ public class OhBLASTItHomeActivityTest extends ActivityInstrumentationTestCase2<
 		solo.clickOnActionBarItem(R.menu.main_menu);
 		solo.clickOnActionBarItem(R.id.create_embl_query);
 		
-		solo.assertCurrentActivity("Expected the EMBL set up activity to be launched", EMBLEBISetUpQueryActivity.class);
+		solo.assertCurrentActivity("Expected the EMBL set up activity to be launched", SetUpEMBLEBIBLASTQuery.class);
 	}
 	
 	public void testWeCanStartAnNCBIQuery(){
 		solo.clickOnActionBarItem(R.menu.main_menu);
 		solo.clickOnActionBarItem(R.id.create_ncbi_query);
 		
-		solo.assertCurrentActivity("Expected the NCBI set up activity to be launched", NCBIQuerySetUpActivity.class);
+		solo.assertCurrentActivity("Expected the NCBI set up activity to be launched", SetUpNCBIBLASTQuery.class);
 	}
 	
 	public void testWeCanGoToThePreferencesActivity(){
