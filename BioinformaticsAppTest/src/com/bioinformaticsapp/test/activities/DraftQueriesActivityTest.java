@@ -11,7 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
-import com.bioinformaticsapp.DraftBLASTQueriesActivity;
+import com.bioinformaticsapp.ListDraftBLASTQueries;
 import com.bioinformaticsapp.SetUpEMBLEBIBLASTQuery;
 import com.bioinformaticsapp.SetUpNCBIBLASTQuery;
 import com.bioinformaticsapp.R;
@@ -22,12 +22,12 @@ import com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
-public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<DraftBLASTQueriesActivity> {
+public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<ListDraftBLASTQueries> {
 	private Solo solo;
 	private Context ctx;
  	
 	public DraftQueriesActivityTest() {
-		super(DraftBLASTQueriesActivity.class);	
+		super(ListDraftBLASTQueries.class);	
 	}
 	
 	public void setUp() throws Exception {

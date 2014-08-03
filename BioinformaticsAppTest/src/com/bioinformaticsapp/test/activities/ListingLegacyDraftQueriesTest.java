@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
-import com.bioinformaticsapp.DraftBLASTQueriesActivity;
+import com.bioinformaticsapp.ListDraftBLASTQueries;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.domain.BLASTQuery;
 import com.bioinformaticsapp.domain.BLASTVendor;
@@ -21,14 +21,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class ListingLegacyDraftQueriesTest extends
-		ActivityInstrumentationTestCase2<DraftBLASTQueriesActivity> {
+		ActivityInstrumentationTestCase2<ListDraftBLASTQueries> {
 
 	private BLASTQuery legacy;
 	private Solo solo;
 	private Context context;
 	
 	public ListingLegacyDraftQueriesTest(){
-		super(DraftBLASTQueriesActivity.class);
+		super(ListDraftBLASTQueries.class);
 	}
 	
 	public void setUp() throws Exception {
