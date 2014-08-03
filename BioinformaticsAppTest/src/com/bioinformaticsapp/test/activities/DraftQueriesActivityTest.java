@@ -38,7 +38,6 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 	}
 
 	public void testWeCanViewAllDraftQueries(){
-		//FIXME - test is fragile. It failed and passed
 		saveQuery(BLASTQueryBuilder.aBLASTQuery());
 		solo = new Solo(getInstrumentation(), getActivity());
 		
