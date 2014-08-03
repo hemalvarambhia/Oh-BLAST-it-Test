@@ -42,7 +42,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 		saveQuery(BLASTQueryBuilder.aBLASTQuery());
 		solo = new Solo(getInstrumentation(), getActivity());
 		
-		solo.waitForView(ListView.class);
+		solo.waitForView(ListView.class, 1, 5000);
 		
 		assertOnlyDisplaysDraftQueries();
 	}
@@ -93,7 +93,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<D
 		solo.clickLongInList(1);
 		solo.clickOnText("Delete");
 		solo.clickOnButton("OK");
-		solo.waitForView(ListView.class);
+		solo.waitForView(ListView.class, 1, 5000);
 		
 		ListView listView = solo.getCurrentListViews().get(0);
 		assertThat("Should be able to delete a query", listView.getCount(), is(0));
