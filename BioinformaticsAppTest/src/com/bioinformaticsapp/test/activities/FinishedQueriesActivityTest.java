@@ -16,7 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
-import com.bioinformaticsapp.FinishedQueriesActivity;
+import com.bioinformaticsapp.ListFinishedBLASTQueries;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.ViewBLASTHitsActivity;
 import com.bioinformaticsapp.domain.BLASTQuery;
@@ -28,7 +28,7 @@ import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
 public class FinishedQueriesActivityTest extends
-		ActivityInstrumentationTestCase2<FinishedQueriesActivity> {
+		ActivityInstrumentationTestCase2<ListFinishedBLASTQueries> {
 
 	private OhBLASTItTestHelper helper;
 	private Solo solo;
@@ -40,13 +40,13 @@ public class FinishedQueriesActivityTest extends
 	private BLASTQuery ncbiQuery;
 	
 	public FinishedQueriesActivityTest(
-			Class<FinishedQueriesActivity> activityClass) {
+			Class<ListFinishedBLASTQueries> activityClass) {
 		super(activityClass);
 		
 	}
 	
 	public FinishedQueriesActivityTest(){
-		super(FinishedQueriesActivity.class);
+		super(ListFinishedBLASTQueries.class);
 	}
 	
 	public void setUp() throws Exception {
