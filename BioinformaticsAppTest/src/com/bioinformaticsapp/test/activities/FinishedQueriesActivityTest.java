@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.bioinformaticsapp.ViewBLASTQuerySearchParameters;
 import com.bioinformaticsapp.ListFinishedBLASTQueries;
 import com.bioinformaticsapp.R;
-import com.bioinformaticsapp.ViewBLASTHitsActivity;
+import com.bioinformaticsapp.ViewBLASTHits;
 import com.bioinformaticsapp.domain.BLASTQuery;
 import com.bioinformaticsapp.domain.BLASTVendor;
 import com.bioinformaticsapp.domain.BLASTQuery.Status;
@@ -222,9 +222,9 @@ public class FinishedQueriesActivityTest extends
 		solo = new Solo(getInstrumentation(), getActivity());
 		int firstLine = 1;
 		solo.clickInList(firstLine);
-		solo.waitForActivity(ViewBLASTHitsActivity.class.getName());
+		solo.waitForActivity(ViewBLASTHits.class.getName());
 		
-		solo.assertCurrentActivity("Should show the activity that renders the BLAST hits", ViewBLASTHitsActivity.class);
+		solo.assertCurrentActivity("Should show the activity that renders the BLAST hits", ViewBLASTHits.class);
 		
 	}
 	

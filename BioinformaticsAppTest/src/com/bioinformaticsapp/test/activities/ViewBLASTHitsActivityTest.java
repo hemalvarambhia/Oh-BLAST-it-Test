@@ -14,14 +14,14 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bioinformaticsapp.ViewBLASTHitsActivity;
+import com.bioinformaticsapp.ViewBLASTHits;
 import com.bioinformaticsapp.ViewTaxonomyActivity;
 import com.bioinformaticsapp.domain.BLASTQuery;
 import com.bioinformaticsapp.domain.BLASTVendor;
 import com.jayway.android.robotium.solo.Solo;
 
 public class ViewBLASTHitsActivityTest extends
-		ActivityInstrumentationTestCase2<ViewBLASTHitsActivity> {
+		ActivityInstrumentationTestCase2<ViewBLASTHits> {
 
 	private static final String TAG = "ViewBLASTHitsActivityTest";
 	private static final int DIALOG_TIMEOUT = 15000;
@@ -31,7 +31,7 @@ public class ViewBLASTHitsActivityTest extends
 	private String exampleEMBLJobIdentifier = "ncbiblast-R20120418-133731-0240-81389354-pg";
 	private String fileWithNoHits = "NOH86ITs.xml";
 	public ViewBLASTHitsActivityTest(){
-		super(ViewBLASTHitsActivity.class);
+		super(ViewBLASTHits.class);
 	}
 
 	public void setUp() throws Exception {
