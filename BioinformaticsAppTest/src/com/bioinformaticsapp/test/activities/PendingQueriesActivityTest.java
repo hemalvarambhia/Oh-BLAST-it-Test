@@ -9,7 +9,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
-import com.bioinformaticsapp.PendingQueriesActivity;
+import com.bioinformaticsapp.ListPendingQueries;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.domain.BLASTQuery;
 import com.bioinformaticsapp.domain.BLASTVendor;
@@ -22,7 +22,7 @@ import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
 public class PendingQueriesActivityTest extends
-		ActivityInstrumentationTestCase2<PendingQueriesActivity> {
+		ActivityInstrumentationTestCase2<ListPendingQueries> {
 
 	
 	private static final String TAG = "PendingQueriesActivityTest";
@@ -30,7 +30,7 @@ public class PendingQueriesActivityTest extends
 	private Solo solo;
 	
 	public PendingQueriesActivityTest(){
-		super(PendingQueriesActivity.class);
+		super(ListPendingQueries.class);
 	}
 
 	public void setUp() throws Exception{
