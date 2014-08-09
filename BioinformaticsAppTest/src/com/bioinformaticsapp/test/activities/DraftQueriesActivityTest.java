@@ -10,7 +10,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
+import com.bioinformaticsapp.ViewBLASTQuerySearchParameters;
 import com.bioinformaticsapp.ListDraftBLASTQueries;
 import com.bioinformaticsapp.SetUpEMBLEBIBLASTQuery;
 import com.bioinformaticsapp.SetUpNCBIBLASTQuery;
@@ -123,7 +123,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<L
 		String viewParametersOption = ctx.getResources().getString(R.string.view_query_parameters);
 		solo.clickOnText(viewParametersOption);
 		
-		solo.assertCurrentActivity("Search parameters activity should show", BLASTQuerySearchParametersActivity.class);
+		solo.assertCurrentActivity("Search parameters activity should show", ViewBLASTQuerySearchParameters.class);
 	}
 
 	public void testThatWeCanViewTheParametersOfAnNCBIQuery(){
@@ -135,7 +135,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<L
 		String viewParametersOption = ctx.getResources().getString(R.string.view_query_parameters);
 		solo.clickOnText(viewParametersOption);
 		
-		solo.assertCurrentActivity("The search parameters activity should show", BLASTQuerySearchParametersActivity.class);
+		solo.assertCurrentActivity("The search parameters activity should show", ViewBLASTQuerySearchParameters.class);
 	}
 
 	private void saveQuery(BLASTQuery query){

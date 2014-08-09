@@ -3,7 +3,7 @@ package com.bioinformaticsapp.test.activities;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
+import com.bioinformaticsapp.ViewBLASTQuerySearchParameters;
 import com.bioinformaticsapp.ListDraftBLASTQueries;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.domain.BLASTQuery;
@@ -122,7 +122,7 @@ public class ListingLegacyDraftQueriesTest extends
 		
 		solo.clickOnText(viewParametersOption);
 		
-		solo.assertCurrentActivity("Search parameters activity should show", BLASTQuerySearchParametersActivity.class);
+		solo.assertCurrentActivity("Search parameters activity should show", ViewBLASTQuerySearchParameters.class);
 
 	}
 

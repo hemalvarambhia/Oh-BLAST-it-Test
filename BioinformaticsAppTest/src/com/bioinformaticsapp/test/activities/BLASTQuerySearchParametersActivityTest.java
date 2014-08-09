@@ -5,18 +5,18 @@ import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 
-import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
+import com.bioinformaticsapp.ViewBLASTQuerySearchParameters;
 import com.bioinformaticsapp.domain.BLASTQuery;
 import com.bioinformaticsapp.domain.SearchParameter;
 import com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder;
 import com.jayway.android.robotium.solo.Solo;
 
 public class BLASTQuerySearchParametersActivityTest extends
-		ActivityInstrumentationTestCase2<BLASTQuerySearchParametersActivity> {
+		ActivityInstrumentationTestCase2<ViewBLASTQuerySearchParameters> {
 
 	private Solo solo;
 	public BLASTQuerySearchParametersActivityTest(){
-		super(BLASTQuerySearchParametersActivity.class);
+		super(ViewBLASTQuerySearchParameters.class);
 	}
 	
 	private void setupWith(BLASTQuery query){

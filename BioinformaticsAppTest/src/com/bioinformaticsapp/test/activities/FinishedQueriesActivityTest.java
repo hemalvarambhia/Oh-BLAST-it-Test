@@ -15,7 +15,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bioinformaticsapp.BLASTQuerySearchParametersActivity;
+import com.bioinformaticsapp.ViewBLASTQuerySearchParameters;
 import com.bioinformaticsapp.ListFinishedBLASTQueries;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.ViewBLASTHitsActivity;
@@ -105,7 +105,7 @@ public class FinishedQueriesActivityTest extends
 		
 		solo.clickOnText(viewParametersOption);
 		
-		solo.assertCurrentActivity("Should show the search parameters activity", BLASTQuerySearchParametersActivity.class);
+		solo.assertCurrentActivity("Should show the search parameters activity", ViewBLASTQuerySearchParameters.class);
 		
 		boolean checkJobIdIsShownAsTitle = solo.searchText(emblQuery.getJobIdentifier());
 		
@@ -131,7 +131,7 @@ public class FinishedQueriesActivityTest extends
 		
 		solo.clickOnText(viewParametersOption);
 		
-		solo.assertCurrentActivity("Should show the search parameters activity", BLASTQuerySearchParametersActivity.class);
+		solo.assertCurrentActivity("Should show the search parameters activity", ViewBLASTQuerySearchParameters.class);
 		
 		boolean checkJobIdIsShownAsTitle = solo.searchText(ncbiQuery.getJobIdentifier());
 		
