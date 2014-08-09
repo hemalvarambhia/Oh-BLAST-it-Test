@@ -1,14 +1,14 @@
 package com.bioinformaticsapp.test.activities;
 
-import com.bioinformaticsapp.ViewTaxonomyActivity;
+import com.bioinformaticsapp.ViewTaxonomy;
 
 import android.test.ActivityInstrumentationTestCase2;
 
 public class ViewTaxonomyActivityTest extends
-		ActivityInstrumentationTestCase2<ViewTaxonomyActivity> {
+		ActivityInstrumentationTestCase2<ViewTaxonomy> {
 
 	public ViewTaxonomyActivityTest(){
-		super(ViewTaxonomyActivity.class);
+		super(ViewTaxonomy.class);
 	}
 	
 	

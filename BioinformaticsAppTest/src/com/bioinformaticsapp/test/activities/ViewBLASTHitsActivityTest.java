@@ -15,7 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bioinformaticsapp.ViewBLASTHits;
-import com.bioinformaticsapp.ViewTaxonomyActivity;
+import com.bioinformaticsapp.ViewTaxonomy;
 import com.bioinformaticsapp.domain.BLASTQuery;
 import com.bioinformaticsapp.domain.BLASTVendor;
 import com.jayway.android.robotium.solo.Solo;
@@ -145,7 +145,7 @@ public class ViewBLASTHitsActivityTest extends
 		
 		solo.waitForDialogToClose(DIALOG_TIMEOUT);
 		
-		solo.assertCurrentActivity("Expected to see the BLAST hits taxonomy information", ViewTaxonomyActivity.class);
+		solo.assertCurrentActivity("Expected to see the BLAST hits taxonomy information", ViewTaxonomy.class);
 		
 	}
 	
