@@ -6,9 +6,9 @@ import android.test.InstrumentationTestCase;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.core.Is.*;
 
+import com.bioinformaticsapp.content.BLASTQueryLabBook;
 import com.bioinformaticsapp.domain.BLASTQuery;
 import com.bioinformaticsapp.persistence.BLASTQueryController;
-import com.bioinformaticsapp.persistence.BLASTQueryLabBook;
 
 import static com.bioinformaticsapp.domain.BLASTQuery.Status.*;
 import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.*;

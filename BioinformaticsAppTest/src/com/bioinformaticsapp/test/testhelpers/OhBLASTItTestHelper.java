@@ -4,8 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.bioinformaticsapp.content.BLASTQueryLabBook;
 import com.bioinformaticsapp.domain.BLASTQuery;
-import com.bioinformaticsapp.persistence.BLASTQueryLabBook;
 import com.bioinformaticsapp.persistence.DatabaseHelper;
 
 public class OhBLASTItTestHelper {
