@@ -26,7 +26,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	private static final int SENDING_DIALOG_TIMEOUT = 95000;
 	
 	public EMBLEBIQuerySetUpActivityTest() {
-		super("com.bioinformaticsapp", SetUpEMBLEBIBLASTQuery.class);
+		super(SetUpEMBLEBIBLASTQuery.class);
 	}
 	
 	@Override
@@ -70,9 +70,9 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	
 	public void testWeCanSaveANewlyCreatedDraftQuery(){
 		setupActivityWith(blastQuery);
-		
 		solo = new Solo(getInstrumentation(), getActivity());
-        solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.save_query);
+        
+		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.save_query);
         waitFor(5000);
         
         BLASTQuery q = (BLASTQuery)getActivity().getIntent().getSerializableExtra("query");
@@ -130,8 +130,8 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	
 	public void testWeCanEditTheDatabaseOfADraftQuery(){
 		setupActivityWith(blastQuery);
-		
 		solo = new Solo(getInstrumentation(), getActivity());
+		
 		solo.pressSpinnerItem(1, -2);
 		waitFor(5000);
         
@@ -154,26 +154,26 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	
 	public void testWeCanEditTheScoreOfADraftQuery(){
 		setupActivityWith(blastQuery);
-		SetUpEMBLEBIBLASTQuery setupActivity = getActivity();
-		solo = new Solo(getInstrumentation(), setupActivity);
+		solo = new Solo(getInstrumentation(), getActivity());
 		
 		solo.pressSpinnerItem(3, 1);
 		waitFor(5000);
         
 		Spinner databaseSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_score_spinner);
+		SetUpEMBLEBIBLASTQuery setupActivity = getActivity();
 		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
 		assertEquals(databaseSpinner.getSelectedItem().toString(), q.getSearchParameter("score").getValue());
 	}
 	
 	public void testWeCanEditMatchMisMatchScore(){
 		setupActivityWith(blastQuery);
-		SetUpEMBLEBIBLASTQuery setupActivity = getActivity();
-		solo = new Solo(getInstrumentation(), setupActivity);
+		solo = new Solo(getInstrumentation(), getActivity());
 		
 		solo.pressSpinnerItem(4, -2);
 		waitFor(5000);
 		
 		Spinner matchMismatchScoreSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.ebi_match_mismatch_score_spinner);
+		SetUpEMBLEBIBLASTQuery setupActivity = getActivity();
 		BLASTQuery q = (BLASTQuery)setupActivity.getIntent().getSerializableExtra("query");
 		assertEquals(matchMismatchScoreSpinner.getSelectedItem().toString(), q.getSearchParameter("match_mismatch_score").getValue());
 	}
@@ -211,8 +211,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	
 	public void testWeCannotSendAnInvalidQuery(){
 		setupActivityWith(blastQuery);
-		SetUpEMBLEBIBLASTQuery setupQueryActivity = (SetUpEMBLEBIBLASTQuery)getActivity();
-		solo = new Solo(getInstrumentation(), setupQueryActivity);
+		solo = new Solo(getInstrumentation(), getActivity());
 		
 		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_sequence_editor);
 		solo.typeText(sequenceEditor, "INVALIDSEQUENCE");
@@ -221,6 +220,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.send_query);
 		solo.waitForDialogToClose(SENDING_DIALOG_TIMEOUT);
 		
+		SetUpEMBLEBIBLASTQuery setupQueryActivity = (SetUpEMBLEBIBLASTQuery)getActivity();
 		BLASTQuery q = (BLASTQuery)setupQueryActivity.getIntent().getSerializableExtra("query");
 		assertEquals( "Expected query to be ready for sending", Status.DRAFT, q.getStatus());
 	}
