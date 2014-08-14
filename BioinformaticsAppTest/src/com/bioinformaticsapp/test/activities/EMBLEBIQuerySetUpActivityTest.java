@@ -60,8 +60,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	}
 	
 	public void testWeCanEditSequenceOfADraftQuery(){
-		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_sequence_editor);
-		solo.typeText(sequenceEditor, "CCTTTATCTAATCTTTGGAGCATGAGCTGG");
+		EditText sequenceEditor = type("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		waitFor(5000);
         
 		BLASTQuery q = (BLASTQuery)getActivity().getIntent().getSerializableExtra("query");
@@ -69,8 +68,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	}
 	
 	public void testWeCanOnlyInputDNASymbolsIntoTheSequenceTextfield(){
-		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_sequence_editor);
-		solo.typeText(sequenceEditor, "INVALIDSEQUENCE");
+		EditText sequenceEditor = type("INVALIDSEQUENCE");
 		waitFor(5000);
         
 		//'A', 'C', 'G', 'T', 'U', 'W', 'S', 'M', 'K', 'R', 'Y', 'B', 'D', 'H', 'V'
@@ -129,8 +127,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	}
 	
 	public void testWeCanSendAValidQuery(){
-		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_sequence_editor);
-		solo.typeText(sequenceEditor, "CCTTTATCTAATCTTTGGAGCATGAGCTGG");
+		type("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		EditText emailEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_send_to_email);
 		solo.typeText(emailEditor, "h.n.varambhia@gmail.com");
 		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.send_query);
@@ -141,8 +138,7 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 	}
 	
 	public void testWeCannotSendAnInvalidQuery(){
-		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_sequence_editor);
-		solo.typeText(sequenceEditor, "INVALIDSEQUENCE");
+		type("INVALIDSEQUENCE");
 		EditText emailEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_send_to_email);
 		solo.typeText(emailEditor, "h.n.varambhia@gmail.com");
 		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.send_query);
@@ -158,6 +154,23 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 		
 		solo.assertCurrentActivity("Should be able to go to the settings screen", AppPreferences.class);
 	}
+	
+	private EditText type(String sequence) {
+		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.embl_sequence_editor);
+		solo.typeText(sequenceEditor, sequence);
+		return sequenceEditor;
+	}
+	
+	private void setupActivityWith(BLASTQuery query){
+		Intent intent = new Intent();
+		intent.putExtra("query", blastQuery);
+		setActivityIntent(intent);
+	}
+	
+	private void waitFor(int time){
+		solo.waitForActivity(getActivity().getLocalClassName(), time);
+	}
+	
 
 	private void assertDefaultsDisplayed(SetUpEMBLEBIBLASTQuery activity){
 		Spinner programSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_program_spinner);
@@ -190,16 +203,6 @@ public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCa
 				sequenceEditorView.getHint().toString(), is("Enter a sequence"));
 	}
 
-	private void setupActivityWith(BLASTQuery query){
-		Intent intent = new Intent();
-		intent.putExtra("query", blastQuery);
-		setActivityIntent(intent);
-	}
-	
-	private void waitFor(int time){
-		solo.waitForActivity(getActivity().getLocalClassName(), time);
-	}
-	
 	private void assertSaved(BLASTQuery q){
 		DatabaseHelper helper = new DatabaseHelper(getActivity());
 		String countCommand = String.format("SELECT COUNT(*) FROM %s", BLASTQuery.BLAST_QUERY_TABLE);
