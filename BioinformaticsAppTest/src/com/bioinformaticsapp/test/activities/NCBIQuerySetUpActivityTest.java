@@ -1,9 +1,6 @@
 package com.bioinformaticsapp.test.activities;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -15,7 +12,6 @@ import com.bioinformaticsapp.AppPreferences;
 import com.bioinformaticsapp.SetUpNCBIBLASTQuery;
 import com.bioinformaticsapp.content.BLASTQueryLabBook;
 import com.bioinformaticsapp.domain.BLASTQuery;
-import com.bioinformaticsapp.domain.SearchParameter;
 import com.bioinformaticsapp.domain.BLASTQuery.Status;
 import com.bioinformaticsapp.persistence.DatabaseHelper;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
@@ -28,7 +24,7 @@ public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2
 	private static final int SENDING_DIALOG_TIMEOUT = 95000;
 	
 	public NCBIQuerySetUpActivityTest() {
-		super("com.bioinformaticsapp", SetUpNCBIBLASTQuery.class);
+		super(SetUpNCBIBLASTQuery.class);
 	}
 	
 	protected void setUp() throws Exception {
