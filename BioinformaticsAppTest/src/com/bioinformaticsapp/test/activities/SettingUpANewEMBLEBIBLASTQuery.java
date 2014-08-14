@@ -17,14 +17,14 @@ import com.bioinformaticsapp.persistence.DatabaseHelper;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
-public class EMBLEBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2<SetUpEMBLEBIBLASTQuery> {
+public class SettingUpANewEMBLEBIBLASTQuery extends ActivityInstrumentationTestCase2<SetUpEMBLEBIBLASTQuery> {
 
 	private BLASTQuery blastQuery;
-	
 	private Solo solo;
+	
 	private static final int SENDING_DIALOG_TIMEOUT = 95000;
 	
-	public EMBLEBIQuerySetUpActivityTest() {
+	public SettingUpANewEMBLEBIBLASTQuery() {
 		super(SetUpEMBLEBIBLASTQuery.class);
 	}
 	
