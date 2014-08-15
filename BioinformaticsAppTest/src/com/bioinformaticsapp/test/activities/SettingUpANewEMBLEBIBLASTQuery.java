@@ -122,29 +122,31 @@ public class SettingUpANewEMBLEBIBLASTQuery extends ActivityInstrumentationTestC
 	}
 
 	public void testWeCanSendAValidQuery(){
-		typeSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-		typeEmailAddress("h.n.varambhia@gmail.com");
-		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.send_query);
-		solo.waitForDialogToClose(SENDING_DIALOG_TIMEOUT);
+		String sequence = "CCTTTATCTAATCTTTGGAGCATGAGCTGG";
+		send(sequence);
 		
 		BLASTQuery q = getBLASTQueryFromActivity();
 		assertEquals( "Expected query to be ready for sending", Status.PENDING, q.getStatus());
 	}
-	
+
 	public void testWeCannotSendAnInvalidQuery(){
-		typeSequence("INVALIDSEQUENCE");
-		typeEmailAddress("h.n.varambhia@gmail.com");
-		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.send_query);
-		solo.waitForDialogToClose(SENDING_DIALOG_TIMEOUT);
+		send("INVALIDSEQUENCE");
 		
 		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals( "Expected query not to be sent", Status.DRAFT, q.getStatus());
+		assertEquals("Expected query not to be sent", Status.DRAFT, q.getStatus());
 	}
 	
 	public void testWeCanGoToTheApplicationPreferencesScreen(){
 		solo.clickOnMenuItem("Settings");
 		
 		solo.assertCurrentActivity("Should be able to go to the settings screen", AppPreferences.class);
+	}
+	
+	private void send(String sequence) {
+		typeSequence(sequence);
+		typeEmailAddress("h.n.varambhia@gmail.com");
+		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.send_query);
+		solo.waitForDialogToClose(SENDING_DIALOG_TIMEOUT);
 	}
 	
 	private EditText typeSequence(String sequence) {
