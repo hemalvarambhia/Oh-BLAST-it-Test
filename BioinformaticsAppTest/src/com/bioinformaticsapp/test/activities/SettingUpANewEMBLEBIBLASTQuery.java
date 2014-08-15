@@ -33,13 +33,12 @@ public class SettingUpANewEMBLEBIBLASTQuery extends ActivityInstrumentationTestC
 		super.setUp();
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
 		helper.cleanDatabase();
-		blastQuery = BLASTQuery.emblBLASTQuery("blastn");
-		setupActivityWith(blastQuery);
+		setUpActivityWithBLASTQuery();
 		solo = new Solo(getInstrumentation(), getActivity());
 	}
 	
 	public void testUIComponentsSetToQueryDefaults(){
-		assertDefaultsDisplayed(getActivity());
+		assertDefaultsDisplayed();
 	}
 	
 	public void testWeCanSaveANewlyCreatedDraftQuery(){
@@ -139,7 +138,7 @@ public class SettingUpANewEMBLEBIBLASTQuery extends ActivityInstrumentationTestC
 		solo.waitForDialogToClose(SENDING_DIALOG_TIMEOUT);
 		
 		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals( "Expected query to be ready for sending", Status.DRAFT, q.getStatus());
+		assertEquals( "Expected query not to be sent", Status.DRAFT, q.getStatus());
 	}
 	
 	public void testWeCanGoToTheApplicationPreferencesScreen(){
@@ -167,13 +166,15 @@ public class SettingUpANewEMBLEBIBLASTQuery extends ActivityInstrumentationTestC
 		return (BLASTQuery)getActivity().getIntent().getSerializableExtra("query");
 	}
 	
-	private void setupActivityWith(BLASTQuery query){
+	private void setUpActivityWithBLASTQuery(){
 		Intent intent = new Intent();
+		blastQuery = BLASTQuery.emblBLASTQuery("blastn");
 		intent.putExtra("query", blastQuery);
 		setActivityIntent(intent);
 	}
 	
-	private void assertDefaultsDisplayed(SetUpEMBLEBIBLASTQuery activity){
+	private void assertDefaultsDisplayed(){
+		SetUpEMBLEBIBLASTQuery activity = getActivity();
 		Spinner programSpinner = (Spinner)activity.findViewById(R.id.blastqueryentry_program_spinner);
 		assertThat("Should have an appropriate default for program", 
 				programSpinner.getSelectedItem().toString(), 
