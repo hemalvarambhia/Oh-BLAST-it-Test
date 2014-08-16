@@ -15,13 +15,13 @@ import com.bioinformaticsapp.persistence.DatabaseHelper;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
-public class NCBIQuerySetUpActivityTest extends ActivityInstrumentationTestCase2<SetUpNCBIBLASTQuery> {
+public class SettingUpANewNCBIBLASTQuery extends ActivityInstrumentationTestCase2<SetUpNCBIBLASTQuery> {
 
 	private BLASTQuery exampleNCBIQuery;
 	private Solo solo;
 	private static final int SENDING_DIALOG_TIMEOUT = 95000;
 	
-	public NCBIQuerySetUpActivityTest() {
+	public SettingUpANewNCBIBLASTQuery() {
 		super(SetUpNCBIBLASTQuery.class);
 	}
 	
