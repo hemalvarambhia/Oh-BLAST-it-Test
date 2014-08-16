@@ -2,6 +2,7 @@ package com.bioinformaticsapp.test.activities;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.test.ActivityInstrumentationTestCase2;
@@ -31,7 +32,8 @@ public class SettingUpANewEMBLEBIBLASTQuery extends ActivityInstrumentationTestC
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getInstrumentation().getTargetContext());
+		Context context = getInstrumentation().getTargetContext();
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(context);
 		helper.cleanDatabase();
 		setUpActivityWithBLASTQuery();
 		solo = new Solo(getInstrumentation(), getActivity());
@@ -42,11 +44,11 @@ public class SettingUpANewEMBLEBIBLASTQuery extends ActivityInstrumentationTestC
 	}
 	
 	public void testWeCanSaveANewlyCreatedDraftQuery(){
-		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.save_query);
+		solo.clickOnActionBarItem(R.id.save_query);
         waitFor(5000);
         
-        BLASTQuery q = getBLASTQueryFromActivity();
-        assertSaved(q);
+        BLASTQuery query = getBLASTQueryFromActivity();
+        assertSaved(query);
 	}
 	
 	public void testWeCanEditTheProgramOfADraftQuery(){
@@ -54,16 +56,16 @@ public class SettingUpANewEMBLEBIBLASTQuery extends ActivityInstrumentationTestC
 		waitFor(5000);
         
 		Spinner programSpinner = (Spinner)solo.getView(R.id.blastqueryentry_program_spinner);
-		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals(programSpinner.getSelectedItem().toString(), q.getBLASTProgram());
+		BLASTQuery query = getBLASTQueryFromActivity();
+		assertEquals(programSpinner.getSelectedItem().toString(), query.getBLASTProgram());
 	}
 	
 	public void testWeCanEditSequenceOfADraftQuery(){
 		EditText sequenceEditor = typeSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		waitFor(5000);
         
-		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals(sequenceEditor.getText().toString(), q.getSequence());
+		BLASTQuery query = getBLASTQueryFromActivity();
+		assertEquals(sequenceEditor.getText().toString(), query.getSequence());
 	}
 	
 	public void testWeCanOnlyInputDNASymbolsIntoTheSequenceTextfield(){
@@ -78,36 +80,32 @@ public class SettingUpANewEMBLEBIBLASTQuery extends ActivityInstrumentationTestC
 		solo.pressSpinnerItem(1, -2);
 		waitFor(5000);
         
-		Spinner databaseSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_database_spinner);
-		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals(databaseSpinner.getSelectedItem().toString(), q.getSearchParameter("database").getValue());
+		Spinner databaseSpinner = (Spinner)solo.getView(R.id.blastqueryentry_database_spinner);
+		assertStoredAs("database", databaseSpinner.getSelectedItem());
 	}
 
 	public void testWeCanEditTheExpThresholdOfADraftQuery(){
 		solo.pressSpinnerItem(2, 3);
 		waitFor(5000);
         
-		Spinner expThresholdSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_expthreshold_spinner);
-		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals(expThresholdSpinner.getSelectedItem().toString(), q.getSearchParameter("exp_threshold").getValue());
+		Spinner expThresholdSpinner = (Spinner)solo.getView(R.id.blastqueryentry_expthreshold_spinner);
+		assertStoredAs("exp_threshold", expThresholdSpinner.getSelectedItem());
 	}
 	
 	public void testWeCanEditTheScoreOfADraftQuery(){
 		solo.pressSpinnerItem(3, 1);
 		waitFor(5000);
         
-		Spinner databaseSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.blastqueryentry_score_spinner);
-		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals(databaseSpinner.getSelectedItem().toString(), q.getSearchParameter("score").getValue());
+		Spinner scoreSpinner = (Spinner)solo.getView(R.id.blastqueryentry_score_spinner);
+		assertStoredAs("score", scoreSpinner.getSelectedItem());
 	}
 	
 	public void testWeCanEditMatchMisMatchScore(){
 		solo.pressSpinnerItem(4, -2);
 		waitFor(5000);
 		
-		Spinner matchMismatchScoreSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.ebi_match_mismatch_score_spinner);
-		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals(matchMismatchScoreSpinner.getSelectedItem().toString(), q.getSearchParameter("match_mismatch_score").getValue());
+		Spinner matchMismatchScoreSpinner = (Spinner)solo.getView(R.id.ebi_match_mismatch_score_spinner);
+		assertStoredAs("match_mismatch_score", matchMismatchScoreSpinner.getSelectedItem());
 	}
 	
 	public void testWeCanEditTheEmailAddressParameter(){
@@ -122,18 +120,17 @@ public class SettingUpANewEMBLEBIBLASTQuery extends ActivityInstrumentationTestC
 	}
 
 	public void testWeCanSendAValidQuery(){
-		String sequence = "CCTTTATCTAATCTTTGGAGCATGAGCTGG";
-		send(sequence);
+		send("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		
-		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals( "Expected query to be ready for sending", Status.PENDING, q.getStatus());
+		BLASTQuery query = getBLASTQueryFromActivity();
+		assertEquals( "Expected query to be ready for sending", Status.PENDING, query.getStatus());
 	}
 
 	public void testWeCannotSendAnInvalidQuery(){
 		send("INVALIDSEQUENCE");
 		
-		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals("Expected query not to be sent", Status.DRAFT, q.getStatus());
+		BLASTQuery query = getBLASTQueryFromActivity();
+		assertEquals("Expected query not to be sent", Status.DRAFT, query.getStatus());
 	}
 	
 	public void testWeCanGoToTheApplicationPreferencesScreen(){
@@ -173,6 +170,11 @@ public class SettingUpANewEMBLEBIBLASTQuery extends ActivityInstrumentationTestC
 		blastQuery = BLASTQuery.emblBLASTQuery("blastn");
 		intent.putExtra("query", blastQuery);
 		setActivityIntent(intent);
+	}
+	
+	private void assertStoredAs(String parameterName, Object selectedSpinnerItem) {
+		BLASTQuery query = getBLASTQueryFromActivity();
+		assertThat(query.getSearchParameter(parameterName).getValue(), is(selectedSpinnerItem.toString()));
 	}
 	
 	private void assertDefaultsDisplayed(){
