@@ -34,8 +34,7 @@ public class SettingUpANewNCBIBLASTQuery extends ActivityInstrumentationTestCase
 	}
 
 	public void testWeCanOnlyInputValidDNASymbolsIntoTheSequenceEditText(){
-		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.ncbi_sequence_edittext);
-		solo.typeText(sequenceEditor, "INVALIDSEQUENCE");
+		EditText sequenceEditor = typeSequence("INVALIDSEQUENCE");
 		getInstrumentation().waitForIdleSync();
 		//'A', 'C', 'G', 'T', 'U', 'W', 'S', 'M', 'K', 'R', 'Y', 'B', 'D', 'H', 'V'
 		assertEquals("Sequence in editor", "VADSUC", sequenceEditor.getEditableText().toString());
@@ -46,12 +45,11 @@ public class SettingUpANewNCBIBLASTQuery extends ActivityInstrumentationTestCase
 	}
 	
 	public void testWeCanEditTheSequence(){
-		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.ncbi_sequence_edittext);
-		solo.typeText(sequenceEditor, "CCTTTATCTAATCTTTGGAGCATGAGCTGG");
+		EditText sequenceEditor = typeSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		getInstrumentation().waitForIdleSync();
 		
-		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals(sequenceEditor.getText().toString(), q.getSequence());
+		BLASTQuery query = getBLASTQueryFromActivity();
+		assertEquals(sequenceEditor.getText().toString(), query.getSequence());
 	}
 	
 	public void testWeCanChangeTheBLASTProgram(){
@@ -59,8 +57,8 @@ public class SettingUpANewNCBIBLASTQuery extends ActivityInstrumentationTestCase
 		solo.pressSpinnerItem(0, 1);
 		getInstrumentation().waitForIdleSync();
 		
-		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals(programSpinner.getSelectedItem().toString(), q.getBLASTProgram());
+		BLASTQuery query = getBLASTQueryFromActivity();
+		assertEquals(programSpinner.getSelectedItem().toString(), query.getBLASTProgram());
 	}
 	
 	public void testWeCanChangeDatabase(){
@@ -68,8 +66,7 @@ public class SettingUpANewNCBIBLASTQuery extends ActivityInstrumentationTestCase
 		solo.pressSpinnerItem(1, 1);
 		getInstrumentation().waitForIdleSync();
 		
-		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals(databaseSpinner.getSelectedItem().toString(), q.getSearchParameter("database").getValue());
+		assertStoredAs("database", databaseSpinner.getSelectedItem());
 	}
 	
 	public void testWeCanChangeTheWordSize(){
@@ -77,8 +74,7 @@ public class SettingUpANewNCBIBLASTQuery extends ActivityInstrumentationTestCase
 		solo.pressSpinnerItem(2, 3);
 		getInstrumentation().waitForIdleSync();
 		
-		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals(wordsizeSpinner.getSelectedItem().toString(), q.getSearchParameter("word_size").getValue());
+		assertStoredAs("word_size", wordsizeSpinner.getSelectedItem());
 	}
 	
 	public void testWeCanChangeExpThreshold(){
@@ -87,8 +83,7 @@ public class SettingUpANewNCBIBLASTQuery extends ActivityInstrumentationTestCase
 		solo.typeText(expThresholdEditor, "100.0");
 		getInstrumentation().waitForIdleSync();
 		
-		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals(expThresholdEditor.getText().toString(), q.getSearchParameter("exp_threshold").getValue());
+		assertStoredAs("exp_threshold", expThresholdEditor.getText());
 	}
 	
 	public void testWeCanChangeTheMatchMisMatchScore(){
@@ -96,8 +91,7 @@ public class SettingUpANewNCBIBLASTQuery extends ActivityInstrumentationTestCase
 		getInstrumentation().waitForIdleSync();
 		
 		Spinner mismatchSpinner = (Spinner)solo.getView(com.bioinformaticsapp.R.id.ncbi_match_mismatch_spinner);
-		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals(mismatchSpinner.getSelectedItem().toString(), q.getSearchParameter("match_mismatch_score").getValue());
+		assertStoredAs("match_mismatch_score", mismatchSpinner.getSelectedItem());
 	}
 	
 	public void testWeCanSaveADraftQuery(){
@@ -108,23 +102,23 @@ public class SettingUpANewNCBIBLASTQuery extends ActivityInstrumentationTestCase
 	}
 	
 	public void testWeCanSendAValidQuery(){
-		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.ncbi_sequence_edittext);
-		solo.typeText(sequenceEditor, "CCTTTATCTAATCTTTGGAGCATGAGCTGG");
+		send("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
+		
+		BLASTQuery query = getBLASTQueryFromActivity();
+		assertEquals( "Expected query to be ready for sending", Status.PENDING, query.getStatus());   
+	}
+
+	private void send(String sequence) {
+		typeSequence(sequence);
 		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.send_query);
 		solo.waitForDialogToClose(SENDING_DIALOG_TIMEOUT);
-		
-		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals( "Expected query to be ready for sending", Status.PENDING, q.getStatus());   
 	}
 	
 	public void testWeCannotSendAnInvalidQuery(){
-		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.ncbi_sequence_edittext);
-		solo.typeText(sequenceEditor, "INVALID SEQUENCE");
-		solo.clickOnActionBarItem(com.bioinformaticsapp.R.id.send_query);
-		solo.waitForDialogToClose(SENDING_DIALOG_TIMEOUT);
+		send("INVALID SEQUENCE");
 		
-		BLASTQuery q = getBLASTQueryFromActivity();
-		assertEquals( "Expected query to be ready for sending", Status.DRAFT, q.getStatus());
+		BLASTQuery query = getBLASTQueryFromActivity();
+		assertEquals( "Expected query to be ready for sending", Status.DRAFT, query.getStatus());
 	}
 	
 	public void testWeCanGoToTheApplicationPreferencesScreen(){
@@ -133,6 +127,12 @@ public class SettingUpANewNCBIBLASTQuery extends ActivityInstrumentationTestCase
 		solo.assertCurrentActivity("Should be able to go to the settings screen", AppPreferences.class);
 	}
 
+	private EditText typeSequence(String sequence) {
+		EditText sequenceEditor = (EditText)solo.getView(com.bioinformaticsapp.R.id.ncbi_sequence_edittext);
+		solo.typeText(sequenceEditor, sequence);
+		return sequenceEditor;
+	}
+	
 	private void setUpActivityWithBLASTQuery(){
 		Intent intent = new Intent();
 		exampleNCBIQuery = BLASTQuery.ncbiBLASTQuery("blastn");
@@ -142,6 +142,11 @@ public class SettingUpANewNCBIBLASTQuery extends ActivityInstrumentationTestCase
 
 	private BLASTQuery getBLASTQueryFromActivity() {
 		return (BLASTQuery)getActivity().getIntent().getSerializableExtra("query");
+	}
+	
+	private void assertStoredAs(String parameterName, Object widgetValue) {
+		BLASTQuery query = getBLASTQueryFromActivity();
+		assertEquals(widgetValue.toString(), query.getSearchParameter(parameterName).getValue());
 	}
 	
 	private void assertSaved(){
