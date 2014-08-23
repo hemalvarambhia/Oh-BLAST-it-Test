@@ -1,12 +1,11 @@
 package com.bioinformaticsapp.test.content;
 
+import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.aBLASTQuery;
+import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.aBLASTQueryWithStatus;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
-
-import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.*;
-import static com.bioinformaticsapp.domain.BLASTQuery.Status;
 
 import java.util.List;
 
@@ -14,6 +13,7 @@ import android.test.InstrumentationTestCase;
 
 import com.bioinformaticsapp.content.BLASTQueryLabBook;
 import com.bioinformaticsapp.domain.BLASTQuery;
+import com.bioinformaticsapp.domain.BLASTQuery.Status;
 import com.bioinformaticsapp.domain.BLASTVendor;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 
@@ -84,6 +84,14 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 		List<BLASTQuery> submittedQueries = labBook.submittedBLASTQueriesForVendor(BLASTVendor.NCBI);
 		
 		assertThat("list should contain submitted blast queries for supplier", submittedQueries.contains(submitted));
+	}
+	
+	public void testWeCanRemoveABLASTQuery(){
+		BLASTQuery query = labBook.save(aBLASTQuery());
+		
+		int remove = labBook.remove(query.getPrimaryKey());
+		
+		assertThat(remove, is(1));
 	}
 	
 	private BLASTQuery aBLASTQueryWithStatusAndVendor(Status status, int vendor){
