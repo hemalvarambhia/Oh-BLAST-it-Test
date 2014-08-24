@@ -68,7 +68,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<L
 	}
 	
 	public void testWeCanDeleteABLASTQuery(){
-		solo.waitForView(ListView.class, 1, 10000);
+		solo.waitForView(ListView.class, 1, 20000);
 		solo.clickLongInList(1);
 		solo.clickOnText("Delete");
 		solo.clickOnButton("OK");
@@ -114,8 +114,6 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<L
 	
 	public void tearDown() throws Exception {
 		solo.finishOpenedActivities();
-		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(ctx);
-		helper.cleanDatabase();
 		super.tearDown();
 	}
 	
