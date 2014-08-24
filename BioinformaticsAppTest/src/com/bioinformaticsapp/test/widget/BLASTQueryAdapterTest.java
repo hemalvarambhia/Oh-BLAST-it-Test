@@ -1,5 +1,8 @@
 package com.bioinformaticsapp.test.widget;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.test.InstrumentationTestCase;
 import android.view.View;
 import android.widget.TextView;
@@ -22,12 +25,14 @@ public class BLASTQueryAdapterTest extends InstrumentationTestCase {
 		query = new BLASTQuery("blastn", BLASTVendor.EMBL_EBI);
 		query.setJobIdentifier("ncbiblast-R20120418-133731-0240-81389354-pg");
 		query.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-		BLASTQuery[] queries = new BLASTQuery[]{query};
+		List<BLASTQuery> queries = new ArrayList<BLASTQuery>();
+		queries.add(query);
 		adapter = new BLASTQueryAdapter(getInstrumentation().getTargetContext(), queries);
 	}
 	
 	public void testAnAppropriateTextIsDisplayedIfNoJobIdentifier(){
-		BLASTQuery[] queries = new BLASTQuery[]{new BLASTQuery("blastn", BLASTVendor.EMBL_EBI)};
+		List<BLASTQuery> queries = new ArrayList<BLASTQuery>();
+		queries.add(new BLASTQuery("blastn", BLASTVendor.EMBL_EBI));
 		BLASTQueryAdapter adapter = new BLASTQueryAdapter(getInstrumentation().getTargetContext(), queries);
 		
 		View view = adapter.getView(0, null, null);
