@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -35,31 +36,17 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<L
 		ctx = getInstrumentation().getTargetContext();
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(ctx);
 		helper.cleanDatabase();
+		saveQuery(BLASTQueryBuilder.aBLASTQuery());
+		solo = new Solo(getInstrumentation(), getActivity());
 	}
 
 	public void testWeCanViewAllDraftQueries(){
-		saveQuery(BLASTQueryBuilder.aBLASTQuery());
-		solo = new Solo(getInstrumentation(), getActivity());
-		
-		solo.waitForView(ListView.class, 1, 5000);
+		solo.waitForView(ListView.class, 1, 30000);
 		
 		assertOnlyDisplaysDraftQueries();
 	}
 	
-	public void testWeCanOpenAnNCBIQueryWhenTappingOnTheCorrespondingListItem(){
-		saveQuery(BLASTQuery.ncbiBLASTQuery("blastn"));
-		solo = new Solo(getInstrumentation(), getActivity());
-		
-		solo.waitForView(ListView.class);
-		solo.clickInList(1);
-		
-		solo.assertCurrentActivity("Expected the NCBI Query Setup screen", SetUpNCBIBLASTQuery.class);
-	}
-	
 	public void testWeCanOpenAnEMBLQueryWhenTappingOnTheCorrespondingListItem(){
-		saveQuery(BLASTQuery.emblBLASTQuery("blastn"));
-		solo = new Solo(getInstrumentation(), getActivity());
-		
 		solo.waitForView(ListView.class);
 		solo.clickInList(1);
 		
@@ -67,8 +54,6 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<L
 	}
 	
 	public void testWeCanCreateAnEMBLQuery(){
-		solo = new Solo(getInstrumentation(), getActivity());
-		
 		solo.clickOnActionBarItem(R.menu.create_query_menu);
 		solo.clickOnActionBarItem(R.id.create_embl_query);
 		
@@ -76,8 +61,6 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<L
 	}
 	
 	public void testWeCanCreateAnNCBIQuery(){
-		solo = new Solo(getInstrumentation(), getActivity());
-		
 		solo.clickOnActionBarItem(R.menu.create_query_menu);
 		solo.clickOnActionBarItem(R.id.create_ncbi_query);
 		
@@ -85,23 +68,17 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<L
 	}
 	
 	public void testWeCanDeleteABLASTQuery(){
-		saveQuery(BLASTQueryBuilder.aBLASTQuery());
-		solo = new Solo(getInstrumentation(), getActivity());
-		
-		solo.waitForView(ListView.class);
+		solo.waitForView(ListView.class, 1, 10000);
 		solo.clickLongInList(1);
 		solo.clickOnText("Delete");
 		solo.clickOnButton("OK");
-		solo.waitForView(ListView.class, 1, 5000);
+		solo.waitForView(ListView.class, 1, 10000);
 		
-		ListView listView = solo.getCurrentListViews().get(0);
-		assertThat("Should be able to delete a query", listView.getCount(), is(0));
+		ListAdapter listAdapter = solo.getCurrentListViews().get(0).getAdapter();
+		assertThat("Should be able to delete a query", listAdapter.getCount(), is(0));
 	}
 
 	public void testWeCanCancelADeleteQueryAction(){
-		saveQuery(BLASTQueryBuilder.aBLASTQuery());
-		solo = new Solo(getInstrumentation(), getActivity());
-		
 		solo.waitForView(ListView.class);
 		solo.clickLongInList(1);
 		solo.clickOnText("Delete");
@@ -114,10 +91,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<L
 		assertThat("Should be able to cancel delete a query", listView.getCount(), is(draftQueries.size()));
 	}
 	
-	public void testWeCanViewTheParametersOfAnEMBLQuery(){
-		saveQuery(BLASTQuery.emblBLASTQuery("blastn"));
-		solo = new Solo(getInstrumentation(), getActivity());
-		
+	public void testWeCanViewTheParametersOfABLASTQuery(){
 		solo.waitForView(TextView.class);
 		solo.clickLongInList(1);
 		String viewParametersOption = ctx.getResources().getString(R.string.view_query_parameters);
@@ -126,34 +100,23 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<L
 		solo.assertCurrentActivity("Search parameters activity should show", ViewBLASTQuerySearchParameters.class);
 	}
 
-	public void testThatWeCanViewTheParametersOfAnNCBIQuery(){
-		saveQuery(BLASTQuery.ncbiBLASTQuery("blastn"));
-		solo = new Solo(getInstrumentation(), getActivity());
-		
-		solo.waitForView(TextView.class);
-		solo.clickLongInList(1);
-		String viewParametersOption = ctx.getResources().getString(R.string.view_query_parameters);
-		solo.clickOnText(viewParametersOption);
-		
-		solo.assertCurrentActivity("The search parameters activity should show", ViewBLASTQuerySearchParameters.class);
-	}
-
 	private void saveQuery(BLASTQuery query){
 		BLASTQueryLabBook labBook = new BLASTQueryLabBook(ctx);
-		BLASTQuery saved = labBook.save(query);
-		assertNotNull(saved.getPrimaryKey());
+		labBook.save(query);
 	}
 	
 	private void assertOnlyDisplaysDraftQueries(){
 		BLASTQueryLabBook labBook = new BLASTQueryLabBook(ctx);
 		List<BLASTQuery> draftQueries = labBook.findBLASTQueriesByStatus(Status.DRAFT);
-		ListView listView = solo.getCurrentListViews().get(0);
-		assertThat(listView.getCount(), is(draftQueries.size()));
+		ListAdapter adapter = solo.getCurrentListViews().get(0).getAdapter();
+		assertThat(adapter.getCount(), is(draftQueries.size()));
 	}
 	
 	public void tearDown() throws Exception {
-		if(solo!=null)
-			solo.finishOpenedActivities();
+		solo.finishOpenedActivities();
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(ctx);
+		helper.cleanDatabase();
 		super.tearDown();
 	}
+	
 }
