@@ -23,11 +23,11 @@ import com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
-public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<ListDraftBLASTQueries> {
+public class ViewingDraftBLASTQueries extends ActivityInstrumentationTestCase2<ListDraftBLASTQueries> {
 	private Solo solo;
 	private Context context;
  	
-	public DraftQueriesActivityTest() {
+	public ViewingDraftBLASTQueries() {
 		super(ListDraftBLASTQueries.class);	
 	}
 	
