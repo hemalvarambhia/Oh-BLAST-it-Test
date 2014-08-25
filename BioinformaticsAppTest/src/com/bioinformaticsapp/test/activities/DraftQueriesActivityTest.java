@@ -1,7 +1,7 @@
 package com.bioinformaticsapp.test.activities;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.*;
+import static org.hamcrest.core.Is.is;
 
 import java.util.List;
 
@@ -9,13 +9,12 @@ import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.bioinformaticsapp.ViewBLASTQuerySearchParameters;
 import com.bioinformaticsapp.ListDraftBLASTQueries;
+import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.SetUpEMBLEBIBLASTQuery;
 import com.bioinformaticsapp.SetUpNCBIBLASTQuery;
-import com.bioinformaticsapp.R;
+import com.bioinformaticsapp.ViewBLASTQuerySearchParameters;
 import com.bioinformaticsapp.content.BLASTQueryLabBook;
 import com.bioinformaticsapp.domain.BLASTQuery;
 import com.bioinformaticsapp.domain.BLASTQuery.Status;
