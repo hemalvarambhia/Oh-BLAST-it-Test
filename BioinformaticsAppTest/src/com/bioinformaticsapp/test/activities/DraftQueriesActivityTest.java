@@ -25,7 +25,7 @@ import com.jayway.android.robotium.solo.Solo;
 
 public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<ListDraftBLASTQueries> {
 	private Solo solo;
-	private Context ctx;
+	private Context context;
  	
 	public DraftQueriesActivityTest() {
 		super(ListDraftBLASTQueries.class);	
@@ -33,21 +33,19 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<L
 	
 	public void setUp() throws Exception {
 		super.setUp();
-		ctx = getInstrumentation().getTargetContext();
-		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(ctx);
+		context = getInstrumentation().getTargetContext();
+		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(context);
 		helper.cleanDatabase();
 		saveQuery(BLASTQueryBuilder.aBLASTQuery());
 		solo = new Solo(getInstrumentation(), getActivity());
+		waitForItemsToLoad();
 	}
 
 	public void testWeCanViewAllDraftQueries(){
-		solo.waitForView(ListView.class, 1, 30000);
-		
 		assertOnlyDisplaysDraftQueries();
 	}
 	
 	public void testWeCanOpenAnEMBLQueryWhenTappingOnTheCorrespondingListItem(){
-		solo.waitForView(ListView.class);
 		solo.clickInList(1);
 		
 		solo.assertCurrentActivity("Expected the EMBL Query Setup screen", SetUpEMBLEBIBLASTQuery.class);
@@ -68,53 +66,53 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<L
 	}
 	
 	public void testWeCanDeleteABLASTQuery(){
-		solo.waitForView(ListView.class, 1, 20000);
 		solo.clickLongInList(1);
 		solo.clickOnText("Delete");
 		solo.clickOnButton("OK");
-		solo.waitForView(ListView.class, 1, 10000);
+		solo.waitForView(ListView.class);
 		
 		ListAdapter listAdapter = solo.getCurrentListViews().get(0).getAdapter();
 		assertThat("Should be able to delete a query", listAdapter.getCount(), is(0));
 	}
 
 	public void testWeCanCancelADeleteQueryAction(){
-		solo.waitForView(ListView.class);
 		solo.clickLongInList(1);
 		solo.clickOnText("Delete");
 		solo.clickOnButton("Cancel");
 		solo.waitForView(ListView.class);
 		
 		ListView listView = solo.getCurrentListViews().get(0);
-		BLASTQueryLabBook labBook = new BLASTQueryLabBook(ctx);
+		BLASTQueryLabBook labBook = new BLASTQueryLabBook(context);
 		List<BLASTQuery> draftQueries = labBook.findBLASTQueriesByStatus(Status.DRAFT);
 		assertThat("Should be able to cancel delete a query", listView.getCount(), is(draftQueries.size()));
 	}
 	
 	public void testWeCanViewTheParametersOfABLASTQuery(){
-		solo.waitForView(TextView.class);
 		solo.clickLongInList(1);
-		String viewParametersOption = ctx.getResources().getString(R.string.view_query_parameters);
+		String viewParametersOption = context.getResources().getString(R.string.view_query_parameters);
 		solo.clickOnText(viewParametersOption);
 		
 		solo.assertCurrentActivity("Search parameters activity should show", ViewBLASTQuerySearchParameters.class);
 	}
 
+	private void waitForItemsToLoad() {
+		solo.waitForView(ListView.class);
+	}
+	
 	private void saveQuery(BLASTQuery query){
-		BLASTQueryLabBook labBook = new BLASTQueryLabBook(ctx);
+		BLASTQueryLabBook labBook = new BLASTQueryLabBook(context);
 		labBook.save(query);
 	}
 	
 	private void assertOnlyDisplaysDraftQueries(){
-		BLASTQueryLabBook labBook = new BLASTQueryLabBook(ctx);
+		BLASTQueryLabBook labBook = new BLASTQueryLabBook(context);
 		List<BLASTQuery> draftQueries = labBook.findBLASTQueriesByStatus(Status.DRAFT);
-		ListAdapter adapter = solo.getCurrentListViews().get(0).getAdapter();
-		assertThat(adapter.getCount(), is(draftQueries.size()));
+		ListView listView = solo.getCurrentListViews().get(0);
+		assertThat(listView.getCount(), is(draftQueries.size()));
 	}
 	
 	public void tearDown() throws Exception {
 		solo.finishOpenedActivities();
 		super.tearDown();
-	}
-	
+	}	
 }
