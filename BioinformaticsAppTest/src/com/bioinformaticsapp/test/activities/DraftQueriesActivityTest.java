@@ -9,6 +9,7 @@ import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.bioinformaticsapp.ListDraftBLASTQueries;
 import com.bioinformaticsapp.R;
@@ -37,7 +38,7 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<L
 		helper.cleanDatabase();
 		saveQuery(BLASTQueryBuilder.aBLASTQuery());
 		solo = new Solo(getInstrumentation(), getActivity());
-		waitForItemsToLoad();
+		waitForQueriesToLoad();
 	}
 
 	public void testWeCanViewAllDraftQueries(){
@@ -94,8 +95,9 @@ public class DraftQueriesActivityTest extends ActivityInstrumentationTestCase2<L
 		solo.assertCurrentActivity("Search parameters activity should show", ViewBLASTQuerySearchParameters.class);
 	}
 
-	private void waitForItemsToLoad() {
+	private void waitForQueriesToLoad() {
 		solo.waitForView(ListView.class);
+		solo.waitForView(TextView.class);
 	}
 	
 	private void saveQuery(BLASTQuery query){
