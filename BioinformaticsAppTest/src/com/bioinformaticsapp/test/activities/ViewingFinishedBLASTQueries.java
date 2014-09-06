@@ -30,14 +30,14 @@ import static com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder.*;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
-public class FinishedQueriesActivityTest extends
+public class ViewingFinishedBLASTQueries extends
 		ActivityInstrumentationTestCase2<ListFinishedBLASTQueries> {
 
 	private Solo solo;
 	private String exampleEMBLJobId = "ncbiblast-R20120418-133731-0240-81389354-pg";
 	private BLASTQuery emblQuery;
 	
-	public FinishedQueriesActivityTest(){
+	public ViewingFinishedBLASTQueries(){
 		super(ListFinishedBLASTQueries.class);
 	}
 	
