@@ -81,10 +81,7 @@ public class ViewingDraftBLASTQueries extends ActivityInstrumentationTestCase2<L
 		solo.clickOnButton("Cancel");
 		solo.waitForView(ListView.class);
 		
-		ListView listView = solo.getCurrentListViews().get(0);
-		BLASTQueryLabBook labBook = new BLASTQueryLabBook(context);
-		List<BLASTQuery> draftQueries = labBook.findBLASTQueriesByStatus(Status.DRAFT);
-		assertThat("Should be able to cancel delete a query", listView.getCount(), is(draftQueries.size()));
+		assertOnlyDisplaysDraftQueries();
 	}
 	
 	public void testWeCanViewTheParametersOfABLASTQuery(){
