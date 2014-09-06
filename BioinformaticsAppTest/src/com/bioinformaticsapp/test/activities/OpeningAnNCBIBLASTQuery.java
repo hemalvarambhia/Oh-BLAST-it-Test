@@ -1,19 +1,18 @@
 package com.bioinformaticsapp.test.activities;
 
+import android.content.Context;
+import android.test.ActivityInstrumentationTestCase2;
+import android.widget.ListView;
+import android.widget.TextView;
+
 import com.bioinformaticsapp.ListDraftBLASTQueries;
 import com.bioinformaticsapp.R;
 import com.bioinformaticsapp.SetUpNCBIBLASTQuery;
 import com.bioinformaticsapp.ViewBLASTQuerySearchParameters;
 import com.bioinformaticsapp.content.BLASTQueryLabBook;
 import com.bioinformaticsapp.domain.BLASTQuery;
-import com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
-
-import android.content.Context;
-import android.test.ActivityInstrumentationTestCase2;
-import android.widget.ListView;
-import android.widget.TextView;
 
 public class OpeningAnNCBIBLASTQuery extends
 		ActivityInstrumentationTestCase2<ListDraftBLASTQueries> {
@@ -32,6 +31,11 @@ public class OpeningAnNCBIBLASTQuery extends
 		helper.cleanDatabase();
 		saveQuery(BLASTQuery.ncbiBLASTQuery("blastn"));
 		solo = new Solo(getInstrumentation(), getActivity());
+	}
+	
+	public void tearDown() throws Exception {
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	public void testWeCanOpenAnNCBIQueryWhenTappingOnTheCorrespondingListItem(){
