@@ -20,13 +20,13 @@ import com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.jayway.android.robotium.solo.Solo;
 
-public class PendingQueriesActivityTest extends
+public class ViewingPendingBLASTQueries extends
 		ActivityInstrumentationTestCase2<ListPendingBLASTQueries> {
 	
 	private Solo solo;
 	private BLASTQuery query;
 	
-	public PendingQueriesActivityTest(){
+	public ViewingPendingBLASTQueries(){
 		super(ListPendingBLASTQueries.class);
 	}
 
