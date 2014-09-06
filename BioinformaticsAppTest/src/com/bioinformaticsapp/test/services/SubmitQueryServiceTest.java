@@ -5,7 +5,7 @@ import android.test.ServiceTestCase;
 
 import com.bioinformaticsapp.blastservices.SubmitQueryService;
 import com.bioinformaticsapp.domain.BLASTQuery;
-import com.bioinformaticsapp.domain.BLASTVendor;
+import com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 
 public class SubmitQueryServiceTest extends ServiceTestCase<SubmitQueryService> {
@@ -22,7 +22,8 @@ public class SubmitQueryServiceTest extends ServiceTestCase<SubmitQueryService> 
 		super.setUp();
 		OhBLASTItTestHelper helper = new OhBLASTItTestHelper(getContext());
 		helper.cleanDatabase();
-		BLASTQuery query = aPendingQuery();
+		BLASTQuery query = BLASTQueryBuilder.aValidPendingBLASTQuery();
+		query.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
 		helper.save(query);
 	}
 	
@@ -30,12 +31,4 @@ public class SubmitQueryServiceTest extends ServiceTestCase<SubmitQueryService> 
 		Intent intent = new Intent(getContext(), SubmitQueryService.class);
 		startService(intent);
 	}
-	
-	private BLASTQuery aPendingQuery(){
-		BLASTQuery aPendingQuery = new BLASTQuery("blastn", BLASTVendor.NCBI);
-		aPendingQuery.setSequence("CCTTTATCTAATCTTTGGAGCATGAGCTGG");
-		aPendingQuery.setStatus(BLASTQuery.Status.PENDING);	
-		return aPendingQuery;
-	}
-	
 }
