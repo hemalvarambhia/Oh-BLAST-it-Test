@@ -110,5 +110,4 @@ public class BLASTQueryLabBookTest extends InstrumentationTestCase {
 		blastQuery.setStatus(status);
 		return blastQuery;
 	}
-
 }
