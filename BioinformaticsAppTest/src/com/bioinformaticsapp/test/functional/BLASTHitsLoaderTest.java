@@ -7,7 +7,7 @@ import android.content.Context;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
 
-import com.bioinformaticsapp.blastservices.BLASTHitsDownloadingTask;
+import com.bioinformaticsapp.blastservices.BLASTHitsLoaderTask;
 import com.bioinformaticsapp.blastservices.BLASTSearchEngine;
 import com.bioinformaticsapp.blastservices.EMBLEBIBLASTService;
 import com.bioinformaticsapp.blastservices.NCBIBLASTService;
@@ -19,7 +19,7 @@ import com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder;
 import com.bioinformaticsapp.test.testhelpers.OhBLASTItTestHelper;
 import com.bioinformaticsapp.test.testhelpers.SendBLASTQuery;
 
-public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
+public class BLASTHitsLoaderTest extends InstrumentationTestCase {
 
 	private static final String TAG = "BLASTHitsDownloaderTest";
 	private Context context;
@@ -32,7 +32,7 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 	
 	public void testWeCannotDownloadResultsIfThereIsNoWebConnection() throws InterruptedException, ExecutionException{
 		BLASTQuery query = BLASTQueryBuilder.aValidPendingBLASTQuery();
-		BLASTHitsDownloadingTask downloader = new BLASTHitsDownloadingTask(context, getServiceFor(query.getVendorID())){
+		BLASTHitsLoaderTask downloader = new BLASTHitsLoaderTask(context, getServiceFor(query.getVendorID())){
 			protected boolean connectedToWeb(){
 				return false;
 			}
@@ -48,7 +48,7 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 		save(ncbiQuery);
 		SendBLASTQuery.sendToNCBI(context, ncbiQuery);
 		waitUntilFinished(ncbiQuery);
-		BLASTHitsDownloadingTask downloader = new BLASTHitsDownloadingTask(context, getServiceFor(ncbiQuery.getVendorID()));	
+		BLASTHitsLoaderTask downloader = new BLASTHitsLoaderTask(context, getServiceFor(ncbiQuery.getVendorID()));	
 		
 		downloader.execute(ncbiQuery);
 		String nameOfFile = downloader.get();
@@ -63,7 +63,7 @@ public class BLASTHitsDownloaderTest extends InstrumentationTestCase {
 		save(emblQuery);
 		SendBLASTQuery.sendToEBIEMBL(context, emblQuery);
 		waitUntilFinished(emblQuery);
-		BLASTHitsDownloadingTask downloader = new BLASTHitsDownloadingTask(context, getServiceFor(emblQuery.getVendorID()));	
+		BLASTHitsLoaderTask downloader = new BLASTHitsLoaderTask(context, getServiceFor(emblQuery.getVendorID()));	
 		downloader.execute(emblQuery);
 		
 		String nameOfFile = downloader.get();

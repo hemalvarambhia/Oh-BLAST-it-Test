@@ -13,21 +13,21 @@ import android.content.Context;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
 
-import com.bioinformaticsapp.blastservices.BLASTHitsDownloadingTask;
+import com.bioinformaticsapp.blastservices.BLASTHitsLoaderTask;
 import com.bioinformaticsapp.domain.BLASTQuery;
 import com.bioinformaticsapp.test.testhelpers.BLASTQueryBuilder;
 import com.bioinformaticsapp.test.testhelpers.StubbedBLASTSearchEngine;
 
-public class BLASTHitsDownloaderUnitTest extends InstrumentationTestCase {
+public class BLASTHitsLoaderUnitTest extends InstrumentationTestCase {
 
 	private static final String TAG = "BLASTHitsDownloaderTest";
-	private BLASTHitsDownloadingTask downloaderTask;
+	private BLASTHitsLoaderTask downloaderTask;
 	private Context context;
 	
 	public void setUp() throws Exception {
 		super.setUp();
 		context = getInstrumentation().getTargetContext();
-		downloaderTask = new BLASTHitsDownloadingTask(context, new StubbedBLASTSearchEngine());
+		downloaderTask = new BLASTHitsLoaderTask(context, new StubbedBLASTSearchEngine());
 	}
 	
 	public void testWeCanDownloadResultsOfAFINISHEDNCBIBLASTQuery() throws InterruptedException, ExecutionException{
